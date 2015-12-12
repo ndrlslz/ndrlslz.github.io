@@ -229,8 +229,8 @@
             
               
                 
-                <a class="post-title-link" href="/2015/11/25/hello-world/" itemprop="url">
-                  Hello World
+                <a class="post-title-link" href="/2015/12/06/keystone记录/" itemprop="url">
+                  keystone记录
                 </a>
               
             
@@ -243,8 +243,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-11-25T23:16:07+08:00" content="2015-11-25">
-              2015-11-25
+            <time itemprop="dateCreated" datetime="2015-12-06T16:03:32+08:00" content="2015-12-06">
+              2015-12-06
             </time>
           </span>
 
@@ -254,8 +254,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2015/11/25/hello-world/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/11/25/hello-world/" itemprop="commentsCount"></span>
+                <a href="/2015/12/06/keystone记录/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/06/keystone记录/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -265,7 +265,7 @@
 
           
           
-             <span id="/2015/11/25/hello-world/" class="leancloud_visitors" data-flag-title="Hello World">
+             <span id="/2015/12/06/keystone记录/" class="leancloud_visitors" data-flag-title="keystone记录">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -287,15 +287,49 @@
       
         
           
-            <p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick_Start">Quick Start</h2><h3 id="Create_a_new_post">Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run_server">Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate_static_files">Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy_to_remote_sites">Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+            <p>记录下openstack中keystone的安装及基本用法。</p>
+<h3 id="环境信息">环境信息</h3><p><strong>虚机</strong><br>使用virtualBox安装CentOS 7作为节点</p>
+<p><strong>网络</strong><br>创建3张网卡</p>
+<blockquote>
+<ul>
+<li>management network：10.20.0.0/24</li>
+<li>private network: 192.168.4.0/24</li>
+<li>external network: 172.16.0.0/24</li>
+</ul>
+</blockquote>
+<hr>
+<h3 id="安装步骤">安装步骤</h3><ol>
+<li>创建个虚机作为controller节点，我这里给它2个网卡，一个<strong>management</strong>的网卡，用于controller节点与其他节点的通信，一个<strong>NAT</strong>的网卡，让虚机可以上网。进虚机后先把网络配置好。我设置的controller节点的ip为10.20.0.10.</li>
+<li>安装ntp服务，参考 <a href="http://docs.openstack.org/liberty/install-guide-rdo/environment-ntp.html" target="_blank" rel="external">ntp安装</a></li>
+<li>安装epel源和openstack的源 参考 <a href="http://docs.openstack.org/liberty/install-guide-rdo/environment-packages.html" target="_blank" rel="external">安装源</a></li>
+<li>安装mysql和rabbitmq的服务 参考 <a href="http://docs.openstack.org/liberty/install-guide-rdo/environment-sql-database.html" target="_blank" rel="external">mysql</a> <a href="http://docs.openstack.org/liberty/install-guide-rdo/environment-messaging.html" target="_blank" rel="external">rabbitmq</a></li>
+<li>然后就可以安装keystone的服务和进行相关配置了，参考 <a href="http://docs.openstack.org/liberty/install-guide-rdo/keystone-install.html" target="_blank" rel="external">keystone安装</a></li>
+<li>keystone装好后，开始安装keystone service和endpoint 参考 <a href="http://docs.openstack.org/liberty/install-guide-rdo/keystone-services.html" target="_blank" rel="external">service，endpoint</a></li>
+<li>最后再创建好tenant,user,role。 参考<a href="http://docs.openstack.org/liberty/install-guide-rdo/keystone-users.html" target="_blank" rel="external">create tenant,user,role</a></li>
+</ol>
+<p>之后再创建个脚本文件，方便以后命令行操作。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> OS_PROJECT_DOMAIN_ID=<span class="keyword">default</span></span><br><span class="line"><span class="keyword">export</span> OS_USER_DOMAIN_ID=<span class="keyword">default</span></span><br><span class="line"><span class="keyword">export</span> OS_PROJECT_NAME=admin</span><br><span class="line"><span class="keyword">export</span> OS_TENANT_NAME=admin</span><br><span class="line"><span class="keyword">export</span> OS_USERNAME=admin</span><br><span class="line"><span class="keyword">export</span> OS_PASSWORD=ADMIN_PASS</span><br><span class="line"><span class="keyword">export</span> OS_AUTH_URL=http:<span class="comment">//controller:35357/v3</span></span><br><span class="line"><span class="keyword">export</span> OS_IDENTITY_API_VERSION=<span class="number">3</span></span><br></pre></td></tr></table></figure>
+<p>这是官网的脚本内容，但因为keystone命令行客户端在v3版被弃用了，所以在命令行无法使用keystone v3的认证服务，这样用keystone开头的命令会出错，所以需要把版本改成v2.0.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> OS_AUTH_URL=http:<span class="comment">//controller:35357/v2.0</span></span><br></pre></td></tr></table></figure>
+<p>这样就可以使用keystone CLI了。<br>然后到这些，keystone的基本安装就结束了，一些驱动的配置都是按照官网安装步骤的配置来配的，例如认证方式采用UUID，token的持久化用的memcache。</p>
+<h3 id="keystone认证流程">keystone认证流程</h3><p><a href="../uploads/Keystone-workflow.png"><img src="../uploads/Keystone-workflow.png" alt="keystone流程图"></a></p>
+<h4 id="认证方式">认证方式</h4><p>之前提到的认证方式，现在keystone有UUID，PKI，ZPKI三种方式，不同点可以参考 <a href="https://www.mirantis.com/blog/understanding-openstack-authentication-keystone-pki/" target="_blank" rel="external">keystone认证方式</a></p>
+<p>大概总结一下：<br><strong>UUID</strong><br>UUID方式通过keystone生成32位的字符串token，然后保存在backend中，并返回给申请者，之后拿到这个token去请求其他的openstack组件，而其他组件会再通过keystone验证这个token是否有效。<br>这个方式可能会有几个问题：</p>
+<ol>
+<li>其他组件都会来keystone进行token验证，keystone很容易成为系统的瓶颈，特别对于多region的情况，所以可以考虑对keystone做HA。</li>
+<li>如果backend采用sql，默认不会清理token，所以token数量增大，查询效率会降低。<br>这里keystone-manage token-flush命令可以把过期token删掉，并把token有效期设为1小时。backend也可以采用memcahce。</li>
+</ol>
+<p><strong>PKI</strong><br>PKI方式的keystone相当于一个Certificate Authority，当请求token时，它会生成包含catalog，metadata等的json，然后用自己的密钥和证书来签署，生成token。而其它组件会有自己的一份公钥和证书，对token进行解密得到json串，所以不必再去请求keystone进行验证，它自己就可以进行验证了，降低了keystone的负载。<br>这个方式也可能会存在问题：</p>
+<ol>
+<li>pki的本身性能比UUID要低。</li>
+<li>UUID方式只需要拿32位字符串这个token去请求其他组件即可，而PKI需要拿整个json串的token去请求，数据包很大。</li>
+</ol>
+<p><strong>ZPKI</strong><br>ZPKI方式就是对PKI方式的token进行zlib压缩。</p>
+<h4 id="具体用法">具体用法</h4><p>我这里是采用uuid的方式进行认证。去调keystone的REST API即可。 API参考 <a href="http://developer.openstack.org/api-ref-identity-v3.html" target="_blank" rel="external">keystone API</a></p>
+<p>先定义好请求的json串 vim auth.json<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"auth"</span>: &#123;</span><br><span class="line">        <span class="string">"identity"</span>: &#123;</span><br><span class="line">            <span class="string">"methods"</span>: [</span><br><span class="line">                <span class="string">"password"</span>      </span><br><span class="line">            ],          </span><br><span class="line">            <span class="string">"password"</span>: &#123;</span><br><span class="line">                <span class="string">"user"</span>: &#123;       </span><br><span class="line">                    <span class="string">"id"</span>: <span class="string">"ADMIN_USER_ID"</span>,</span><br><span class="line">                    <span class="string">"password"</span>: <span class="string">"ADMIN_USER_PASSWORD"</span></span><br><span class="line">                &#125;               </span><br><span class="line">            &#125;           </span><br><span class="line">        &#125;,      </span><br><span class="line">        <span class="string">"scope"</span>: &#123;</span><br><span class="line">            <span class="string">"project"</span>: &#123;</span><br><span class="line">                <span class="string">"id"</span>: <span class="string">"ADMIN_PROJECT_ID"</span></span><br><span class="line">            &#125;           </span><br><span class="line">        &#125;       </span><br><span class="line">    &#125;   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后我这里用curl调api<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl -i -X POST -H <span class="string">"Content-Type: application/json"</span> <span class="operator">-d</span> <span class="string">"`cat auth.json`"</span> \</span><br><span class="line">http://<span class="number">10.20</span>.<span class="number">0.10</span>:<span class="number">5000</span>/v3/auth/tokens</span><br></pre></td></tr></table></figure></p>
+<p>返回的消息的头部如下<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">HTTP/<span class="number">1.1</span> <span class="number">201</span> Created</span><br><span class="line">Date: Thu, <span class="number">10</span> Dec <span class="number">2015</span> <span class="number">20</span>:<span class="number">42</span>:<span class="number">31</span> GMT</span><br><span class="line">Server: Apache/<span class="number">2.4</span><span class="number">.6</span> (CentOS) mod_wsgi/<span class="number">3.4</span> Python/<span class="number">2.7</span><span class="number">.5</span></span><br><span class="line">X-Subject-Token: d576cfe5c3d54b46a8aa2d9a153979b0</span><br><span class="line">Vary: X-Auth-Token</span><br><span class="line">x-openstack-request-id: req-<span class="number">7</span>d3d627a-c77f-<span class="number">49</span>b0-a93b-<span class="number">755</span>d93ff5646</span><br><span class="line">Content-Length: <span class="number">1065</span></span><br><span class="line">Content-Type: application/json</span><br></pre></td></tr></table></figure></p>
+<p>这样就得到了keystone返回的token，body体中还有catalog等信息我没截出来。<br>然后取Header中的X-Subject-Token去向catalog中的某个endpoint发送请求即可。其他组件得到这个token后，再向keystone验证token的有效性，执行相应操作。keystone大致流程就是这样。</p>
 
           
         
