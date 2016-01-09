@@ -197,6 +197,143 @@
 
     
     
+      
+      
+        
+        
+        
+      
+
+      
+    
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/01/09/Heat-Salt自动部署服务/" itemprop="url">
+                  Heat+Salt自动部署服务
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-01-09T14:45:06+08:00" content="2016-01-09">
+              2016-01-09
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/01/09/Heat-Salt自动部署服务/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/09/Heat-Salt自动部署服务/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/01/09/Heat-Salt自动部署服务/" class="leancloud_visitors" data-flag-title="Heat+Salt自动部署服务">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>记录下在PaaS层自动部署服务的学习过程。</p>
+<h3 id="整体流程">整体流程</h3><p>Heat来做自动编排，Salt来安装服务和对虚机的管理。</p>
+<blockquote>
+<ul>
+<li>1.Create vm</li>
+<li>2.Install minion</li>
+<li>3.Master accept minions’s key</li>
+<li>4.Install service</li>
+</ul>
+</blockquote>
+<hr>
+<h3 id="分析和编码">分析和编码</h3><h4 id="Heat_VS_Cloudify">Heat VS Cloudify</h4><p>因为之前项目也用过cloudify，所以大致的比较下。Heat和cloudify都是PaaS层的，但它们的规模不同，可以说cloudify要强大的多。<br><strong>Heat</strong>更趋近于Project，它是openstack众多组件中的一个，目的是为了对资源(计算，网络，存储等等)的自动化操作，所以如果要有一套完整的体系，需要自己结合其他的组件，比如本文中与Salt结合。<br><strong>Cloudify</strong>更趋近于一套完整的解决方案，它自带了很多的plugin，可以集成很多功能，比如：openstack，Salt，Chef，Docker等等。它还带有Monitor和Scala的功能。</p>
+<p>下面开始部署服务</p>
+<h4 id="1-_Create_vm">1. Create vm</h4><p>首先用heat template创建虚机。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">minion_server:</span></span><br><span class="line"><span class="label">  type:</span> <span class="string">OS:</span>:<span class="string">Nova:</span>:Server</span><br><span class="line"><span class="label">  properties:</span></span><br><span class="line"><span class="label">    networks:</span></span><br><span class="line">      - <span class="string">port:</span> &#123; <span class="string">get_resource:</span> minion_server_port &#125;</span><br><span class="line"><span class="label">    name:</span> &#123; <span class="string">get_param:</span> name &#125;</span><br><span class="line"><span class="label">    image:</span> &#123; <span class="string">get_param:</span> image &#125;</span><br><span class="line"><span class="label">    flavor:</span> &#123; <span class="string">get_param:</span> flavor &#125;</span><br><span class="line"><span class="label">    config_drive:</span> <span class="string">'true'</span></span><br><span class="line"><span class="label">    user_data_format:</span> SOFTWARE_CONFIG</span><br><span class="line"><span class="label">    user_data:</span> &#123; <span class="string">get_resource:</span> minion_server_mime &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="2-_Install_minion">2. Install minion</h4><p>然后通过user_data注入脚本来安装salt-minion。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">install_minion:</span><br><span class="line">  <span class="built_in">type</span>: OS::Heat::SoftwareConfig</span><br><span class="line">  properties:</span><br><span class="line">    config: | </span><br><span class="line">      <span class="comment">#!/bin/bash</span></span><br><span class="line">      rpm -Uvh &lt;your salt-minion repo address&gt;</span><br><span class="line">      chkconfig salt-minion on</span><br><span class="line">      <span class="built_in">echo</span> <span class="string">"master: &lt;your master ip&gt;"</span> &gt; /etc/salt/minion</span><br><span class="line">      <span class="built_in">echo</span> <span class="string">"id: `hostname -s`"</span> &gt;&gt; /etc/salt/minion</span><br><span class="line">      salt-minion <span class="operator">-d</span></span><br></pre></td></tr></table></figure>
+<h4 id="3-_Accept_key">3. Accept key</h4><p>这里需要用到salt-api和wheel模块。<br><strong>salt-api</strong>提供了对minions，jobs，events等等的Rest操作，以及远程执行模块的功能，这里我们需要远程执行wheel模块。<br><strong>wheel</strong>模块是对key的一个封装。用于执行对key的list，accept，reject，delete等操作。</p>
+<p>其中，在配置salt-api的时候，需要注意配置请求api的用户的权限。<br><figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">external_auth:</span><br><span class="line">  pam:</span><br><span class="line">    user:</span><br><span class="line">      -<span class="ruby"> .*</span><br><span class="line"></span>      -<span class="ruby"> <span class="string">'@wheel'</span></span><br><span class="line"></span>      -<span class="ruby"> <span class="string">'@runner'</span></span></span><br></pre></td></tr></table></figure></p>
+<p>在调api的时候，机制和keystone差不多，需要先调/login获得token，再用token去调相应的api,这里是执行wheel模块来accept key。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">accept_key:</span><br><span class="line">  <span class="built_in">type</span>: OS::Heat::SoftwareConfig</span><br><span class="line">  properties:</span><br><span class="line">    config: |</span><br><span class="line">      curl -Ssk https://&lt;master ip&gt;:<span class="number">8000</span>/login -H <span class="string">'Accept: application/x-yaml'</span> \</span><br><span class="line">      <span class="operator">-d</span> username=&lt;your username&gt; <span class="operator">-d</span> password=&lt;your password&gt; \ </span><br><span class="line">      <span class="operator">-d</span> eauth=pam | awk <span class="string">'/token/ &#123;printf $2&#125;'</span> &gt; ~/token</span><br><span class="line">      curl -Ssk https://&lt;master ip&gt;:<span class="number">8000</span>/ -H <span class="string">'Accept: application/x-yaml'</span> \</span><br><span class="line">      -H <span class="string">"X-Auth-Token: `cat ~/token`"</span> <span class="operator">-d</span> client=<span class="string">'wheel'</span> \</span><br><span class="line">      <span class="operator">-d</span> match=`hostname <span class="operator">-s</span>` <span class="operator">-d</span> fun=<span class="string">'key.accept'</span></span><br></pre></td></tr></table></figure>
+<h4 id="4-_Install_service">4. Install service</h4><p>最后就是安装服务了，这里需要用到salt的Reactor system。<br><strong>Reactor</strong>是基于Event system的，在执行操作的时候，会通过zeroMQ PUB产生event，而reactor就是监听这些event，然后执行相应的操作。</p>
+<p>这个命令在master上运行可以看到产生的实时的event：<br><figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">salt-run <span class="keyword">state</span>.event pretty=True</span><br></pre></td></tr></table></figure></p>
+<p>api中，/hook用于产生event，比如调用/hook/states/state ,就会产生tag为/salt/netapi/hook/states/state的event，我们要做的就是监听这个event,去执行state.sls文件。<br><figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">reactor:</span><br><span class="line">  - '/salt/netapi/hook/states/<span class="keyword">state</span>':</span><br><span class="line">    - /srv/salt/reactor/states/<span class="keyword">state</span>.sls</span><br></pre></td></tr></table></figure></p>
+<p>这个state.sls里写的是接收参数，并用local.state.sls来执行，参数里面指定tgt(即minion_id)和args(即要执行的state文件)。<br><figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;% set postdata = data.get(<span class="string">'post'</span>, &#123;&#125;) %&#125;</span><br><span class="line"></span><br><span class="line">run_state:</span><br><span class="line">  local.state.sls:</span><br><span class="line">    - tgt: &#123;&#123;postdata.tgt&#125;&#125;</span><br><span class="line">    &#123;% if <span class="string">"matcher"</span> in postdata %&#125;</span><br><span class="line">    - expr_form: &#123;&#123;postdata.matcher&#125;&#125;</span><br><span class="line">    &#123;% endif %&#125;</span><br><span class="line">    &#123;% if <span class="string">"args"</span> in postdata %&#125;</span><br><span class="line">    - arg:</span><br><span class="line">      - &#123;&#123;postdata.args&#125;&#125;</span><br><span class="line">    &#123;% endif %&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后在heat template中调api来产生这个event。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">install_service:</span></span><br><span class="line"><span class="label">  type:</span> <span class="string">OS:</span>:<span class="string">Heat:</span>:SoftwareConfig</span><br><span class="line"><span class="label">  properties:</span></span><br><span class="line"><span class="label">    config:</span> |</span><br><span class="line">      curl -Ssk <span class="string">https:</span><span class="comment">//&lt;master ip&gt;:8000/hook/states/state \</span></span><br><span class="line">      -H <span class="string">'Accept: application/x-yaml'</span> -H <span class="string">"X-Auth-Token: `cat ~/token`"</span> \</span><br><span class="line">      -d tgt=`hostname -s` -d args=<span class="string">'memcached_v14'</span></span><br></pre></td></tr></table></figure>
+<p>这里的memcached_v14是在master上写好的state文件，用于安装memcache。这样，就可以通过运行heat template来自动安装相应的服务了。</p>
+<p>Heat加Salt进行服务自动部署的流程大致就是这样。</p>
+
+          
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -308,7 +445,7 @@
 <li>发送loginreq后会收到type@=setmsgroup包，里面就有gid</li>
 </ol>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sendReq</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    String roomId = roomInformation.getRoomId();</span><br><span class="line">    String devid = UUID.randomUUID().toString().replace(<span class="string">"-"</span>, <span class="string">""</span>).toUpperCase();</span><br><span class="line">    String rt = String.valueOf(System.currentTimeMillis() / <span class="number">1000</span>);</span><br><span class="line">    String ver = <span class="string">"20150526"</span>;</span><br><span class="line">    String magic = <span class="string">"7oE9nPEG9xXV69phU31FYCLUagKeYtsF"</span>;</span><br><span class="line">    String vk = MD5Utils.MD5(rt + magic + devid);</span><br><span class="line"></span><br><span class="line">    sendMessage(<span class="string">"type@=loginreq/username@=/ct@=2/password@=/roomid@="</span> + roomId +</span><br><span class="line">            <span class="string">"/devid@="</span> + devid + <span class="string">"/rt@="</span> + rt + <span class="string">"/vk@="</span> + vk + <span class="string">"/ver@="</span> + ver + <span class="string">"/"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>然后就可以从socket的inputstream来获取弹幕了，接着对获取的字符串进行解析，我这里只解析了弹幕，没有解析礼物那些。为了方便，我直接用log4j来存储弹幕了。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">parseResponse</span><span class="params">(String response)</span> </span>&#123;</span><br><span class="line">    String REGEX =<span class="string">"type@=chatmessage/.*/content@=(.*)/snick@=(.*?)/"</span>;</span><br><span class="line">    Pattern pattern = Pattern.compile(REGEX);</span><br><span class="line">    Matcher matcher = pattern.matcher(response);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (matcher.find()) &#123;</span><br><span class="line">        System.out.println((matcher.group(<span class="number">2</span>) + <span class="string">": "</span> + matcher.group(<span class="number">1</span>)));</span><br><span class="line">        logger.info(matcher.group(<span class="number">2</span>) + <span class="string">": "</span> + matcher.group(<span class="number">1</span>));</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后就可以从socket的inputstream来获取弹幕了，接着对获取的字符串进行解析，我这里只解析了弹幕，没有解析礼物那些。为了方便，我直接用log4j来存储弹幕了。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">parseResponse</span><span class="params">(String response)</span> </span>&#123;</span><br><span class="line">    String REGEX =<span class="string">"type@=chatmessage/.*/content@=(.*)/snick@=(.*?)/"</span>;</span><br><span class="line">    Pattern pattern = Pattern.compile(REGEX);</span><br><span class="line">    Matcher matcher = pattern.matcher(response);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (matcher.find()) &#123;</span><br><span class="line">        logger.info(matcher.group(<span class="number">2</span>) + <span class="string">": "</span> + matcher.group(<span class="number">1</span>));</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>然后，还需要不停的向服务器发送心跳包，否则服务器过段时间会关闭我们的连接。我这里每隔60秒发送一个心跳包。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sendMessage(<span class="string">"type@=keeplive/tick@=70/"</span>);</span><br></pre></td></tr></table></figure></p>
 <p>最后，贴下获取的弹幕图：</p>
 <p><img src="/uploads/result.jpg" alt="弹幕"></p>
@@ -518,7 +655,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-count">3</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
