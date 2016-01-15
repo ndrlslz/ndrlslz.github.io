@@ -197,15 +197,127 @@
 
     
     
+
+    
       
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/01/16/Salt-UI-Demo/" itemprop="url">
+                  Salt UI Demo
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-01-16T00:13:25+08:00" content="2016-01-16">
+              2016-01-16
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/01/16/Salt-UI-Demo/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/16/Salt-UI-Demo/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/01/16/Salt-UI-Demo/" class="leancloud_visitors" data-flag-title="Salt UI Demo">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
       
-        
-        
-        
       
 
       
-    
+        
+          
+            <p>因为之前学习了saltstack，所以有个简单的想法，想写个salt management UI，这样就不用输入繁琐的命令，方便管理和运维。<br>由于没多少时间，就做了个简单的demo，仅仅写了登陆，key管理，远程执行minion的cmd命令的功能，在这里记录下。</p>
+<h3 id="涉及框架">涉及框架</h3><p>demo采用springMVC + velocity + bootstrap框架。</p>
+<hr>
+<h3 id="方法介绍">方法介绍</h3><p>原理主要还是通过调用salt-api来实现各种操作。</p>
+<h4 id="1-Key_management">1.Key management</h4><p>salt中， <strong>Wheel</strong> module是对key操作的一个封装， 通过调用wheel模块的api，实现key的accept，delete，reject，list等操作。</p>
+<p>Wheel api参考： <a href="https://docs.saltstack.com/en/latest/ref/wheel/all/salt.wheel.key.html#module-salt.wheel.key" target="_blank" rel="external">Wheel API</a></p>
+<p>调用方式，这里用list key举例。</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">curl -X <span class="keyword">POST</span> -Ssk -i https:<span class="comment">//&lt;master ip&gt;:8000/login \</span></span><br><span class="line">-<span class="keyword">H</span> <span class="string">"Accept: application/x-yaml"</span> -<span class="keyword">d</span> username=&lt;your username&gt; \</span><br><span class="line">-<span class="keyword">d</span> password=&lt;your password&gt; -<span class="keyword">d</span> eauth=pam | awk '/<span class="keyword">token</span>/ &#123;printf <span class="label">$2&#125;</span>' &gt; ~/<span class="keyword">token</span></span><br><span class="line"></span><br><span class="line">curl -Ssk -i https:<span class="comment">//&lt;master ip&gt;:8000/ \</span></span><br><span class="line">-<span class="keyword">H</span> <span class="string">"X-Auth-Token: `cat ~/token`"</span> -<span class="keyword">H</span> <span class="string">"Accept: application/x-yaml"</span> \</span><br><span class="line">-<span class="keyword">d</span> client='wheel' -<span class="keyword">d</span> fun='key.list_all'</span><br></pre></td></tr></table></figure>
+<h4 id="2-Run_cmd">2.Run cmd</h4><p><strong>Execution</strong> module是远程执行一些function的模块，其中，cmd.run这个function就是执行minion的shell命令了。当然，其他function也可以执行，我的demo里只实现了cmd.run这个function。</p>
+<p>Execution module参考： <a href="https://docs.saltstack.com/en/latest/ref/modules/all/index.html" target="_blank" rel="external">Execution module</a><br>cmd.run function参考: <a href="https://docs.saltstack.com/en/latest/ref/modules/all/salt.modules.cmdmod.html#module-salt.modules.cmdmod" target="_blank" rel="external">cmd.run funciton</a></p>
+<p>调用方式举例：</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">curl -X <span class="keyword">POST</span> -Ssk -i https:<span class="comment">//&lt;master ip&gt;:8000/login \</span></span><br><span class="line">-<span class="keyword">H</span> <span class="string">"Accept: application/x-yaml"</span> -<span class="keyword">d</span> username=&lt;your username&gt; \</span><br><span class="line">-<span class="keyword">d</span> password=&lt;your password&gt; -<span class="keyword">d</span> eauth=pam | awk '/<span class="keyword">token</span>/ &#123;printf <span class="label">$2&#125;</span>' &gt; ~/<span class="keyword">token</span></span><br><span class="line"></span><br><span class="line">curl -Ssk -i https:<span class="comment">//&lt;master ip&gt;:8000/ \</span></span><br><span class="line">-<span class="keyword">H</span> <span class="string">"X-Auth-Token: `cat ~/token`"</span> -<span class="keyword">H</span> <span class="string">"Accept: application/x-yaml"</span> \</span><br><span class="line">-<span class="keyword">d</span> client='<span class="keyword">local</span>' -<span class="keyword">d</span> fun='cmd.<span class="keyword">run</span>' -<span class="keyword">d</span> tgt='minion_id' -<span class="keyword">d</span> arg='df -<span class="keyword">h</span>'</span><br></pre></td></tr></table></figure>
+<p><img src="/uploads/cmd.jpg" alt="cmd运行结果"></p>
+<hr>
+<h3 id="UI">UI</h3><p>然后就是调用api来实现功能，展示页面了。<br>调api部分，我比较懒，直接用了我们项目的httpclient库了。<br>页面部分，我从bootstrap官网下载的页面来用。</p>
+<p><strong>Key Management UI</strong></p>
+<p><img src="/uploads/key_ui.jpg" alt="key management ui"></p>
+<p><strong>Cmd Run UI</strong></p>
+<p><img src="/uploads/cmd_ui.jpg" alt="cmd run ui"></p>
+<hr>
+<h3 id="demo配置">demo配置</h3><p>如果要运行demo，需要：<br>1.salt-api正确配置，参考： <a href="http://www.saltstack.cn/projects/cssug-kb/wiki/salt-api-deploy-and-use" target="_blank" rel="external">salt-api配置</a><br>2.salt user权限正确配置，可参考上一篇文章。<br>3.demo中，classpath下account.properties，需要配置ip_url,username和password。</p>
+<p>代码地址： <a href="https://github.com/ndrlslz/SaltManagement" target="_blank" rel="external">demo代码</a></p>
+
+          
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -655,7 +767,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-count">4</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

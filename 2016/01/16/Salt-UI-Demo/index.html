@@ -57,28 +57,28 @@
 
 
 
-<meta name="description" content="因为平时无聊的时候喜欢看下斗鱼之类的直播平台,所以顺便会思考下斗鱼是怎么让获取弹幕的。这里记录下过程。
-抓包分析了解到斗鱼有个专门的弹幕服务器，http://danmu.douyutv.com, 端口的话，8601，8602，12601，12602都是弹幕端口。
-这里我用wireshark对其进行抓包。结果如下图：
-一开始我没完全看懂这个包内容具体的意思，参考了下知乎的答案后才明白。这个内容分为4">
+<meta name="description" content="因为之前学习了saltstack，所以有个简单的想法，想写个salt management UI，这样就不用输入繁琐的命令，方便管理和运维。由于没多少时间，就做了个简单的demo，仅仅写了登陆，key管理，远程执行minion的cmd命令的功能，在这里记录下。
+涉及框架demo采用springMVC + velocity + bootstrap框架。
+
+方法介绍原理主要还是通过调用salt-api">
 <meta property="og:type" content="article">
-<meta property="og:title" content="斗鱼弹幕抓取">
-<meta property="og:url" content="http://yoursite.com/2015/12/26/斗鱼弹幕抓取/index.html">
+<meta property="og:title" content="Salt UI Demo">
+<meta property="og:url" content="http://yoursite.com/2016/01/16/Salt-UI-Demo/index.html">
 <meta property="og:site_name" content="霹雳啪啦程序汪">
-<meta property="og:description" content="因为平时无聊的时候喜欢看下斗鱼之类的直播平台,所以顺便会思考下斗鱼是怎么让获取弹幕的。这里记录下过程。
-抓包分析了解到斗鱼有个专门的弹幕服务器，http://danmu.douyutv.com, 端口的话，8601，8602，12601，12602都是弹幕端口。
-这里我用wireshark对其进行抓包。结果如下图：
-一开始我没完全看懂这个包内容具体的意思，参考了下知乎的答案后才明白。这个内容分为4">
-<meta property="og:image" content="http://yoursite.com/uploads/package.jpg">
-<meta property="og:image" content="http://yoursite.com/uploads/response.jpg">
-<meta property="og:image" content="http://yoursite.com/uploads/result.jpg">
-<meta property="og:updated_time" content="2016-01-07T14:11:30.863Z">
+<meta property="og:description" content="因为之前学习了saltstack，所以有个简单的想法，想写个salt management UI，这样就不用输入繁琐的命令，方便管理和运维。由于没多少时间，就做了个简单的demo，仅仅写了登陆，key管理，远程执行minion的cmd命令的功能，在这里记录下。
+涉及框架demo采用springMVC + velocity + bootstrap框架。
+
+方法介绍原理主要还是通过调用salt-api">
+<meta property="og:image" content="http://yoursite.com/uploads/cmd.jpg">
+<meta property="og:image" content="http://yoursite.com/uploads/key_ui.jpg">
+<meta property="og:image" content="http://yoursite.com/uploads/cmd_ui.jpg">
+<meta property="og:updated_time" content="2016-01-15T16:28:26.573Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="斗鱼弹幕抓取">
-<meta name="twitter:description" content="因为平时无聊的时候喜欢看下斗鱼之类的直播平台,所以顺便会思考下斗鱼是怎么让获取弹幕的。这里记录下过程。
-抓包分析了解到斗鱼有个专门的弹幕服务器，http://danmu.douyutv.com, 端口的话，8601，8602，12601，12602都是弹幕端口。
-这里我用wireshark对其进行抓包。结果如下图：
-一开始我没完全看懂这个包内容具体的意思，参考了下知乎的答案后才明白。这个内容分为4">
+<meta name="twitter:title" content="Salt UI Demo">
+<meta name="twitter:description" content="因为之前学习了saltstack，所以有个简单的想法，想写个salt management UI，这样就不用输入繁琐的命令，方便管理和运维。由于没多少时间，就做了个简单的demo，仅仅写了登陆，key管理，远程执行minion的cmd命令的功能，在这里记录下。
+涉及框架demo采用springMVC + velocity + bootstrap框架。
+
+方法介绍原理主要还是通过调用salt-api">
 
 
 
@@ -96,7 +96,7 @@
   };
 </script>
 
-  <title> 斗鱼弹幕抓取 | 霹雳啪啦程序汪 </title>
+  <title> Salt UI Demo | 霹雳啪啦程序汪 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -224,7 +224,7 @@
             
             
               
-                斗鱼弹幕抓取
+                Salt UI Demo
               
             
           </h1>
@@ -236,8 +236,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-12-26T22:56:21+08:00" content="2015-12-26">
-              2015-12-26
+            <time itemprop="dateCreated" datetime="2016-01-16T00:13:25+08:00" content="2016-01-16">
+              2016-01-16
             </time>
           </span>
 
@@ -247,8 +247,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2015/12/26/斗鱼弹幕抓取/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/26/斗鱼弹幕抓取/" itemprop="commentsCount"></span>
+                <a href="/2016/01/16/Salt-UI-Demo/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/16/Salt-UI-Demo/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -258,7 +258,7 @@
 
           
           
-             <span id="/2015/12/26/斗鱼弹幕抓取/" class="leancloud_visitors" data-flag-title="斗鱼弹幕抓取">
+             <span id="/2016/01/16/Salt-UI-Demo/" class="leancloud_visitors" data-flag-title="Salt UI Demo">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -278,42 +278,28 @@
       
 
       
-        <p>因为平时无聊的时候喜欢看下斗鱼之类的直播平台,所以顺便会思考下斗鱼是怎么让获取弹幕的。这里记录下过程。</p>
-<h3 id="抓包分析">抓包分析</h3><p>了解到斗鱼有个专门的弹幕服务器，<a href="http://danmu.douyutv.com" target="_blank" rel="external">http://danmu.douyutv.com</a>, 端口的话，8601，8602，12601，12602都是弹幕端口。</p>
-<p>这里我用wireshark对其进行抓包。结果如下图：<br><a href="/uploads/package.jpg"><img src="/uploads/package.jpg" alt="抓包"></a></p>
-<p>一开始我没完全看懂这个包内容具体的意思，参考了下知乎的答案后才明白。<br>这个内容分为4部分。</p>
-<ol>
-<li>第一部分用黑色框住的，是后3个部分内容的总字节长度。这里是5b,即后3个部分内容的字节长度为91，另外第一部分自己会占4个字节，所以这个包的data长度为95，即橙色框部分。</li>
-<li>第二部分用红色框住的，斗鱼的规则是这个内容和第一部分一样。占4个字节。</li>
-<li>第三部分用绿色框住的，斗鱼的规则是向服务器发送的包，这部分固定为0xb1,0x02,0x00,0x00 这4个字节，从服务器发回来的包固定为0xb2,0x02,0x00,0x00 这4个字节</li>
-<li>最后一部分就是发送的具体内容了。</li>
-</ol>
-<p>抓包得知，如果需要连上斗鱼的弹幕服务器，需要让弹幕服务器发送2个包，</p>
-<ol>
-<li>一种是上图的loginreq包。<br>“type@=loginreq/username@=auto_KRLJbE8mZM/password@=1234567890123456/roomid@=/“<br>这个账号密码随便填都行，roomid即房间号了，如果房间号是昵称的话，需要转换成id。</li>
-<li>另一种是joingroup包。<br>“type@=joingroup/rid@=/gid@=/“<br>因为每个房间因为人数原因，人数多房间的会将弹幕分流，分成几个group。这里需要选择进入哪个group，我最后实验看不同的group的弹幕其实是一样的，所以它是为了把用户均衡下，分到不同的group，避免都连上同一个而负载很高。</li>
-</ol>
-<p>然后就可以获得弹幕服务器发回来的弹幕了，如下图：<br><img src="/uploads/response.jpg" alt="抓包弹幕"></p>
+        <p>因为之前学习了saltstack，所以有个简单的想法，想写个salt management UI，这样就不用输入繁琐的命令，方便管理和运维。<br>由于没多少时间，就做了个简单的demo，仅仅写了登陆，key管理，远程执行minion的cmd命令的功能，在这里记录下。</p>
+<h3 id="涉及框架">涉及框架</h3><p>demo采用springMVC + velocity + bootstrap框架。</p>
 <hr>
-<h3 id="抓取弹幕">抓取弹幕</h3><p>然后开始来抓取弹幕，我这里用Java来抓取，这里截取部分主要流程代码。</p>
-<p>先获得和弹幕服务器的socket连接，我这里把地址和端口写到配置文件了。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">socket = <span class="keyword">new</span> Socket(Config.getAddress(),Integer.parseInt(Config.getPort()));</span><br></pre></td></tr></table></figure></p>
-<p>然后向服务器发送那2个包。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sendMessage(<span class="string">"type@=loginreq/username@=auto_KRLJbE8mZM/password@=1234567890123456/roomid@="</span> + roomId + <span class="string">"/"</span>);</span><br><span class="line">sendMessage(<span class="string">"type@=joingroup/rid@="</span> + roomId + <span class="string">"/gid@="</span> + groupId + <span class="string">"/"</span>);</span><br></pre></td></tr></table></figure></p>
-<p>这里roomId如果是昵称的话，需要转成id，我是去房间通过feedback_report_button这个id来得到的，也有其他方式。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">String html = httpClient.doGet(<span class="string">"http://www.douyutv.com/"</span> + roomName);</span><br><span class="line">Document doc = Jsoup.parse(html);</span><br><span class="line">Element element = doc.select(<span class="string">"#feedback_report_button"</span>).first();</span><br><span class="line">String href = element.attr(<span class="string">"href"</span>);</span><br><span class="line"><span class="keyword">if</span> (href != <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> href.split(<span class="string">"="</span>)[<span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>gid的获取,我参考的github的一个项目。</p>
-<ol>
-<li>首先去对应的斗鱼房间抓取页面，取到server_config的字符串</li>
-<li>进行URL解码,得到一组ip, port</li>
-<li>向其中任意的一个ip,port发送loginreq包，这个loginreq包和之前的不一样。</li>
-<li>这个loginreq包中,devid是随机UUID,需要替换掉’-‘,字母全大写<br>rt是时间戳,这里必须是以秒为单位<br>ver是版本号<br>vk我不懂是什么意思，我参考的那个项目是这么做的: rt + 一串固定字符串 + devid的MD5编码</li>
-<li>发送loginreq后会收到type@=setmsgroup包，里面就有gid</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sendReq</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    String roomId = roomInformation.getRoomId();</span><br><span class="line">    String devid = UUID.randomUUID().toString().replace(<span class="string">"-"</span>, <span class="string">""</span>).toUpperCase();</span><br><span class="line">    String rt = String.valueOf(System.currentTimeMillis() / <span class="number">1000</span>);</span><br><span class="line">    String ver = <span class="string">"20150526"</span>;</span><br><span class="line">    String magic = <span class="string">"7oE9nPEG9xXV69phU31FYCLUagKeYtsF"</span>;</span><br><span class="line">    String vk = MD5Utils.MD5(rt + magic + devid);</span><br><span class="line"></span><br><span class="line">    sendMessage(<span class="string">"type@=loginreq/username@=/ct@=2/password@=/roomid@="</span> + roomId +</span><br><span class="line">            <span class="string">"/devid@="</span> + devid + <span class="string">"/rt@="</span> + rt + <span class="string">"/vk@="</span> + vk + <span class="string">"/ver@="</span> + ver + <span class="string">"/"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>然后就可以从socket的inputstream来获取弹幕了，接着对获取的字符串进行解析，我这里只解析了弹幕，没有解析礼物那些。为了方便，我直接用log4j来存储弹幕了。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">parseResponse</span><span class="params">(String response)</span> </span>&#123;</span><br><span class="line">    String REGEX =<span class="string">"type@=chatmessage/.*/content@=(.*)/snick@=(.*?)/"</span>;</span><br><span class="line">    Pattern pattern = Pattern.compile(REGEX);</span><br><span class="line">    Matcher matcher = pattern.matcher(response);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (matcher.find()) &#123;</span><br><span class="line">        logger.info(matcher.group(<span class="number">2</span>) + <span class="string">": "</span> + matcher.group(<span class="number">1</span>));</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>然后，还需要不停的向服务器发送心跳包，否则服务器过段时间会关闭我们的连接。我这里每隔60秒发送一个心跳包。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sendMessage(<span class="string">"type@=keeplive/tick@=70/"</span>);</span><br></pre></td></tr></table></figure></p>
-<p>最后，贴下获取的弹幕图：</p>
-<p><img src="/uploads/result.jpg" alt="弹幕"></p>
-<p>我抓取弹幕的过程大概就是这样。</p>
-<p>代码地址： <a href="https://github.com/ndrlslz/DouyuBarrageTool" target="_blank" rel="external">代码参考</a></p>
+<h3 id="方法介绍">方法介绍</h3><p>原理主要还是通过调用salt-api来实现各种操作。</p>
+<h4 id="1-Key_management">1.Key management</h4><p>salt中， <strong>Wheel</strong> module是对key操作的一个封装， 通过调用wheel模块的api，实现key的accept，delete，reject，list等操作。</p>
+<p>Wheel api参考： <a href="https://docs.saltstack.com/en/latest/ref/wheel/all/salt.wheel.key.html#module-salt.wheel.key" target="_blank" rel="external">Wheel API</a></p>
+<p>调用方式，这里用list key举例。</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">curl -X <span class="keyword">POST</span> -Ssk -i https:<span class="comment">//&lt;master ip&gt;:8000/login \</span></span><br><span class="line">-<span class="keyword">H</span> <span class="string">"Accept: application/x-yaml"</span> -<span class="keyword">d</span> username=&lt;your username&gt; \</span><br><span class="line">-<span class="keyword">d</span> password=&lt;your password&gt; -<span class="keyword">d</span> eauth=pam | awk '/<span class="keyword">token</span>/ &#123;printf <span class="label">$2&#125;</span>' &gt; ~/<span class="keyword">token</span></span><br><span class="line"></span><br><span class="line">curl -Ssk -i https:<span class="comment">//&lt;master ip&gt;:8000/ \</span></span><br><span class="line">-<span class="keyword">H</span> <span class="string">"X-Auth-Token: `cat ~/token`"</span> -<span class="keyword">H</span> <span class="string">"Accept: application/x-yaml"</span> \</span><br><span class="line">-<span class="keyword">d</span> client='wheel' -<span class="keyword">d</span> fun='key.list_all'</span><br></pre></td></tr></table></figure>
+<h4 id="2-Run_cmd">2.Run cmd</h4><p><strong>Execution</strong> module是远程执行一些function的模块，其中，cmd.run这个function就是执行minion的shell命令了。当然，其他function也可以执行，我的demo里只实现了cmd.run这个function。</p>
+<p>Execution module参考： <a href="https://docs.saltstack.com/en/latest/ref/modules/all/index.html" target="_blank" rel="external">Execution module</a><br>cmd.run function参考: <a href="https://docs.saltstack.com/en/latest/ref/modules/all/salt.modules.cmdmod.html#module-salt.modules.cmdmod" target="_blank" rel="external">cmd.run funciton</a></p>
+<p>调用方式举例：</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">curl -X <span class="keyword">POST</span> -Ssk -i https:<span class="comment">//&lt;master ip&gt;:8000/login \</span></span><br><span class="line">-<span class="keyword">H</span> <span class="string">"Accept: application/x-yaml"</span> -<span class="keyword">d</span> username=&lt;your username&gt; \</span><br><span class="line">-<span class="keyword">d</span> password=&lt;your password&gt; -<span class="keyword">d</span> eauth=pam | awk '/<span class="keyword">token</span>/ &#123;printf <span class="label">$2&#125;</span>' &gt; ~/<span class="keyword">token</span></span><br><span class="line"></span><br><span class="line">curl -Ssk -i https:<span class="comment">//&lt;master ip&gt;:8000/ \</span></span><br><span class="line">-<span class="keyword">H</span> <span class="string">"X-Auth-Token: `cat ~/token`"</span> -<span class="keyword">H</span> <span class="string">"Accept: application/x-yaml"</span> \</span><br><span class="line">-<span class="keyword">d</span> client='<span class="keyword">local</span>' -<span class="keyword">d</span> fun='cmd.<span class="keyword">run</span>' -<span class="keyword">d</span> tgt='minion_id' -<span class="keyword">d</span> arg='df -<span class="keyword">h</span>'</span><br></pre></td></tr></table></figure>
+<p><img src="/uploads/cmd.jpg" alt="cmd运行结果"></p>
+<hr>
+<h3 id="UI">UI</h3><p>然后就是调用api来实现功能，展示页面了。<br>调api部分，我比较懒，直接用了我们项目的httpclient库了。<br>页面部分，我从bootstrap官网下载的页面来用。</p>
+<p><strong>Key Management UI</strong></p>
+<p><img src="/uploads/key_ui.jpg" alt="key management ui"></p>
+<p><strong>Cmd Run UI</strong></p>
+<p><img src="/uploads/cmd_ui.jpg" alt="cmd run ui"></p>
+<hr>
+<h3 id="demo配置">demo配置</h3><p>如果要运行demo，需要：<br>1.salt-api正确配置，参考： <a href="http://www.saltstack.cn/projects/cssug-kb/wiki/salt-api-deploy-and-use" target="_blank" rel="external">salt-api配置</a><br>2.salt user权限正确配置，可参考上一篇文章。<br>3.demo中，classpath下account.properties，需要配置ip_url,username和password。</p>
+<p>代码地址： <a href="https://github.com/ndrlslz/SaltManagement" target="_blank" rel="external">demo代码</a></p>
 
       
     </div>
@@ -325,17 +311,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/12/06/keystone记录/" rel="next" title="keystone记录">
-                <i class="fa fa-chevron-left"></i> keystone记录
+              <a href="/2016/01/09/Heat-Salt自动部署服务/" rel="next" title="Heat+Salt自动部署服务">
+                <i class="fa fa-chevron-left"></i> Heat+Salt自动部署服务
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/01/09/Heat-Salt自动部署服务/" rel="prev" title="Heat+Salt自动部署服务">
-                Heat+Salt自动部署服务 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -361,8 +343,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2015/12/26/斗鱼弹幕抓取/"
-           data-title="斗鱼弹幕抓取" data-url="http://yoursite.com/2015/12/26/斗鱼弹幕抓取/">
+      <div class="ds-thread" data-thread-key="2016/01/16/Salt-UI-Demo/"
+           data-title="Salt UI Demo" data-url="http://yoursite.com/2016/01/16/Salt-UI-Demo/">
       </div>
     
   </div>
@@ -471,7 +453,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#抓包分析"><span class="nav-number">1.</span> <span class="nav-text">抓包分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#抓取弹幕"><span class="nav-number">2.</span> <span class="nav-text">抓取弹幕</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#涉及框架"><span class="nav-number">1.</span> <span class="nav-text">涉及框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法介绍"><span class="nav-number">2.</span> <span class="nav-text">方法介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Key_management"><span class="nav-number">2.1.</span> <span class="nav-text">1.Key management</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Run_cmd"><span class="nav-number">2.2.</span> <span class="nav-text">2.Run cmd</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UI"><span class="nav-number">3.</span> <span class="nav-text">UI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#demo配置"><span class="nav-number">4.</span> <span class="nav-text">demo配置</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
