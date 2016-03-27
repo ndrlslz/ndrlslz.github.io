@@ -57,25 +57,25 @@
 
 
 
-<meta name="description" content="Salt ModulesState Modules和Execution ModulesSalt有2种Modules，State Modules和Execution Modules。
+<meta name="description" content="Saltstack自带了很多module供使用，但需要自己实现一些功能的时候，就需要来自定义module了。
+Salt ModulesState Modules和Execution ModulesSalt有2种Modules，State Modules和Execution Modules。
 
-Execution Modules: 它是通过salt的命令行调用的。当执行相应的execution module的时候，会发送给minion相应的命令，让其马上执行这个命令。
-State Modules: 它是通过">
+Execution Modules: 它是通过salt的命令行调用的。当执行相应的execution mo">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Salt自定义module">
 <meta property="og:url" content="http://yoursite.com/2016/03/03/Salt自定义module/index.html">
 <meta property="og:site_name" content="霹雳啪啦程序汪">
-<meta property="og:description" content="Salt ModulesState Modules和Execution ModulesSalt有2种Modules，State Modules和Execution Modules。
+<meta property="og:description" content="Saltstack自带了很多module供使用，但需要自己实现一些功能的时候，就需要来自定义module了。
+Salt ModulesState Modules和Execution ModulesSalt有2种Modules，State Modules和Execution Modules。
 
-Execution Modules: 它是通过salt的命令行调用的。当执行相应的execution module的时候，会发送给minion相应的命令，让其马上执行这个命令。
-State Modules: 它是通过">
-<meta property="og:updated_time" content="2016-03-03T14:41:24.966Z">
+Execution Modules: 它是通过salt的命令行调用的。当执行相应的execution mo">
+<meta property="og:updated_time" content="2016-03-27T16:16:25.869Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Salt自定义module">
-<meta name="twitter:description" content="Salt ModulesState Modules和Execution ModulesSalt有2种Modules，State Modules和Execution Modules。
+<meta name="twitter:description" content="Saltstack自带了很多module供使用，但需要自己实现一些功能的时候，就需要来自定义module了。
+Salt ModulesState Modules和Execution ModulesSalt有2种Modules，State Modules和Execution Modules。
 
-Execution Modules: 它是通过salt的命令行调用的。当执行相应的execution module的时候，会发送给minion相应的命令，让其马上执行这个命令。
-State Modules: 它是通过">
+Execution Modules: 它是通过salt的命令行调用的。当执行相应的execution mo">
 
 
 
@@ -275,7 +275,8 @@ State Modules: 它是通过">
       
 
       
-        <h3 id="Salt_Modules">Salt Modules</h3><h4 id="State_Modules和Execution_Modules">State Modules和Execution Modules</h4><p>Salt有2种Modules，State Modules和Execution Modules。</p>
+        <p>Saltstack自带了很多module供使用，但需要自己实现一些功能的时候，就需要来自定义module了。</p>
+<h3 id="Salt_Modules">Salt Modules</h3><h4 id="State_Modules和Execution_Modules">State Modules和Execution Modules</h4><p>Salt有2种Modules，State Modules和Execution Modules。</p>
 <ol>
 <li>Execution Modules: 它是通过salt的命令行调用的。当执行相应的execution module的时候，会发送给minion相应的命令，让其马上执行这个命令。</li>
 <li>State Modules: 它是通过states文件调用的。它更倾向于让minion保持某种状态或结果。和Execution Modules不同的是，当执行State Modules的时候，它会检测minion有没有达到state modules想让它达到的效果，比如pkg.installed，它会检测minion有没有装这个软件，如果没有，才会去安装。</li>
@@ -297,6 +298,7 @@ State Modules: 它是通过">
 <li>salt ‘minion-id’ sys.state_doc , 这个命令可以查看具体某个state module或其中某个function的具体用法。</li>
 </ol>
 </blockquote>
+<hr>
 <h3 id="Modules写法">Modules写法</h3><p>在写modules的时候，有几个变量使用较多。<br>1.__grains__ 字典，存储了minion的grains<br>2.__pillar__ 字典，存储了minion的pillar<br>3.__salt__ 字典，存储了minion能用的execution modules</p>
 <p><strong>Execution Modules</strong><br>因为execution modules的定位是用来让minion执行命令，所以通常用它来执行shell命令，执行各种操作等等。<br>举个例子，自定义module的时候，经常调用cmd 这个module。<br>__salt__[‘cmd.run’](command) , 执行shell命令，返回shell执行的字符串结果。</p>
 <p>__salt__[‘cmd.run_all’](command) , 执行shell命令，返回一个字典:</p>
@@ -309,6 +311,7 @@ State Modules: 它是通过">
 <p>{<br>  ‘name’: string, #执行的state module的name。<br>  ‘changes’: dict, #执行完module的变化。<br>  ‘result’: True | False | None,<br>  ‘comment’: string, #执行结果的摘要<br>}</p>
 </blockquote>
 <p>参考文档：<br><a href="https://docs.saltstack.com/en/latest/ref/states/writing.html" target="_blank" rel="external">salt官方文档</a><br><a href="https://github.com/saltstack/salt/tree/develop/salt/states" target="_blank" rel="external">salt自带state modules源码</a></p>
+<hr>
 <h3 id="练习Modules编写">练习Modules编写</h3><p>由于最近需要写IBM Websphere Application Server的salt，需要自定义modules来实现一些功能。所以练习下modules的编写。</p>
 <p>WAS的集群安装中，需要实现start和stop集群中的dmgr，nodeagent和server，这里贴下学习写的start部分。</p>
 <p><strong>Execution Modules</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"><span class="keyword">import</span> salt</span><br><span class="line"><span class="keyword">from</span> salt.exceptions <span class="keyword">import</span> SaltInvocationError</span><br><span class="line"></span><br><span class="line">log = logging.getLogger(__name__)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">start_process</span><span class="params">(type, profile_path, server_name=None)</span>:</span></span><br><span class="line">    <span class="string">"""</span><br><span class="line">    Start the dmgr, node agent or server.</span><br><span class="line">    :param type: dmgr | node | server</span><br><span class="line">    :param profile_path: profile path of server. i.e: /opt/IBM/WebSphere/AppServer/profiles/dmgr01</span><br><span class="line">    :param server_name: server name. i.e: server01</span><br><span class="line"></span><br><span class="line">    CLI Example:</span><br><span class="line">    .. code-block: bash</span><br><span class="line">        salt '*' websphere.start_server dmgr /opt/IBM/WebSphere/AppServer/profiles dmgr01</span><br><span class="line">    """</span></span><br><span class="line">    log.info(<span class="string">"type: &#123;0&#125;"</span>.format(type))</span><br><span class="line">    log.info(<span class="string">"profile_path: &#123;0&#125;"</span>.format(profile_path))</span><br><span class="line">    log.info(<span class="string">"server_name: &#123;0&#125;"</span>.format(server_name))</span><br><span class="line"></span><br><span class="line">    pre_command = profile_path + <span class="string">'/bin/'</span></span><br><span class="line">    <span class="keyword">if</span> type == <span class="string">'node'</span>:</span><br><span class="line">        command = pre_command + <span class="string">'startNode.sh'</span></span><br><span class="line">    <span class="keyword">elif</span> type == <span class="string">'dmgr'</span>:</span><br><span class="line">        command = pre_command + <span class="string">'startManager.sh'</span></span><br><span class="line">    <span class="keyword">elif</span> type == <span class="string">'server'</span>:</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> server_name:</span><br><span class="line">            log.error(<span class="string">'server_name is null!'</span>)</span><br><span class="line">            <span class="keyword">raise</span> SaltInvocationError(<span class="string">'server_name can not be null when type is server'</span>)</span><br><span class="line">        command = pre_command + <span class="string">'startServer.sh '</span> + server_name</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        log.error(<span class="string">'param type error.'</span>)</span><br><span class="line">        <span class="keyword">raise</span> SaltInvocationError(<span class="string">'param type error, please select dmgr, node or server.'</span>)</span><br><span class="line"></span><br><span class="line">    out = __salt__[<span class="string">'cmd.run_all'</span>](command, python_shell=<span class="keyword">True</span>)</span><br><span class="line">    <span class="keyword">return</span> out</span><br></pre></td></tr></table></figure></p>
@@ -406,7 +409,7 @@ State Modules: 它是通过">
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-count">8</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

@@ -57,28 +57,20 @@
 
 
 
-<meta name="description" content="因为之前学习了saltstack，所以有个简单的想法，想写个salt management UI，这样就不用输入繁琐的命令，方便管理和运维。由于没多少时间，就做了个简单的demo，仅仅写了登陆，key管理，远程执行minion的cmd命令的功能，在这里记录下。
-涉及框架demo采用springMVC + velocity + bootstrap框架。
-
-方法介绍原理主要还是通过调用salt-api">
+<meta name="description" content="存储基本知识存储方案DAS (Direct-Attached Storage)服务器和存储设备直接连接的方式。 每个服务器有自己单独的存储设备，存储之间不共享。类似于机器的硬盘这种方式。这种方式的话，扩展性，利用率，容灾等等都很差，这是早期的实现方式。
+SAN (Storage Area Network)服务器和存储设备通过光纤网络连接的方式，服务器共享一个磁盘阵列。当服务器需要存储时，存储设备分">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Salt UI Demo">
-<meta property="og:url" content="http://yoursite.com/2016/01/16/Salt-UI-Demo/index.html">
+<meta property="og:title" content="Openstack cinder学习">
+<meta property="og:url" content="http://yoursite.com/2016/03/28/Openstack-cinder学习/index.html">
 <meta property="og:site_name" content="霹雳啪啦程序汪">
-<meta property="og:description" content="因为之前学习了saltstack，所以有个简单的想法，想写个salt management UI，这样就不用输入繁琐的命令，方便管理和运维。由于没多少时间，就做了个简单的demo，仅仅写了登陆，key管理，远程执行minion的cmd命令的功能，在这里记录下。
-涉及框架demo采用springMVC + velocity + bootstrap框架。
-
-方法介绍原理主要还是通过调用salt-api">
-<meta property="og:image" content="http://yoursite.com/uploads/cmd.jpg">
-<meta property="og:image" content="http://yoursite.com/uploads/key_ui.jpg">
-<meta property="og:image" content="http://yoursite.com/uploads/cmd_ui.jpg">
-<meta property="og:updated_time" content="2016-01-15T16:28:26.573Z">
+<meta property="og:description" content="存储基本知识存储方案DAS (Direct-Attached Storage)服务器和存储设备直接连接的方式。 每个服务器有自己单独的存储设备，存储之间不共享。类似于机器的硬盘这种方式。这种方式的话，扩展性，利用率，容灾等等都很差，这是早期的实现方式。
+SAN (Storage Area Network)服务器和存储设备通过光纤网络连接的方式，服务器共享一个磁盘阵列。当服务器需要存储时，存储设备分">
+<meta property="og:image" content="http://yoursite.com/uploads/cinder-arch.png">
+<meta property="og:updated_time" content="2016-03-27T16:14:58.339Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Salt UI Demo">
-<meta name="twitter:description" content="因为之前学习了saltstack，所以有个简单的想法，想写个salt management UI，这样就不用输入繁琐的命令，方便管理和运维。由于没多少时间，就做了个简单的demo，仅仅写了登陆，key管理，远程执行minion的cmd命令的功能，在这里记录下。
-涉及框架demo采用springMVC + velocity + bootstrap框架。
-
-方法介绍原理主要还是通过调用salt-api">
+<meta name="twitter:title" content="Openstack cinder学习">
+<meta name="twitter:description" content="存储基本知识存储方案DAS (Direct-Attached Storage)服务器和存储设备直接连接的方式。 每个服务器有自己单独的存储设备，存储之间不共享。类似于机器的硬盘这种方式。这种方式的话，扩展性，利用率，容灾等等都很差，这是早期的实现方式。
+SAN (Storage Area Network)服务器和存储设备通过光纤网络连接的方式，服务器共享一个磁盘阵列。当服务器需要存储时，存储设备分">
 
 
 
@@ -96,7 +88,7 @@
   };
 </script>
 
-  <title> Salt UI Demo | 霹雳啪啦程序汪 </title>
+  <title> Openstack cinder学习 | 霹雳啪啦程序汪 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -224,7 +216,7 @@
             
             
               
-                Salt UI Demo
+                Openstack cinder学习
               
             
           </h1>
@@ -236,8 +228,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-01-16T00:13:25+08:00" content="2016-01-16">
-              2016-01-16
+            <time itemprop="dateCreated" datetime="2016-03-28T00:08:50+08:00" content="2016-03-28">
+              2016-03-28
             </time>
           </span>
 
@@ -247,8 +239,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/01/16/Salt-UI-Demo/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/16/Salt-UI-Demo/" itemprop="commentsCount"></span>
+                <a href="/2016/03/28/Openstack-cinder学习/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/28/Openstack-cinder学习/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -258,7 +250,7 @@
 
           
           
-             <span id="/2016/01/16/Salt-UI-Demo/" class="leancloud_visitors" data-flag-title="Salt UI Demo">
+             <span id="/2016/03/28/Openstack-cinder学习/" class="leancloud_visitors" data-flag-title="Openstack cinder学习">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -278,28 +270,58 @@
       
 
       
-        <p>因为之前学习了saltstack，所以有个简单的想法，想写个salt management UI，这样就不用输入繁琐的命令，方便管理和运维。<br>由于没多少时间，就做了个简单的demo，仅仅写了登陆，key管理，远程执行minion的cmd命令的功能，在这里记录下。</p>
-<h3 id="涉及框架">涉及框架</h3><p>demo采用springMVC + velocity + bootstrap框架。</p>
+        <h3 id="存储基本知识">存储基本知识</h3><h4 id="存储方案">存储方案</h4><p><strong>DAS (Direct-Attached Storage)</strong><br>服务器和存储设备直接连接的方式。 每个服务器有自己单独的存储设备，存储之间不共享。类似于机器的硬盘这种方式。这种方式的话，扩展性，利用率，容灾等等都很差，这是早期的实现方式。</p>
+<p><strong>SAN (Storage Area Network)</strong><br>服务器和存储设备通过光纤网络连接的方式，服务器共享一个磁盘阵列。当服务器需要存储时，存储设备分配出一块区域，然后服务器通过网络连接上这块存储，再对其进行格式化，成为可以用的文件系统。</p>
+<p><strong>DAS (Network Attached Storage)</strong><br>这种方式，存储除了有磁盘阵列外，它有自己的文件系统，相当于自己就是一个提供文件系统的存储服务器，当外部服务器需要访问存储的时候，可以直接通过网络连上存储服务器提供的文件系统来使用。</p>
+<h4 id="LVM">LVM</h4><p><strong>LVM概念</strong><br>LVM 逻辑卷管理，是在物理磁盘和文件系统间抽象出来的一层，用于将物理磁盘抽象成一个大的卷组，然后再在这个卷组上划分逻辑卷。相比于传统的磁盘使用，这样提高了磁盘的利用率和扩展的灵活性。</p>
+<p><strong>创建逻辑卷</strong><br>1.首先给虚拟机加一块存储设备/dev/vdb，通过fdisk将其分好区。在选择Hex Code的时候，选择8e,表示是个LVM格式的分区。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#fdisk /dev/vdb</span></span><br><span class="line">Disk /dev/vdb: <span class="number">21.5</span> GB, <span class="number">21474836480</span> bytes</span><br><span class="line"><span class="number">4</span> heads, <span class="number">32</span> sectors/track, <span class="number">327680</span> cylinders</span><br><span class="line">Units = cylinders of <span class="number">128</span> * <span class="number">512</span> = <span class="number">65536</span> bytes</span><br><span class="line">Sector size (logical/physical): <span class="number">512</span> bytes / <span class="number">512</span> bytes</span><br><span class="line">I/O size (minimum/optimal): <span class="number">512</span> bytes / <span class="number">512</span> bytes</span><br><span class="line">Disk identifier: <span class="number">0</span>x00029ba0</span><br><span class="line"></span><br><span class="line">   Device Boot      Start         End      Blocks   Id  System</span><br><span class="line">/dev/vdb1   *          <span class="number">17</span>      <span class="number">327680</span>    <span class="number">20970496</span>   <span class="number">8</span>e  Linux LVM</span><br></pre></td></tr></table></figure></p>
+<p>2.将这个分区设置成LVM的PV(physical volume),表示它是由LVM管理的物理卷，这个物理卷相比于物理存储设备来说，加了些LVM的参数。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pvcreate /dev/vdb1</span><br></pre></td></tr></table></figure></p>
+<p>3.创建一个卷组，把那个pv加入到这个卷组中，即概念中说的，把多个物理卷抽象成一个大的卷组。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vgcreate vgGroup /dev/vdb1</span><br></pre></td></tr></table></figure></p>
+<p>4.然后就可以从这个卷组中划分逻辑卷了<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lvcreate -L <span class="number">10</span>G -n lv1 vgGroup</span><br></pre></td></tr></table></figure></p>
+<p>5.然后就格式化这个逻辑卷，来进行挂载使用<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#mkfs -t ext4 /dev/vgGroup/lv1</span></span><br><span class="line"><span class="comment">#mount /dev/vgGroup/lv1 /test_fs</span></span><br><span class="line"><span class="comment">#df -h</span></span><br><span class="line">Filesystem            Size  Used Avail Use% Mounted on</span><br><span class="line">/dev/vda1              <span class="number">20</span>G  <span class="number">2.1</span>G   <span class="number">17</span>G  <span class="number">12</span>% /</span><br><span class="line">tmpfs                 <span class="number">499</span>M   <span class="number">12</span>K  <span class="number">499</span>M   <span class="number">1</span>% /dev/shm</span><br><span class="line">/dev/mapper/vgGroup-lv1</span><br><span class="line">                      <span class="number">9.8</span>G   <span class="number">23</span>M  <span class="number">9.2</span>G   <span class="number">1</span>% /<span class="built_in">test</span>_fs</span><br></pre></td></tr></table></figure></p>
+<p><strong>扩展逻辑卷</strong><br>如果vg容量不够，需要新加pv来扩容vg，我们这里容量够，就直接扩展了。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#lvextend -L 15G /dev/vgGroup/lv1</span></span><br><span class="line"><span class="comment">#resize2fs /dev/vgGroup/lv1</span></span><br><span class="line"><span class="comment">#df -h</span></span><br><span class="line">Filesystem            Size  Used Avail Use% Mounted on</span><br><span class="line">/dev/vda1              <span class="number">20</span>G  <span class="number">2.1</span>G   <span class="number">17</span>G  <span class="number">12</span>% /</span><br><span class="line">tmpfs                 <span class="number">499</span>M   <span class="number">12</span>K  <span class="number">499</span>M   <span class="number">1</span>% /dev/shm</span><br><span class="line">/dev/mapper/vgGroup-lv1</span><br><span class="line">                       <span class="number">15</span>G   <span class="number">25</span>M   <span class="number">14</span>G   <span class="number">1</span>% /<span class="built_in">test</span>_fs</span><br></pre></td></tr></table></figure></p>
+<h4 id="iSCSI">iSCSI</h4><p>iSCSI是一种通过TCP/IP协议来传输SCSI命令和块数据的协议。<br>它分为Target(服务端)和Initator(客户端)。<br>大致过程是，Target端暴露出存储设备，Initator端发现这个设备，然后登陆存储设备，来使用。</p>
+<p><strong>Target</strong></p>
+<blockquote>
+<ol>
+<li>准备存储介质(文件，物理磁盘，lvm盘)</li>
+<li>进行配置，将存储介质暴露出来</li>
+</ol>
+</blockquote>
+<p><strong>Initator</strong></p>
+<blockquote>
+<ol>
+<li>服务发现Target上能用的存储</li>
+<li>Initator端登陆上Target暴露出的设备</li>
+</ol>
+</blockquote>
 <hr>
-<h3 id="方法介绍">方法介绍</h3><p>原理主要还是通过调用salt-api来实现各种操作。</p>
-<h4 id="1-Key_management">1.Key management</h4><p>salt中， <strong>Wheel</strong> module是对key操作的一个封装， 通过调用wheel模块的api，实现key的accept，delete，reject，list等操作。</p>
-<p>Wheel api参考： <a href="https://docs.saltstack.com/en/latest/ref/wheel/all/salt.wheel.key.html#module-salt.wheel.key" target="_blank" rel="external">Wheel API</a></p>
-<p>调用方式，这里用list key举例。</p>
-<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">curl -X <span class="keyword">POST</span> -Ssk -i https:<span class="comment">//&lt;master ip&gt;:8000/login \</span></span><br><span class="line">-<span class="keyword">H</span> <span class="string">"Accept: application/x-yaml"</span> -<span class="keyword">d</span> username=&lt;your username&gt; \</span><br><span class="line">-<span class="keyword">d</span> password=&lt;your password&gt; -<span class="keyword">d</span> eauth=pam | awk '/<span class="keyword">token</span>/ &#123;printf <span class="label">$2&#125;</span>' &gt; ~/<span class="keyword">token</span></span><br><span class="line"></span><br><span class="line">curl -Ssk -i https:<span class="comment">//&lt;master ip&gt;:8000/ \</span></span><br><span class="line">-<span class="keyword">H</span> <span class="string">"X-Auth-Token: `cat ~/token`"</span> -<span class="keyword">H</span> <span class="string">"Accept: application/x-yaml"</span> \</span><br><span class="line">-<span class="keyword">d</span> client='wheel' -<span class="keyword">d</span> fun='key.list_all'</span><br></pre></td></tr></table></figure>
-<h4 id="2-Run_cmd">2.Run cmd</h4><p><strong>Execution</strong> module是远程执行一些function的模块，其中，cmd.run这个function就是执行minion的shell命令了。当然，其他function也可以执行，我的demo里只实现了cmd.run这个function。</p>
-<p>Execution module参考： <a href="https://docs.saltstack.com/en/latest/ref/modules/all/index.html" target="_blank" rel="external">Execution module</a><br>cmd.run function参考: <a href="https://docs.saltstack.com/en/latest/ref/modules/all/salt.modules.cmdmod.html#module-salt.modules.cmdmod" target="_blank" rel="external">cmd.run funciton</a></p>
-<p>调用方式举例：</p>
-<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">curl -X <span class="keyword">POST</span> -Ssk -i https:<span class="comment">//&lt;master ip&gt;:8000/login \</span></span><br><span class="line">-<span class="keyword">H</span> <span class="string">"Accept: application/x-yaml"</span> -<span class="keyword">d</span> username=&lt;your username&gt; \</span><br><span class="line">-<span class="keyword">d</span> password=&lt;your password&gt; -<span class="keyword">d</span> eauth=pam | awk '/<span class="keyword">token</span>/ &#123;printf <span class="label">$2&#125;</span>' &gt; ~/<span class="keyword">token</span></span><br><span class="line"></span><br><span class="line">curl -Ssk -i https:<span class="comment">//&lt;master ip&gt;:8000/ \</span></span><br><span class="line">-<span class="keyword">H</span> <span class="string">"X-Auth-Token: `cat ~/token`"</span> -<span class="keyword">H</span> <span class="string">"Accept: application/x-yaml"</span> \</span><br><span class="line">-<span class="keyword">d</span> client='<span class="keyword">local</span>' -<span class="keyword">d</span> fun='cmd.<span class="keyword">run</span>' -<span class="keyword">d</span> tgt='minion_id' -<span class="keyword">d</span> arg='df -<span class="keyword">h</span>'</span><br></pre></td></tr></table></figure>
-<p><img src="/uploads/cmd.jpg" alt="cmd运行结果"></p>
-<hr>
-<h3 id="UI">UI</h3><p>然后就是调用api来实现功能，展示页面了。<br>调api部分，我比较懒，直接用了我们项目的httpclient库了。<br>页面部分，我从bootstrap官网下载的页面来用。</p>
-<p><strong>Key Management UI</strong></p>
-<p><img src="/uploads/key_ui.jpg" alt="key management ui"></p>
-<p><strong>Cmd Run UI</strong></p>
-<p><img src="/uploads/cmd_ui.jpg" alt="cmd run ui"></p>
-<hr>
-<h3 id="demo配置">demo配置</h3><p>如果要运行demo，需要：<br>1.salt-api正确配置，参考： <a href="http://www.saltstack.cn/projects/cssug-kb/wiki/salt-api-deploy-and-use" target="_blank" rel="external">salt-api配置</a><br>2.salt user权限正确配置，可参考上一篇文章。<br>3.demo中，classpath下account.properties，需要配置ip_url,username和password。</p>
-<p>代码地址： <a href="https://github.com/ndrlslz/SaltManagement" target="_blank" rel="external">demo代码</a></p>
+<h3 id="Openstack_cinder">Openstack cinder</h3><h4 id="部署cinder">部署cinder</h4><p><strong>controller节点</strong></p>
+<ol>
+<li>安装必要的服务，mysql，mq，ntp等等</li>
+<li>配置keystone cinder相关部分</li>
+<li>安装cinder，启动cinder-api，cinder-scheduler服务</li>
+</ol>
+<p>参考： <a href="http://docs.openstack.org/liberty/install-guide-rdo/cinder-controller-install.html" target="_blank" rel="external">controller节点配置</a></p>
+<p><strong>cinder节点</strong></p>
+<ol>
+<li>准备好存储介质，通过lvm将其创建成pv，加入cinder-volumes这个vg。</li>
+<li>安装cinder，做好配置，启动cinder-volume服务。</li>
+</ol>
+<p>参考： <a href="http://docs.openstack.org/liberty/install-guide-rdo/cinder-storage-install.html" target="_blank" rel="external">cinder节点配置</a></p>
+<p>下面这样就算安装成功.<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#cinder service-list</span></span><br><span class="line">+------------------+------------------------+------+---------+-------+----------------------------+-----------------+</span><br><span class="line">|      Binary      |          Host          | Zone |  Status | State |         Updated_at         | Disabled Reason |</span><br><span class="line">+------------------+------------------------+------+---------+-------+----------------------------+-----------------+</span><br><span class="line">| cinder-scheduler | controller.localdomain | nova | enabled |   up  | <span class="number">2016</span>-<span class="number">03</span>-<span class="number">21</span>T23:<span class="number">01</span>:<span class="number">15.000000</span> |        -        |</span><br><span class="line">|  cinder-volume   |        cinder0         | nova | enabled |   up  | <span class="number">2016</span>-<span class="number">03</span>-<span class="number">21</span>T23:<span class="number">01</span>:<span class="number">19.000000</span> |        -        |</span><br><span class="line">+------------------+------------------------+------+---------+-------+----------------------------+-----------------+</span><br></pre></td></tr></table></figure></p>
+<p>然后就可以管理volume了，但是需要attach的话，还需要装iscsi服务，在cinder节点装iscsi-target，在compute节点装iscsi-Initator。</p>
+<h4 id="cinder学习">cinder学习</h4><p><strong>cinder组件</strong></p>
+<p><a href="/uploads/cinder-arch.png"><img src="/uploads/cinder-arch.png" alt="cinder组件"></a></p>
+<blockquote>
+<p>cinder-api： WSGI的app， 用来提供Rest ful API， 接受http请求， 经过处理再通过mq或http发送给其他组件。<br>cinder-scheduler： 处理从cinder-api过来的请求，进行调度算法，决定在哪个host上进行volume操作<br>cinder-volume： 管理块存储设备的服务。<br>cinder-backup： 提供备份cinder volume的服务</p>
+</blockquote>
+<p><strong>scheduler调度</strong></p>
+<ol>
+<li>查看volume host的状态， 只选择state为up的host</li>
+<li>Filter过滤<br> 1) AvailabilityZoneFilter， 过滤掉zone与选择的zone不同的host<br> 2) CapacityFilter， 查看host的剩余空间， 过滤掉剩余空间&lt;所选大小的host<br> 3) CapabilitiesFilter， 查看host的volume type， 过滤掉与所选的type不同的host<br> 4) 可配置的其他Filter</li>
+<li>weight算法<br> a) AllocatedCapacityWeigher，优先选择剩余空间最小的<br> b) CapacityWeigher，优先选择剩余空间最大的 (默认算法)<br> c) GoodnessWeigher，根据host的goodness值(0-100)，优先选择最大的<br> d) ChanceWeigher， 随机选择一个host</li>
+</ol>
 
       
     </div>
@@ -311,17 +333,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/01/09/Heat-Salt自动部署服务/" rel="next" title="Heat+Salt自动部署服务">
-                <i class="fa fa-chevron-left"></i> Heat+Salt自动部署服务
+              <a href="/2016/03/14/Python抓取知乎图片/" rel="next" title="Python抓取知乎图片">
+                <i class="fa fa-chevron-left"></i> Python抓取知乎图片
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/01/20/Openstack-neutron学习/" rel="prev" title="Openstack neutron学习">
-                Openstack neutron学习 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -347,8 +365,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/01/16/Salt-UI-Demo/"
-           data-title="Salt UI Demo" data-url="http://yoursite.com/2016/01/16/Salt-UI-Demo/">
+      <div class="ds-thread" data-thread-key="2016/03/28/Openstack-cinder学习/"
+           data-title="Openstack cinder学习" data-url="http://yoursite.com/2016/03/28/Openstack-cinder学习/">
       </div>
     
   </div>
@@ -457,7 +475,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#涉及框架"><span class="nav-number">1.</span> <span class="nav-text">涉及框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法介绍"><span class="nav-number">2.</span> <span class="nav-text">方法介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Key_management"><span class="nav-number">2.1.</span> <span class="nav-text">1.Key management</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Run_cmd"><span class="nav-number">2.2.</span> <span class="nav-text">2.Run cmd</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UI"><span class="nav-number">3.</span> <span class="nav-text">UI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#demo配置"><span class="nav-number">4.</span> <span class="nav-text">demo配置</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#存储基本知识"><span class="nav-number">1.</span> <span class="nav-text">存储基本知识</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#存储方案"><span class="nav-number">1.1.</span> <span class="nav-text">存储方案</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LVM"><span class="nav-number">1.2.</span> <span class="nav-text">LVM</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#iSCSI"><span class="nav-number">1.3.</span> <span class="nav-text">iSCSI</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Openstack_cinder"><span class="nav-number">2.</span> <span class="nav-text">Openstack cinder</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#部署cinder"><span class="nav-number">2.1.</span> <span class="nav-text">部署cinder</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cinder学习"><span class="nav-number">2.2.</span> <span class="nav-text">cinder学习</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
