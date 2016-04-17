@@ -64,11 +64,7 @@
 1.Create vm
 2.Install minion
 3.Master accept minions’s key
-4.Install service
-
-
-
-分析和编码Heat VS Cloudify因为之前项目也用过cloudify，所以大致的比较下。Heat和cloudify都是">
+4.Install service">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Heat+Salt自动部署服务">
 <meta property="og:url" content="http://yoursite.com/2016/01/09/Heat-Salt自动部署服务/index.html">
@@ -80,12 +76,8 @@
 1.Create vm
 2.Install minion
 3.Master accept minions’s key
-4.Install service
-
-
-
-分析和编码Heat VS Cloudify因为之前项目也用过cloudify，所以大致的比较下。Heat和cloudify都是">
-<meta property="og:updated_time" content="2016-01-09T13:47:38.229Z">
+4.Install service">
+<meta property="og:updated_time" content="2016-04-17T10:53:01.519Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Heat+Salt自动部署服务">
 <meta name="twitter:description" content="记录下在PaaS层自动部署服务的学习过程。
@@ -95,11 +87,7 @@
 1.Create vm
 2.Install minion
 3.Master accept minions’s key
-4.Install service
-
-
-
-分析和编码Heat VS Cloudify因为之前项目也用过cloudify，所以大致的比较下。Heat和cloudify都是">
+4.Install service">
 
 
 
@@ -310,6 +298,7 @@
 </ul>
 </blockquote>
 <hr>
+<a id="more"></a>
 <h3 id="分析和编码">分析和编码</h3><h4 id="Heat_VS_Cloudify">Heat VS Cloudify</h4><p>因为之前项目也用过cloudify，所以大致的比较下。Heat和cloudify都是PaaS层的，但它们的规模不同，可以说cloudify要强大的多。<br><strong>Heat</strong>更趋近于Project，它是openstack众多组件中的一个，目的是为了对资源(计算，网络，存储等等)的自动化操作，所以如果要有一套完整的体系，需要自己结合其他的组件，比如本文中与Salt结合。<br><strong>Cloudify</strong>更趋近于一套完整的解决方案，它自带了很多的plugin，可以集成很多功能，比如：openstack，Salt，Chef，Docker等等。它还带有Monitor和Scala的功能。</p>
 <p>下面开始部署服务</p>
 <h4 id="1-_Create_vm">1. Create vm</h4><p>首先用heat template创建虚机。</p>

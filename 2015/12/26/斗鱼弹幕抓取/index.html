@@ -59,26 +59,23 @@
 
 <meta name="description" content="因为平时无聊的时候喜欢看下斗鱼之类的直播平台,所以顺便会思考下斗鱼是怎么让获取弹幕的。这里记录下过程。
 抓包分析了解到斗鱼有个专门的弹幕服务器，http://danmu.douyutv.com, 端口的话，8601，8602，12601，12602都是弹幕端口。
-这里我用wireshark对其进行抓包。结果如下图：
-一开始我没完全看懂这个包内容具体的意思，参考了下知乎的答案后才明白。这个内容分为4">
+这里我用wireshark对其进行抓包。结果如下图：">
 <meta property="og:type" content="article">
 <meta property="og:title" content="斗鱼弹幕抓取">
 <meta property="og:url" content="http://yoursite.com/2015/12/26/斗鱼弹幕抓取/index.html">
 <meta property="og:site_name" content="霹雳啪啦程序汪">
 <meta property="og:description" content="因为平时无聊的时候喜欢看下斗鱼之类的直播平台,所以顺便会思考下斗鱼是怎么让获取弹幕的。这里记录下过程。
 抓包分析了解到斗鱼有个专门的弹幕服务器，http://danmu.douyutv.com, 端口的话，8601，8602，12601，12602都是弹幕端口。
-这里我用wireshark对其进行抓包。结果如下图：
-一开始我没完全看懂这个包内容具体的意思，参考了下知乎的答案后才明白。这个内容分为4">
+这里我用wireshark对其进行抓包。结果如下图：">
 <meta property="og:image" content="http://yoursite.com/uploads/package.jpg">
 <meta property="og:image" content="http://yoursite.com/uploads/response.jpg">
 <meta property="og:image" content="http://yoursite.com/uploads/result.jpg">
-<meta property="og:updated_time" content="2016-01-07T14:11:30.863Z">
+<meta property="og:updated_time" content="2016-04-17T10:52:43.860Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="斗鱼弹幕抓取">
 <meta name="twitter:description" content="因为平时无聊的时候喜欢看下斗鱼之类的直播平台,所以顺便会思考下斗鱼是怎么让获取弹幕的。这里记录下过程。
 抓包分析了解到斗鱼有个专门的弹幕服务器，http://danmu.douyutv.com, 端口的话，8601，8602，12601，12602都是弹幕端口。
-这里我用wireshark对其进行抓包。结果如下图：
-一开始我没完全看懂这个包内容具体的意思，参考了下知乎的答案后才明白。这个内容分为4">
+这里我用wireshark对其进行抓包。结果如下图：">
 
 
 
@@ -281,6 +278,7 @@
         <p>因为平时无聊的时候喜欢看下斗鱼之类的直播平台,所以顺便会思考下斗鱼是怎么让获取弹幕的。这里记录下过程。</p>
 <h3 id="抓包分析">抓包分析</h3><p>了解到斗鱼有个专门的弹幕服务器，<a href="http://danmu.douyutv.com" target="_blank" rel="external">http://danmu.douyutv.com</a>, 端口的话，8601，8602，12601，12602都是弹幕端口。</p>
 <p>这里我用wireshark对其进行抓包。结果如下图：<br><a href="/uploads/package.jpg"><img src="/uploads/package.jpg" alt="抓包"></a></p>
+<a id="more"></a>
 <p>一开始我没完全看懂这个包内容具体的意思，参考了下知乎的答案后才明白。<br>这个内容分为4部分。</p>
 <ol>
 <li>第一部分用黑色框住的，是后3个部分内容的总字节长度。这里是5b,即后3个部分内容的字节长度为91，另外第一部分自己会占4个字节，所以这个包的data长度为95，即橙色框部分。</li>

@@ -58,27 +58,21 @@
 
 
 <meta name="description" content="因为之前学习了saltstack，所以有个简单的想法，想写个salt management UI，这样就不用输入繁琐的命令，方便管理和运维。由于没多少时间，就做了个简单的demo，仅仅写了登陆，key管理，远程执行minion的cmd命令的功能，在这里记录下。
-涉及框架demo采用springMVC + velocity + bootstrap框架。
-
-方法介绍原理主要还是通过调用salt-api">
+涉及框架demo采用springMVC + velocity + bootstrap框架。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Salt UI Demo">
 <meta property="og:url" content="http://yoursite.com/2016/01/16/Salt-UI-Demo/index.html">
 <meta property="og:site_name" content="霹雳啪啦程序汪">
 <meta property="og:description" content="因为之前学习了saltstack，所以有个简单的想法，想写个salt management UI，这样就不用输入繁琐的命令，方便管理和运维。由于没多少时间，就做了个简单的demo，仅仅写了登陆，key管理，远程执行minion的cmd命令的功能，在这里记录下。
-涉及框架demo采用springMVC + velocity + bootstrap框架。
-
-方法介绍原理主要还是通过调用salt-api">
+涉及框架demo采用springMVC + velocity + bootstrap框架。">
 <meta property="og:image" content="http://yoursite.com/uploads/cmd.jpg">
 <meta property="og:image" content="http://yoursite.com/uploads/key_ui.jpg">
 <meta property="og:image" content="http://yoursite.com/uploads/cmd_ui.jpg">
-<meta property="og:updated_time" content="2016-01-15T16:28:26.573Z">
+<meta property="og:updated_time" content="2016-04-17T10:53:16.710Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Salt UI Demo">
 <meta name="twitter:description" content="因为之前学习了saltstack，所以有个简单的想法，想写个salt management UI，这样就不用输入繁琐的命令，方便管理和运维。由于没多少时间，就做了个简单的demo，仅仅写了登陆，key管理，远程执行minion的cmd命令的功能，在这里记录下。
-涉及框架demo采用springMVC + velocity + bootstrap框架。
-
-方法介绍原理主要还是通过调用salt-api">
+涉及框架demo采用springMVC + velocity + bootstrap框架。">
 
 
 
@@ -281,6 +275,7 @@
         <p>因为之前学习了saltstack，所以有个简单的想法，想写个salt management UI，这样就不用输入繁琐的命令，方便管理和运维。<br>由于没多少时间，就做了个简单的demo，仅仅写了登陆，key管理，远程执行minion的cmd命令的功能，在这里记录下。</p>
 <h3 id="涉及框架">涉及框架</h3><p>demo采用springMVC + velocity + bootstrap框架。</p>
 <hr>
+<a id="more"></a>
 <h3 id="方法介绍">方法介绍</h3><p>原理主要还是通过调用salt-api来实现各种操作。</p>
 <h4 id="1-Key_management">1.Key management</h4><p>salt中， <strong>Wheel</strong> module是对key操作的一个封装， 通过调用wheel模块的api，实现key的accept，delete，reject，list等操作。</p>
 <p>Wheel api参考： <a href="https://docs.saltstack.com/en/latest/ref/wheel/all/salt.wheel.key.html#module-salt.wheel.key" target="_blank" rel="external">Wheel API</a></p>

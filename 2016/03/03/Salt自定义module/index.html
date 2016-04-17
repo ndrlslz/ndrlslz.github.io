@@ -69,7 +69,7 @@ Execution Modules: 它是通过salt的命令行调用的。当执行相应的exe
 Salt ModulesState Modules和Execution ModulesSalt有2种Modules，State Modules和Execution Modules。
 
 Execution Modules: 它是通过salt的命令行调用的。当执行相应的execution mo">
-<meta property="og:updated_time" content="2016-03-27T16:16:25.869Z">
+<meta property="og:updated_time" content="2016-04-17T10:53:55.838Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Salt自定义module">
 <meta name="twitter:description" content="Saltstack自带了很多module供使用，但需要自己实现一些功能的时候，就需要来自定义module了。
@@ -281,6 +281,7 @@ Execution Modules: 它是通过salt的命令行调用的。当执行相应的exe
 <li>Execution Modules: 它是通过salt的命令行调用的。当执行相应的execution module的时候，会发送给minion相应的命令，让其马上执行这个命令。</li>
 <li>State Modules: 它是通过states文件调用的。它更倾向于让minion保持某种状态或结果。和Execution Modules不同的是，当执行State Modules的时候，它会检测minion有没有达到state modules想让它达到的效果，比如pkg.installed，它会检测minion有没有装这个软件，如果没有，才会去安装。</li>
 </ol>
+<a id="more"></a>
 <h4 id="查看Modules">查看Modules</h4><p>salt自带了很多的modules，可以在装有master的机器上查看。</p>
 <p><strong>Execution Modules</strong>:</p>
 <blockquote>
