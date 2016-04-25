@@ -57,25 +57,22 @@
 
 
 
-<meta name="description" content="因为平时无聊的时候喜欢看下斗鱼之类的直播平台,所以顺便会思考下斗鱼是怎么让获取弹幕的。这里记录下过程。
-抓包分析了解到斗鱼有个专门的弹幕服务器，http://danmu.douyutv.com, 端口的话，8601，8602，12601，12602都是弹幕端口。
-这里我用wireshark对其进行抓包。结果如下图：">
+<meta name="description" content="AMQP好处先谈谈不用amqp的情况，以Java为例，通常使用JMS API来做message client，和一个支持JMS的message broker来传输。 那如果我们需要跨语言的平台来进行交互，比如Java message client和Ruby message client，那就需要一个支持Java OpenWire协议和Ruby STOMP协议的message broker，然后我们">
 <meta property="og:type" content="article">
-<meta property="og:title" content="斗鱼弹幕抓取">
-<meta property="og:url" content="http://yoursite.com/2015/12/26/斗鱼弹幕抓取/index.html">
+<meta property="og:title" content="RabbitMQ学习">
+<meta property="og:url" content="http://yoursite.com/2016/04/25/RabbitMQ学习/index.html">
 <meta property="og:site_name" content="霹雳啪啦程序汪">
-<meta property="og:description" content="因为平时无聊的时候喜欢看下斗鱼之类的直播平台,所以顺便会思考下斗鱼是怎么让获取弹幕的。这里记录下过程。
-抓包分析了解到斗鱼有个专门的弹幕服务器，http://danmu.douyutv.com, 端口的话，8601，8602，12601，12602都是弹幕端口。
-这里我用wireshark对其进行抓包。结果如下图：">
-<meta property="og:image" content="http://yoursite.com/uploads/package.jpg">
-<meta property="og:image" content="http://yoursite.com/uploads/response.jpg">
-<meta property="og:image" content="http://yoursite.com/uploads/result.jpg">
-<meta property="og:updated_time" content="2016-04-17T10:52:43.860Z">
+<meta property="og:description" content="AMQP好处先谈谈不用amqp的情况，以Java为例，通常使用JMS API来做message client，和一个支持JMS的message broker来传输。 那如果我们需要跨语言的平台来进行交互，比如Java message client和Ruby message client，那就需要一个支持Java OpenWire协议和Ruby STOMP协议的message broker，然后我们">
+<meta property="og:image" content="http://yoursite.com/uploads/amqp_ruby_csharp.png">
+<meta property="og:image" content="http://yoursite.com/uploads/amqp_java_ruby.png">
+<meta property="og:image" content="http://yoursite.com/uploads/amqp_model.png">
+<meta property="og:image" content="http://yoursite.com/uploads/rabbitmq-direct.png">
+<meta property="og:image" content="http://yoursite.com/uploads/rabbitmq-fanout.png">
+<meta property="og:image" content="http://yoursite.com/uploads/rabbitmq-topic.png">
+<meta property="og:updated_time" content="2016-04-25T13:43:33.581Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="斗鱼弹幕抓取">
-<meta name="twitter:description" content="因为平时无聊的时候喜欢看下斗鱼之类的直播平台,所以顺便会思考下斗鱼是怎么让获取弹幕的。这里记录下过程。
-抓包分析了解到斗鱼有个专门的弹幕服务器，http://danmu.douyutv.com, 端口的话，8601，8602，12601，12602都是弹幕端口。
-这里我用wireshark对其进行抓包。结果如下图：">
+<meta name="twitter:title" content="RabbitMQ学习">
+<meta name="twitter:description" content="AMQP好处先谈谈不用amqp的情况，以Java为例，通常使用JMS API来做message client，和一个支持JMS的message broker来传输。 那如果我们需要跨语言的平台来进行交互，比如Java message client和Ruby message client，那就需要一个支持Java OpenWire协议和Ruby STOMP协议的message broker，然后我们">
 
 
 
@@ -93,7 +90,7 @@
   };
 </script>
 
-  <title> 斗鱼弹幕抓取 | 霹雳啪啦程序汪 </title>
+  <title> RabbitMQ学习 | 霹雳啪啦程序汪 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -221,7 +218,7 @@
             
             
               
-                斗鱼弹幕抓取
+                RabbitMQ学习
               
             
           </h1>
@@ -233,8 +230,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-12-26T22:56:21+08:00" content="2015-12-26">
-              2015-12-26
+            <time itemprop="dateCreated" datetime="2016-04-25T21:12:51+08:00" content="2016-04-25">
+              2016-04-25
             </time>
           </span>
 
@@ -244,8 +241,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2015/12/26/斗鱼弹幕抓取/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/26/斗鱼弹幕抓取/" itemprop="commentsCount"></span>
+                <a href="/2016/04/25/RabbitMQ学习/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/25/RabbitMQ学习/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -255,7 +252,7 @@
 
           
           
-             <span id="/2015/12/26/斗鱼弹幕抓取/" class="leancloud_visitors" data-flag-title="斗鱼弹幕抓取">
+             <span id="/2016/04/25/RabbitMQ学习/" class="leancloud_visitors" data-flag-title="RabbitMQ学习">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -275,43 +272,45 @@
       
 
       
-        <p>因为平时无聊的时候喜欢看下斗鱼之类的直播平台,所以顺便会思考下斗鱼是怎么让获取弹幕的。这里记录下过程。</p>
-<h3 id="抓包分析">抓包分析</h3><p>了解到斗鱼有个专门的弹幕服务器，<a href="http://danmu.douyutv.com" target="_blank" rel="external">http://danmu.douyutv.com</a>, 端口的话，8601，8602，12601，12602都是弹幕端口。</p>
-<p>这里我用wireshark对其进行抓包。结果如下图：<br><a href="/uploads/package.jpg"><img src="/uploads/package.jpg" alt="抓包"></a></p>
+        <h3 id="AMQP">AMQP</h3><h4 id="好处">好处</h4><p>先谈谈不用amqp的情况，以Java为例，通常使用JMS API来做message client，和一个支持JMS的message broker来传输。 那如果我们需要跨语言的平台来进行交互，比如Java message client和Ruby message client，那就需要一个支持Java OpenWire协议和Ruby STOMP协议的message broker，然后我们找到了支持这种的ActiveMQ。但是如果我们需要在C#和Ruby之间传输呢，就需要一个支持C#的MSMQ和Ruby的STOMP协议的message broker。<br><img src="/uploads/amqp_ruby_csharp.png" alt="amqp_ruby_C#图"></p>
 <a id="more"></a>
-<p>一开始我没完全看懂这个包内容具体的意思，参考了下知乎的答案后才明白。<br>这个内容分为4部分。</p>
-<ol>
-<li>第一部分用黑色框住的，是后3个部分内容的总字节长度。这里是5b,即后3个部分内容的字节长度为91，另外第一部分自己会占4个字节，所以这个包的data长度为95，即橙色框部分。</li>
-<li>第二部分用红色框住的，斗鱼的规则是这个内容和第一部分一样。占4个字节。</li>
-<li>第三部分用绿色框住的，斗鱼的规则是向服务器发送的包，这部分固定为0xb1,0x02,0x00,0x00 这4个字节，从服务器发回来的包固定为0xb2,0x02,0x00,0x00 这4个字节</li>
-<li>最后一部分就是发送的具体内容了。</li>
-</ol>
-<p>抓包得知，如果需要连上斗鱼的弹幕服务器，需要让弹幕服务器发送2个包，</p>
-<ol>
-<li>一种是上图的loginreq包。<br>“type@=loginreq/username@=auto_KRLJbE8mZM/password@=1234567890123456/roomid@=/“<br>这个账号密码随便填都行，roomid即房间号了，如果房间号是昵称的话，需要转换成id。</li>
-<li>另一种是joingroup包。<br>“type@=joingroup/rid@=/gid@=/“<br>因为每个房间因为人数原因，人数多房间的会将弹幕分流，分成几个group。这里需要选择进入哪个group，我最后实验看不同的group的弹幕其实是一样的，所以它是为了把用户均衡下，分到不同的group，避免都连上同一个而负载很高。</li>
-</ol>
-<p>然后就可以获得弹幕服务器发回来的弹幕了，如下图：<br><img src="/uploads/response.jpg" alt="抓包弹幕"></p>
+<p>即使你找到了，在你需要进行平台的切换的时候，又需要为每个message client改变源码，消息库，配置等。 所以可以看出来，厂商之间的封闭性加大了producer和consumer的耦合。</p>
+<p>所以有了AMQP(高级消息队列协议)，它提供了一个跨平台的标准的消息协议。你可以使用任意的支持AMQP的message client library和支持AMQP的message broker。比如之间的Java和Ruby的通信，你甚至可以用Qpid的client library来连接Rabbitmq的broker。<br><img src="/uploads/amqp_java_ruby.png" alt="amqp_java_ruby图"></p>
+<p>这样就对producer和consumer之间进行了解耦，producer和consumer之间无需关心对方的实现方式，producer只需要把消息发给broker，consumer只需要从broker取回消息就好。</p>
 <hr>
-<h3 id="抓取弹幕">抓取弹幕</h3><p>然后开始来抓取弹幕，我这里用Java来抓取，这里截取部分主要流程代码。</p>
-<p>先获得和弹幕服务器的socket连接，我这里把地址和端口写到配置文件了。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">socket = <span class="keyword">new</span> Socket(Config.getAddress(),Integer.parseInt(Config.getPort()));</span><br></pre></td></tr></table></figure></p>
-<p>然后向服务器发送那2个包。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sendMessage(<span class="string">"type@=loginreq/username@=auto_KRLJbE8mZM/password@=1234567890123456/roomid@="</span> + roomId + <span class="string">"/"</span>);</span><br><span class="line">sendMessage(<span class="string">"type@=joingroup/rid@="</span> + roomId + <span class="string">"/gid@="</span> + groupId + <span class="string">"/"</span>);</span><br></pre></td></tr></table></figure></p>
-<p>这里roomId如果是昵称的话，需要转成id，我是去房间通过feedback_report_button这个id来得到的，也有其他方式。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">String html = httpClient.doGet(<span class="string">"http://www.douyutv.com/"</span> + roomName);</span><br><span class="line">Document doc = Jsoup.parse(html);</span><br><span class="line">Element element = doc.select(<span class="string">"#feedback_report_button"</span>).first();</span><br><span class="line">String href = element.attr(<span class="string">"href"</span>);</span><br><span class="line"><span class="keyword">if</span> (href != <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> href.split(<span class="string">"="</span>)[<span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>gid的获取,我参考的github的一个项目。</p>
-<ol>
-<li>首先去对应的斗鱼房间抓取页面，取到server_config的字符串</li>
-<li>进行URL解码,得到一组ip, port</li>
-<li>向其中任意的一个ip,port发送loginreq包，这个loginreq包和之前的不一样。</li>
-<li>这个loginreq包中,devid是随机UUID,需要替换掉’-‘,字母全大写<br>rt是时间戳,这里必须是以秒为单位<br>ver是版本号<br>vk我不懂是什么意思，我参考的那个项目是这么做的: rt + 一串固定字符串 + devid的MD5编码</li>
-<li>发送loginreq后会收到type@=setmsgroup包，里面就有gid</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sendReq</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    String roomId = roomInformation.getRoomId();</span><br><span class="line">    String devid = UUID.randomUUID().toString().replace(<span class="string">"-"</span>, <span class="string">""</span>).toUpperCase();</span><br><span class="line">    String rt = String.valueOf(System.currentTimeMillis() / <span class="number">1000</span>);</span><br><span class="line">    String ver = <span class="string">"20150526"</span>;</span><br><span class="line">    String magic = <span class="string">"7oE9nPEG9xXV69phU31FYCLUagKeYtsF"</span>;</span><br><span class="line">    String vk = MD5Utils.MD5(rt + magic + devid);</span><br><span class="line"></span><br><span class="line">    sendMessage(<span class="string">"type@=loginreq/username@=/ct@=2/password@=/roomid@="</span> + roomId +</span><br><span class="line">            <span class="string">"/devid@="</span> + devid + <span class="string">"/rt@="</span> + rt + <span class="string">"/vk@="</span> + vk + <span class="string">"/ver@="</span> + ver + <span class="string">"/"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>然后就可以从socket的inputstream来获取弹幕了，接着对获取的字符串进行解析，我这里只解析了弹幕，没有解析礼物那些。为了方便，我直接用log4j来存储弹幕了。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">parseResponse</span><span class="params">(String response)</span> </span>&#123;</span><br><span class="line">    String REGEX =<span class="string">"type@=chatmessage/.*/content@=(.*)/snick@=(.*?)/"</span>;</span><br><span class="line">    Pattern pattern = Pattern.compile(REGEX);</span><br><span class="line">    Matcher matcher = pattern.matcher(response);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (matcher.find()) &#123;</span><br><span class="line">        logger.info(matcher.group(<span class="number">2</span>) + <span class="string">": "</span> + matcher.group(<span class="number">1</span>));</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>然后，还需要不停的向服务器发送心跳包，否则服务器过段时间会关闭我们的连接。我这里每隔60秒发送一个心跳包。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sendMessage(<span class="string">"type@=keeplive/tick@=70/"</span>);</span><br></pre></td></tr></table></figure></p>
-<p>最后，贴下获取的弹幕图：</p>
-<p><img src="/uploads/result.jpg" alt="弹幕"></p>
-<p>我抓取弹幕的过程大概就是这样。</p>
-<p>代码地址： <a href="https://github.com/ndrlslz/DouyuBarrageTool" target="_blank" rel="external">代码参考</a></p>
+<h4 id="相关概念">相关概念</h4><p><img src="/uploads/amqp_model.png" alt="amqp_model图"></p>
+<p><strong>Virtual Host</strong><br>用来对mq-server进行权限隔离，每个virtual host都有自己的exchange和queue，意味着如果你有多个application需要用自己的mq，可以用同一个mq-server，通过virtual host来隔离他们</p>
+<p><strong>Exchange</strong><br>接收producer发来的消息，并转发给binding在exchange上的queue。有4种type的exchange</p>
+<p>属性:</p>
+<blockquote>
+<ul>
+<li>持久性: Duration设置可以对exchange持久化</li>
+<li>自动删除: exchange所bind的queue删除完后，会自动删除exchange(默认不会自动删除)</li>
+<li>惰性: 不会自动创建，需要声明exchange，否则报错</li>
+</ul>
+</blockquote>
+<p><strong>Queue</strong><br>消息队列，用于存储exchange转发过来的消息。</p>
+<p>属性:</p>
+<blockquote>
+<ul>
+<li>持久性: Duration设置可以对queue持久化</li>
+<li>自动删除: queue会在consumer停止后删除自己。</li>
+<li>惰性: 不会自动创建，需要声明queue，否则报错</li>
+</ul>
+</blockquote>
+<p><strong>Binding</strong><br>bingding是将exchange和queue进行绑定，绑定的关键字为route_key。当exchange接收到消息后，它会提取消息的route_key，通过route_key和exchange type将消息路由到相应的queue。</p>
+<p><strong>Channel</strong><br>信道，client与broker创建连接后，还需要创建channel才可以通信。</p>
+<hr>
+<h4 id="Exchange_type">Exchange type</h4><p><strong>direct</strong></p>
+<p><img src="/uploads/rabbitmq-direct.png" alt="direct图"><br>queue通过route_key与exchange进行绑定，当消息发送到exchange后，检测消息中的route_key，然后发送到用相同route_key进行绑定的queue中，如上图，如果消息中的route_key为orange，则发到Q1 queue，如果是black或green，则发到Q2。<br>如果exchange绑定的多个queue的route_key相同，则会给每个queue都转发消息。</p>
+<p><strong>fanout</strong></p>
+<p><img src="/uploads/rabbitmq-fanout.png" alt="fanout图"><br>这种方式，exchange不会管route_key，它会把消息广播到每个和它连接的queue中。</p>
+<p><strong>topic</strong></p>
+<p><img src="/uploads/rabbitmq-topic.png" alt="topic图"><br>这种方式和direct差不多，不同之处在于它支持通配符，”*”匹配单个单词，”#”匹配多个单词，标记之间需要用”.”来分割。</p>
+<hr>
+<h4 id="可靠性">可靠性</h4><p><strong>ack</strong></p>
+<p>当consumer从queue取得消息后，但这时consumer宕掉了，这时消息就没了。 所以rabbitmq可以开启autoAck，即当consumer处理完消息后，会发回给queue ack，这时queue才删除掉消息。<br>如果有多个consumer订阅同一个queue，那消息只会被某一个consumer收到，queue默认采用round robin(轮询)的策略来选择consumer。现在consumerA和consumerB订阅同一个queue，queue先把messageA发给consumerA，consumerA处理完后，返回ack表示处理完成，queue删掉messageA，messageB来了，queue把它分给consumerB，但这时consumerB宕掉了，断开了channel，queue检测到后重新把messageB发给consumerA。</p>
+<p><strong>持久化</strong><br>rabbitmq默认是不持久化exchange和queue的，如果server重启了，那这些都会消失。<br>rabbitmq提供了持久化机制，需要将exchange和queue的durable设置为true，并将producer发送消息是的dilivery mode设置为2。</p>
 
       
     </div>
@@ -323,17 +322,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/12/06/keystone记录/" rel="next" title="keystone记录">
-                <i class="fa fa-chevron-left"></i> keystone记录
+              <a href="/2016/03/28/Openstack-cinder学习/" rel="next" title="Openstack cinder学习">
+                <i class="fa fa-chevron-left"></i> Openstack cinder学习
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/01/09/Heat-Salt自动部署服务/" rel="prev" title="Heat+Salt自动部署服务">
-                Heat+Salt自动部署服务 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -359,8 +354,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2015/12/26/斗鱼弹幕抓取/"
-           data-title="斗鱼弹幕抓取" data-url="http://yoursite.com/2015/12/26/斗鱼弹幕抓取/">
+      <div class="ds-thread" data-thread-key="2016/04/25/RabbitMQ学习/"
+           data-title="RabbitMQ学习" data-url="http://yoursite.com/2016/04/25/RabbitMQ学习/">
       </div>
     
   </div>
@@ -469,7 +464,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#抓包分析"><span class="nav-number">1.</span> <span class="nav-text">抓包分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#抓取弹幕"><span class="nav-number">2.</span> <span class="nav-text">抓取弹幕</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#AMQP"><span class="nav-number">1.</span> <span class="nav-text">AMQP</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#好处"><span class="nav-number">1.1.</span> <span class="nav-text">好处</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#相关概念"><span class="nav-number">1.2.</span> <span class="nav-text">相关概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Exchange_type"><span class="nav-number">1.3.</span> <span class="nav-text">Exchange type</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可靠性"><span class="nav-number">1.4.</span> <span class="nav-text">可靠性</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
