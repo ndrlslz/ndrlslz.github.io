@@ -66,7 +66,7 @@
 <meta property="og:description" content="写tenrya的初衷现在部门做的项目是个基于openstack的云平台，其中一个模块是需要监听openstack的notification来进行响应，现有后台代码是用Java写的，逻辑是用switch-case判断notification的event_type来调用对应的响应类。可以想象到这段switch-case有多长。
 希望用更优雅的方式来做这个事，所以就把这块抽离了出来，写个了简单的pyth">
 <meta property="og:image" content="http://yoursite.com/uploads/consumer_count.jpg">
-<meta property="og:updated_time" content="2016-05-07T14:21:36.734Z">
+<meta property="og:updated_time" content="2016-05-07T14:25:20.921Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Ternya">
 <meta name="twitter:description" content="写tenrya的初衷现在部门做的项目是个基于openstack的云平台，其中一个模块是需要监听openstack的notification来进行响应，现有后台代码是用Java写的，逻辑是用switch-case判断notification的event_type来调用对应的响应类。可以想象到这段switch-case有多长。
@@ -272,6 +272,7 @@
       
         <h2 id="写tenrya的初衷">写tenrya的初衷</h2><p>现在部门做的项目是个基于openstack的云平台，其中一个模块是需要监听openstack的notification来进行响应，现有后台代码是用Java写的，逻辑是用switch-case判断notification的event_type来调用对应的响应类。可以想象到这段switch-case有多长。</p>
 <p>希望用更优雅的方式来做这个事，所以就把这块抽离了出来，写个了简单的python library。<br>ternya的目的是为了更方便的接收和处理openstack notification。</p>
+<a id="more"></a>
 <hr>
 <h2 id="安装ternya">安装ternya</h2><p>3种方式都可以：</p>
 <blockquote>

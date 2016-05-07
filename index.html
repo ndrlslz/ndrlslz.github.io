@@ -277,52 +277,13 @@
 
       
         
-          
-            <h2 id="写tenrya的初衷">写tenrya的初衷</h2><p>现在部门做的项目是个基于openstack的云平台，其中一个模块是需要监听openstack的notification来进行响应，现有后台代码是用Java写的，逻辑是用switch-case判断notification的event_type来调用对应的响应类。可以想象到这段switch-case有多长。</p>
+          <h2 id="写tenrya的初衷">写tenrya的初衷</h2><p>现在部门做的项目是个基于openstack的云平台，其中一个模块是需要监听openstack的notification来进行响应，现有后台代码是用Java写的，逻辑是用switch-case判断notification的event_type来调用对应的响应类。可以想象到这段switch-case有多长。</p>
 <p>希望用更优雅的方式来做这个事，所以就把这块抽离了出来，写个了简单的python library。<br>ternya的目的是为了更方便的接收和处理openstack notification。</p>
-<hr>
-<h2 id="安装ternya">安装ternya</h2><p>3种方式都可以：</p>
-<blockquote>
-<p>pip install ternya<br>easy_install ternya<br>python setup.py install</p>
-</blockquote>
-<hr>
-<h2 id="如何填写配置文件">如何填写配置文件</h2><h3 id="配置文件的例子">配置文件的例子</h3><p><a href="https://github.com/ndrlslz/ternya/blob/master/config.ini" target="_blank" rel="external">example config file</a></p>
-<h3 id="配置信息解释">配置信息解释</h3><p><strong>project_abspath</strong><br>填写你的项目根目录的绝对路径地址。</p>
-<p><strong>packages_scan</strong><br>你的项目中，处理notification的方法所在的package。<br>ternya会扫描你填写的package下的所有py文件，然后注入处理notification的业务逻辑。<br>意思就是处理notification的逻辑放在哪，就填它所在的package。</p>
-<p>举个例子，假如项目目录结构如下：<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">E:\ternya</span><br><span class="line">|<span class="comment">-- my_process_one.py</span></span><br><span class="line">`<span class="comment">-- process</span></span><br><span class="line">   |<span class="comment">-- my_process_two.py</span></span><br><span class="line">   `<span class="comment">-- sub_process</span></span><br><span class="line">       |<span class="comment">-- my_process_three.py</span></span><br><span class="line">`<span class="comment">-- process1</span></span><br><span class="line">   |<span class="comment">-- my_process_four.py</span></span><br></pre></td></tr></table></figure></p>
-<ol>
-<li>如果不填，即 packages_scan =<br>ternya会扫描项目的所有py文件</li>
-<li>如果填process这个package，即 packages_scan = process<br>tenrya会扫描到my_process_two.py和my_process_three.py 这2个py文件。</li>
-<li>如果填process.sub_process这个package，即 packages_scan = process.sub_process<br>ternya会扫描my_process_three.py 这个py文件。</li>
-<li>如果填多个package，之间以分号分割， 即 packages_scan = process.sub_process;process1<br>tenrya会扫描my_process_three.py和my_process_four.py 这2个py文件</li>
-</ol>
-<p>为了内存和速度着想，让tenrya扫描的py文件越少越好，意味着最好只扫描处理notification的那些py文件。</p>
-<p><strong>mq_user</strong><br>openstack mq的username</p>
-<p><strong>mq_password</strong><br>openstack mq的password</p>
-<p><strong>mq_host</strong><br>openstack controller节点的mq的host</p>
-<p><strong>listen_notification</strong><br>是否监听这个组件的notification</p>
-<p><strong>mq_consumer_count</strong><br>对每个组件而言，启用多少个consumer去监听和处理notification。<br>比如启动3个consumer：<br><img src="/uploads/consumer_count.jpg" alt="multi_consumer"><br>queue通过轮询的方式将message负载均衡到多个consumer。</p>
-<hr>
-<h2 id="如何运行ternya">如何运行ternya</h2><ol>
-<li>通过调用read(path)方法加载你的配置文件。</li>
-<li>通过调用work()来启动ternya</li>
-</ol>
-<p>如果在项目中用到ternya，需要启用一个进程来启动ternya。<br>提醒：如果是windows平台，要想启动进程， if <strong>name</strong> == “<strong>main</strong>“是必须要的。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">from ternya <span class="keyword">import</span> Ternya</span><br><span class="line">from multiprocessing <span class="keyword">import</span> Process</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    ternya = Ternya()</span><br><span class="line">    ternya.read(<span class="string">"config.ini"</span>)</span><br><span class="line">    process = Process(target=ternya.work)</span><br><span class="line">    process.start()</span><br></pre></td></tr></table></figure></p>
-<hr>
-<h2 id="如何处理notification">如何处理notification</h2><p>如一开始提到的，ternya的主要目的就是更简单的处理notification。<br>ternya提供了基于注解的方式来处理notification。<br><strong>注解使用方法</strong>: @openstack组件名称(“event_type”)</p>
-<p>举个例子，比如要处理开始创建虚机的notification。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> ternya <span class="keyword">import</span> nova</span><br><span class="line"></span><br><span class="line"><span class="decorator">@nova("compute.instance.create.start")</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">create_instance_start</span><span class="params">(body, message)</span>:</span></span><br><span class="line">    <span class="string">"""</span><br><span class="line">    Service method of dealing with notification.</span><br><span class="line">    body and message parameter is necessary.</span><br><span class="line"></span><br><span class="line">    :param body: notification dict</span><br><span class="line">    :param message: kombu Message class</span><br><span class="line">    """</span></span><br><span class="line">    print(<span class="string">"start to create instance notification."</span>)</span><br><span class="line">    print(body[<span class="string">'event_type'</span>])</span><br><span class="line">    print(body)</span><br></pre></td></tr></table></figure></p>
-<p>通过注解的方式，ternya会记录event_type和业务方法的映射关系，在这个例子中，ternya会记录下用create_instance_start这个方法来处理’compute.instance.create.start’这个event_type。</p>
-<p>ternya的注解也支持<strong>通配符</strong>的方式。<br>比如要处理删除虚机的notification。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> ternya <span class="keyword">import</span> nova</span><br><span class="line"></span><br><span class="line"><span class="decorator">@nova("compute.instance.delete.*"):</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">instance_delete</span><span class="params">(body, message)</span>:</span></span><br><span class="line">    print(<span class="string">"delete instance notification"</span>)</span><br><span class="line">    print(body[<span class="string">'event_type'</span>])</span><br><span class="line">    print(body)</span><br></pre></td></tr></table></figure></p>
-<p>在这个例子中，instance_delete这个方法可以处理2种notification，分别为event_type为”compute.instance.delete.start”和”compute.instance.delete.end”的notification。</p>
-<p>ternya目前支持7种openstack组件的注解。</p>
-<blockquote>
-<p>nova<br>cinder<br>neutron<br>glance<br>swift<br>keystone<br>heat</p>
-</blockquote>
-<hr>
-<h2 id="如何编写处理notification的方法">如何编写处理notification的方法</h2><p>ternya中使用了kombu库，采用kombu提供的方式来编写方法，方法需要接收2个参数，body和message。一般只需要用到body即可。<br><strong>body</strong><br>notification的字典<br><strong>message</strong><br>kombu.transport.base.Message</p>
-<p>ternya默认处理notification的方式是通过log的DEBUG模式输出。</p>
-
-          
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/05/07/Ternya/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
