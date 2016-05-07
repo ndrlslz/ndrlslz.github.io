@@ -66,7 +66,7 @@
 <meta property="og:description" content="写tenrya的初衷现在部门做的项目是个基于openstack的云平台，其中一个模块是需要监听openstack的notification来进行响应，现有后台代码是用Java写的，逻辑是用switch-case判断notification的event_type来调用对应的响应类。可以想象到这段switch-case有多长。
 希望用更优雅的方式来做这个事，所以就把这块抽离了出来，写个了简单的pyth">
 <meta property="og:image" content="http://yoursite.com/uploads/consumer_count.jpg">
-<meta property="og:updated_time" content="2016-05-07T14:25:20.921Z">
+<meta property="og:updated_time" content="2016-05-07T14:28:12.984Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Ternya">
 <meta name="twitter:description" content="写tenrya的初衷现在部门做的项目是个基于openstack的云平台，其中一个模块是需要监听openstack的notification来进行响应，现有后台代码是用Java写的，逻辑是用switch-case判断notification的event_type来调用对应的响应类。可以想象到这段switch-case有多长。
@@ -314,6 +314,8 @@
 <hr>
 <h2 id="如何编写处理notification的方法">如何编写处理notification的方法</h2><p>ternya中使用了kombu库，采用kombu提供的方式来编写方法，方法需要接收2个参数，body和message。一般只需要用到body即可。<br><strong>body</strong><br>notification的字典<br><strong>message</strong><br>kombu.transport.base.Message</p>
 <p>ternya默认处理notification的方式是通过log的DEBUG模式输出。</p>
+<hr>
+<h2 id="源码地址">源码地址</h2><p><a href="https://github.com/ndrlslz/ternya" target="_blank" rel="external">ternya源码</a></p>
 
       
     </div>
@@ -467,7 +469,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写tenrya的初衷"><span class="nav-number">1.</span> <span class="nav-text">写tenrya的初衷</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装ternya"><span class="nav-number">2.</span> <span class="nav-text">安装ternya</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何填写配置文件"><span class="nav-number">3.</span> <span class="nav-text">如何填写配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置文件的例子"><span class="nav-number">3.1.</span> <span class="nav-text">配置文件的例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置信息解释"><span class="nav-number">3.2.</span> <span class="nav-text">配置信息解释</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何运行ternya"><span class="nav-number">4.</span> <span class="nav-text">如何运行ternya</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何处理notification"><span class="nav-number">5.</span> <span class="nav-text">如何处理notification</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何编写处理notification的方法"><span class="nav-number">6.</span> <span class="nav-text">如何编写处理notification的方法</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写tenrya的初衷"><span class="nav-number">1.</span> <span class="nav-text">写tenrya的初衷</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装ternya"><span class="nav-number">2.</span> <span class="nav-text">安装ternya</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何填写配置文件"><span class="nav-number">3.</span> <span class="nav-text">如何填写配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置文件的例子"><span class="nav-number">3.1.</span> <span class="nav-text">配置文件的例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置信息解释"><span class="nav-number">3.2.</span> <span class="nav-text">配置信息解释</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何运行ternya"><span class="nav-number">4.</span> <span class="nav-text">如何运行ternya</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何处理notification"><span class="nav-number">5.</span> <span class="nav-text">如何处理notification</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何编写处理notification的方法"><span class="nav-number">6.</span> <span class="nav-text">如何编写处理notification的方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码地址"><span class="nav-number">7.</span> <span class="nav-text">源码地址</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
