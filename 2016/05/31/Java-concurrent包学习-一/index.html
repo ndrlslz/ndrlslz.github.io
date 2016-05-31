@@ -67,7 +67,7 @@ Executor在JDK5之前，启动线程通常采用下面的方法。123456new Thre
 <meta property="og:description" content="在JDK5之后，引入了java.util.concurrent包，增加了很多功能来更方便的处理并发编程。JDK8又加入异步处理，并发集合的增强等更强大的功能。在这里记录下学习过程。
 
 Executor在JDK5之前，启动线程通常采用下面的方法。123456new Thread(new Runnable() &amp;#123;    @Override    public void run() &amp;#123">
-<meta property="og:updated_time" content="2016-05-31T16:04:50.113Z">
+<meta property="og:updated_time" content="2016-05-31T16:15:29.980Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java concurrent包学习(一)">
 <meta name="twitter:description" content="在JDK5之后，引入了java.util.concurrent包，增加了很多功能来更方便的处理并发编程。JDK8又加入异步处理，并发集合的增强等更强大的功能。在这里记录下学习过程。
@@ -279,9 +279,9 @@ Executor在JDK5之前，启动线程通常采用下面的方法。123456new Thre
 <a id="more"></a>
 <p><strong>创建线程池</strong></p>
 <blockquote>
-<p><em>newSingleThreadExecutor : 创建只有单个线程的线程池 
-</em>newFixedThreadPool : 创建固定个数的线程池<br><em>newCachedThreadPool : 创建缓存线程池，可以按需，灵活的增加和删除线程
-</em>newScheduledThreadPool : 创建一个定期处理任务的线程池</p>
+<p><em>newSingleThreadExecutor: 创建只有单个线程的线程池 
+</em>newFixedThreadPool: 创建固定个数的线程池<br><em>newCachedThreadPool: 创建缓存线程池，可以按需，灵活的增加和删除线程
+</em>newScheduledThreadPool: 创建一个定期处理任务的线程池</p>
 </blockquote>
 <p><strong>启动线程</strong><br>通过创建的线程池来启动线程。<br><figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ExecutorService service = Executors.newSingleThreadExecutor();</span><br><span class="line">service.submit<span class="function"><span class="params">(() -&gt; &#123;</span><br><span class="line">    System.out.println(Thread.currentThread().getName());</span><br><span class="line">&#125;)</span>;</span></span><br></pre></td></tr></table></figure></p>
 <p><code>submit</code>可以接受<code>Runnable</code>和<code>Callable</code>两种Functional Interface。 区别是前者没有返回值，后者有返回值。</p>
