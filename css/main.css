@@ -287,7 +287,7 @@ a:hover {
   border-bottom-color: #222;
 }
 ul {
-  list-style: none;
+  list-style: disc;
 }
 blockquote {
   margin: 0;
@@ -1081,6 +1081,9 @@ pre .javascript .function {
 .posts-expand .post-body h6 {
   padding-top: 10px;
 }
+.posts-expand .post-body ul li {
+  list-style: disc;
+}
 .posts-expand .post-body img {
   box-sizing: border-box;
   margin: auto;
@@ -1515,7 +1518,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #c204ff;
+  background: #d0f761;
 }
 .sidebar-nav {
   margin: 0 0 20px;
