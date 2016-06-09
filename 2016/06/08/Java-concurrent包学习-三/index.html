@@ -60,7 +60,7 @@
 <meta name="description" content="在编写多线程程序的时候，需要考虑到对共享变量的访问。这篇学习下并发编程中锁的使用。
 
 Synchronized在JDK5之前，通常是使用synchronized关键字来实现同步。
-synchronized简介考虑一种简单的场景，假设有个方法是让int变量加1。1234567int count = 0;void increment() &amp;#123;    count = count + 1;&amp;#12">
+synchronized简介考虑一种简单的场景，假设有个方法是让int变量加1。12345int count = 0;void increment() &amp;#123;    count = count + 1;&amp;#125;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java concurrent包学习(三)">
 <meta property="og:url" content="http://yoursite.com/2016/06/08/Java-concurrent包学习-三/index.html">
@@ -68,14 +68,14 @@ synchronized简介考虑一种简单的场景，假设有个方法是让int变�
 <meta property="og:description" content="在编写多线程程序的时候，需要考虑到对共享变量的访问。这篇学习下并发编程中锁的使用。
 
 Synchronized在JDK5之前，通常是使用synchronized关键字来实现同步。
-synchronized简介考虑一种简单的场景，假设有个方法是让int变量加1。1234567int count = 0;void increment() &amp;#123;    count = count + 1;&amp;#12">
-<meta property="og:updated_time" content="2016-06-08T15:24:04.160Z">
+synchronized简介考虑一种简单的场景，假设有个方法是让int变量加1。12345int count = 0;void increment() &amp;#123;    count = count + 1;&amp;#125;">
+<meta property="og:updated_time" content="2016-06-09T12:06:36.461Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java concurrent包学习(三)">
 <meta name="twitter:description" content="在编写多线程程序的时候，需要考虑到对共享变量的访问。这篇学习下并发编程中锁的使用。
 
 Synchronized在JDK5之前，通常是使用synchronized关键字来实现同步。
-synchronized简介考虑一种简单的场景，假设有个方法是让int变量加1。1234567int count = 0;void increment() &amp;#123;    count = count + 1;&amp;#12">
+synchronized简介考虑一种简单的场景，假设有个方法是让int变量加1。12345int count = 0;void increment() &amp;#123;    count = count + 1;&amp;#125;">
 
 
 
@@ -278,7 +278,8 @@ synchronized简介考虑一种简单的场景，假设有个方法是让int变�
         <p>在编写多线程程序的时候，需要考虑到对共享变量的访问。这篇学习下并发编程中锁的使用。</p>
 <hr>
 <h2 id="Synchronized">Synchronized</h2><p>在JDK5之前，通常是使用synchronized关键字来实现同步。</p>
-<p><strong>synchronized简介</strong><br>考虑一种简单的场景，假设有个方法是让int变量加1。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">int count = 0;</span><br><span class="line"></span><br><span class="line">void increment() &#123;</span><br><span class="line">    count = count + 1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- more --&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>synchronized简介</strong><br>考虑一种简单的场景，假设有个方法是让int变量加1。<br><figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> <span class="keyword">count</span> = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> increment() &#123;</span><br><span class="line">    <span class="keyword">count</span> = <span class="keyword">count</span> + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
 <p>然后利用多线程来运行这个方法10万次，最后结果会小于10万。<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">ExecutorService service = Executors.newFixedThreadPool(<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">IntStream.range(<span class="number">0</span>, <span class="number">100000</span>)</span><br><span class="line">        .forEach(value -&gt; service.submit(<span class="keyword">this</span>::increment));</span><br><span class="line"></span><br><span class="line">service.shutdown();</span><br><span class="line">service.awaitTermination(<span class="number">60</span>, TimeUnit.SECONDS);</span><br><span class="line"></span><br><span class="line">System.out.println(count);</span><br><span class="line"></span><br><span class="line"><span class="comment">//99978</span></span><br></pre></td></tr></table></figure></p>
 <p>因为<code>increment</code>这个方法不是原子态的，实际需要做3步。</p>
 <ol>
