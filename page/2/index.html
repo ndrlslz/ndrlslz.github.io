@@ -225,6 +225,116 @@
             
               
                 
+                <a class="post-title-link" href="/2016/03/14/Python抓取知乎图片/" itemprop="url">
+                  Python抓取知乎图片
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-14T23:06:25+08:00" content="2016-03-14">
+              2016-03-14
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/14/Python抓取知乎图片/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/14/Python抓取知乎图片/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/03/14/Python抓取知乎图片/" class="leancloud_visitors" data-flag-title="Python抓取知乎图片">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>最近在学python，写个简单的爬虫来练练手。</p>
+<h3 id="思路">思路</h3><p>为了爬取的速度，所以目的是写个多线程的爬虫来爬取知乎的图片。</p>
+<p>大致思路是模拟用户登录，从首页进入，下载其中的所有图片，并存储首页中的链接，然后再递归的查询存储的链接，下载图片，如此循环。</p>
+<p>代码中用到的数据结构：</p>
+<blockquote>
+<p>download_image_queue 队列，用来存储所有的链接。 会有多个下载图片的线程通过竞争从这个队列中pop出链接，然后下载其中的图片</p>
+<p>generate_url_queue 队列，用来通过链接来查找链接。从download_image_queue pop出来的链接，除了下载其中的图片外，还需要put到这个队列中，有一个单独的线程来从这个队列中pop出链接，来查找这个链接中的其他所有链接，并存入download_image_queue队列。</p>
+<p>queried_set Set集合，用于存储已经查询过的链接，避免陷入死循环</p>
+</blockquote>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/03/14/Python抓取知乎图片/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/03/03/Salt自定义module/" itemprop="url">
                   Salt自定义module
                 </a>
@@ -894,7 +1004,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
