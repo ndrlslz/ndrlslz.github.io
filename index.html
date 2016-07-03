@@ -220,6 +220,111 @@
             
               
                 
+                <a class="post-title-link" href="/2016/07/03/Java注解学习-二/" itemprop="url">
+                  Java注解学习(二)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-03T21:08:20+08:00" content="2016-07-03">
+              2016-07-03
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/03/Java注解学习-二/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/03/Java注解学习-二/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/07/03/Java注解学习-二/" class="leancloud_visitors" data-flag-title="Java注解学习(二)">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>上一篇博客关注点在利用反射解析运行时的注解，这篇学习下利用apt来解析编译时的注解。</p>
+<hr>
+<h2 id="APT">APT</h2><p><strong>概念</strong><br><code>Annotation Processor Tool</code>(注解处理器工具)是<code>javac</code>的一个工具，它用来在编译时去扫描和处理注解。你可以自定义一些注解，然后注册相应的注解处理器来处理你的自定义注解。</p>
+<p><strong>用途</strong><br>利用apt来解析编译时注解的作用通常是用来生成文件，比如可以用来生成<code>.java</code>代码，而且apt是在javac编译代码之前，意味着我们生成的代码也会被编译。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/07/03/Java注解学习-二/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/06/30/Java注解学习-一/" itemprop="url">
                   Java注解学习(一)
                 </a>
@@ -1139,110 +1244,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/03/28/Openstack-cinder学习/" itemprop="url">
-                  Openstack cinder学习
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-03-28T00:08:50+08:00" content="2016-03-28">
-              2016-03-28
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/03/28/Openstack-cinder学习/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/28/Openstack-cinder学习/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-             <span id="/2016/03/28/Openstack-cinder学习/" class="leancloud_visitors" data-flag-title="Openstack cinder学习">
-               &nbsp; | &nbsp;
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               <span class="post-meta-item-text">阅读次数 </span>
-               <span class="leancloud-visitors-count"></span>
-              </span>
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="存储基本知识">存储基本知识</h3><h4 id="存储方案">存储方案</h4><p><strong>DAS (Direct-Attached Storage)</strong><br>服务器和存储设备直接连接的方式。 每个服务器有自己单独的存储设备，存储之间不共享。类似于机器的硬盘这种方式。这种方式的话，扩展性，利用率，容灾等等都很差，这是早期的实现方式。</p>
-<p><strong>SAN (Storage Area Network)</strong><br>服务器和存储设备通过光纤网络连接的方式，服务器共享一个磁盘阵列。当服务器需要存储时，存储设备分配出一块区域，然后服务器通过网络连接上这块存储，再对其进行格式化，成为可以用的文件系统。</p>
-<p><strong>DAS (Network Attached Storage)</strong><br>这种方式，存储除了有磁盘阵列外，它有自己的文件系统，相当于自己就是一个提供文件系统的存储服务器，当外部服务器需要访问存储的时候，可以直接通过网络连上存储服务器提供的文件系统来使用。</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/03/28/Openstack-cinder学习/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1289,7 +1290,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-count">18</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

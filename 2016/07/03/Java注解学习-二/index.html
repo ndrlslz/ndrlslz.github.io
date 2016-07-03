@@ -57,20 +57,26 @@
 
 
 
-<meta name="description" content="写tenrya的初衷现在部门做的项目是个基于openstack的云平台，其中一个模块是需要监听openstack的notification来进行响应，现有后台代码是用Java写的，逻辑是用switch-case判断notification的event_type来调用对应的响应类。可以想象到这段switch-case有多长。
-希望用更优雅的方式来做这个事，所以就把这块抽离了出来，写个了简单的pyth">
+<meta name="description" content="上一篇博客关注点在利用反射解析运行时的注解，这篇学习下利用apt来解析编译时的注解。
+
+APT概念Annotation Processor Tool(注解处理器工具)是javac的一个工具，它用来在编译时去扫描和处理注解。你可以自定义一些注解，然后注册相应的注解处理器来处理你的自定义注解。
+用途利用apt来解析编译时注解的作用通常是用来生成文件，比如可以用来生成.java代码，而且apt是在jav">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Ternya">
-<meta property="og:url" content="http://yoursite.com/2016/05/07/Ternya/index.html">
+<meta property="og:title" content="Java注解学习(二)">
+<meta property="og:url" content="http://yoursite.com/2016/07/03/Java注解学习-二/index.html">
 <meta property="og:site_name" content="霹雳啪啦程序汪">
-<meta property="og:description" content="写tenrya的初衷现在部门做的项目是个基于openstack的云平台，其中一个模块是需要监听openstack的notification来进行响应，现有后台代码是用Java写的，逻辑是用switch-case判断notification的event_type来调用对应的响应类。可以想象到这段switch-case有多长。
-希望用更优雅的方式来做这个事，所以就把这块抽离了出来，写个了简单的pyth">
-<meta property="og:image" content="http://yoursite.com/uploads/consumer_count.jpg">
-<meta property="og:updated_time" content="2016-05-07T14:28:12.984Z">
+<meta property="og:description" content="上一篇博客关注点在利用反射解析运行时的注解，这篇学习下利用apt来解析编译时的注解。
+
+APT概念Annotation Processor Tool(注解处理器工具)是javac的一个工具，它用来在编译时去扫描和处理注解。你可以自定义一些注解，然后注册相应的注解处理器来处理你的自定义注解。
+用途利用apt来解析编译时注解的作用通常是用来生成文件，比如可以用来生成.java代码，而且apt是在jav">
+<meta property="og:image" content="http://yoursite.com/uploads/processor-project.jpg">
+<meta property="og:updated_time" content="2016-07-03T13:53:05.674Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Ternya">
-<meta name="twitter:description" content="写tenrya的初衷现在部门做的项目是个基于openstack的云平台，其中一个模块是需要监听openstack的notification来进行响应，现有后台代码是用Java写的，逻辑是用switch-case判断notification的event_type来调用对应的响应类。可以想象到这段switch-case有多长。
-希望用更优雅的方式来做这个事，所以就把这块抽离了出来，写个了简单的pyth">
+<meta name="twitter:title" content="Java注解学习(二)">
+<meta name="twitter:description" content="上一篇博客关注点在利用反射解析运行时的注解，这篇学习下利用apt来解析编译时的注解。
+
+APT概念Annotation Processor Tool(注解处理器工具)是javac的一个工具，它用来在编译时去扫描和处理注解。你可以自定义一些注解，然后注册相应的注解处理器来处理你的自定义注解。
+用途利用apt来解析编译时注解的作用通常是用来生成文件，比如可以用来生成.java代码，而且apt是在jav">
 
 
 
@@ -88,7 +94,7 @@
   };
 </script>
 
-  <title> Ternya | 霹雳啪啦程序汪 </title>
+  <title> Java注解学习(二) | 霹雳啪啦程序汪 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -216,7 +222,7 @@
             
             
               
-                Ternya
+                Java注解学习(二)
               
             
           </h1>
@@ -228,8 +234,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-07T22:10:15+08:00" content="2016-05-07">
-              2016-05-07
+            <time itemprop="dateCreated" datetime="2016-07-03T21:08:20+08:00" content="2016-07-03">
+              2016-07-03
             </time>
           </span>
 
@@ -239,8 +245,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/05/07/Ternya/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/07/Ternya/" itemprop="commentsCount"></span>
+                <a href="/2016/07/03/Java注解学习-二/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/03/Java注解学习-二/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -250,7 +256,7 @@
 
           
           
-             <span id="/2016/05/07/Ternya/" class="leancloud_visitors" data-flag-title="Ternya">
+             <span id="/2016/07/03/Java注解学习-二/" class="leancloud_visitors" data-flag-title="Java注解学习(二)">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -270,52 +276,30 @@
       
 
       
-        <h2 id="写tenrya的初衷">写tenrya的初衷</h2><p>现在部门做的项目是个基于openstack的云平台，其中一个模块是需要监听openstack的notification来进行响应，现有后台代码是用Java写的，逻辑是用switch-case判断notification的event_type来调用对应的响应类。可以想象到这段switch-case有多长。</p>
-<p>希望用更优雅的方式来做这个事，所以就把这块抽离了出来，写个了简单的python library。<br>ternya的目的是为了更方便的接收和处理openstack notification。</p>
+        <p>上一篇博客关注点在利用反射解析运行时的注解，这篇学习下利用apt来解析编译时的注解。</p>
+<hr>
+<h2 id="APT">APT</h2><p><strong>概念</strong><br><code>Annotation Processor Tool</code>(注解处理器工具)是<code>javac</code>的一个工具，它用来在编译时去扫描和处理注解。你可以自定义一些注解，然后注册相应的注解处理器来处理你的自定义注解。</p>
+<p><strong>用途</strong><br>利用apt来解析编译时注解的作用通常是用来生成文件，比如可以用来生成<code>.java</code>代码，而且apt是在javac编译代码之前，意味着我们生成的代码也会被编译。</p>
 <a id="more"></a>
 <hr>
-<h2 id="安装ternya">安装ternya</h2><p>3种方式都可以：</p>
-<blockquote>
-<p>pip install ternya<br>easy_install ternya<br>python setup.py install</p>
-</blockquote>
+<h2 id="编写注解处理器">编写注解处理器</h2><h3 id="自定义注解">自定义注解</h3><p>首先我们先定义一个存活时间为编译时的注解。<br><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> annotation;</span><br><span class="line"></span><br><span class="line"><span class="annotation">@Target</span>(ElementType.TYPE)</span><br><span class="line"><span class="annotation">@Retention</span>(RetentionPolicy.CLASS)</span><br><span class="line"><span class="keyword">public</span> <span class="annotation">@interface</span> CompileAnnotation &#123;</span><br><span class="line">    String value() <span class="keyword">default</span> <span class="string">""</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="编写Processor">编写Processor</h3><p>然后来编写<code>注解处理器</code>来解析我们的自定义注解。</p>
+<p>首先，我们需要知道注解处理器是在它自己的JVM里面运行，javac会启动一个完整的JVM来运行注解处理器。意味着我们像写其他Java程序一样，使用你想用的类库。</p>
+<p>写法方面，所有的注解处理器都需要去继承<code>AbstractProcessor</code>。<br><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">public</span> <span class="tag">class</span> <span class="tag">CompileAnnotationProcessor</span> <span class="tag">extends</span> <span class="tag">AbstractProcessor</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 初始化注解处理器环境,ProcessingEnvironment提供了很多有用的工具类.比如Elements,Types,Filer</span><br><span class="line">     */</span></span><br><span class="line">    <span class="variable">@Override</span></span><br><span class="line">    public synchronized void <span class="function">init</span>(ProcessingEnvironment env)&#123; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 处理注解的主要方法, 我们需要重写这个方法来扫描,处理注解,生成文件.</span><br><span class="line">     * RoundEnvironment包含了被注解的元素,包括类,方法,实例域等.</span><br><span class="line">     * annotations包含了所有的注解信息.</span><br><span class="line">     */</span></span><br><span class="line">    <span class="variable">@Override</span></span><br><span class="line">    public boolean <span class="function">process</span>(Set&lt;? extends TypeElement&gt; annotations, RoundEnvironment env) &#123; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 指定这个注解处理器是去处理哪些注解的.</span><br><span class="line">     * 换句话说,指定注解处理器注册到哪些注解上</span><br><span class="line">     * 可以通过@SupportedAnnotationTypes()注解来替代</span><br><span class="line">     */</span></span><br><span class="line">    <span class="variable">@Override</span></span><br><span class="line">    public Set&lt;String&gt; <span class="function">getSupportedAnnotationTypes</span>() &#123; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 指定使用的Java版本,通常返回SourceVersion.latestSupported()</span><br><span class="line">     * 可以通过@SupportedSourceVersion(SourceVersion.latestSupported())注解来替代</span><br><span class="line">     */</span></span><br><span class="line">    <span class="variable">@Override</span></span><br><span class="line">    public SourceVersion <span class="function">getSupportedSourceVersion</span>() &#123; &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里我们来重写这个<code>process()</code>方法。<br>如一开始提到的，<code>编译时注解</code>主要是用来生成文件，比如java代码的。这里为方便理解，就生成一个文本文件就好。最后生成的文件的文件名为<code>被注解的类的类名</code>,文件内容为`注解的值。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@SupportedAnnotationTypes</span>(&#123;<span class="string">"annotation.CompileAnnotation"</span>&#125;)</span><br><span class="line"><span class="annotation">@SupportedSourceVersion</span>(<span class="type">SourceVersion</span>.<span class="type">RELEASE_8</span>)</span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">CompileAnnotationProcessor</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">AbstractProcessor</span> &#123;</span></span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    public boolean process(<span class="type">Set</span>&lt;? <span class="keyword">extends</span> <span class="type">TypeElement</span>&gt; annotations, <span class="type">RoundEnvironment</span> roundEnv) &#123;</span><br><span class="line">        <span class="comment">//遍历所有被注解了@CompileAnnotation的元素,因为这个注解类型是Type,所以这里只能是类这种元素.</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">Element</span> e : roundEnv.getElementsAnnotatedWith(<span class="type">CompileAnnotation</span>.<span class="keyword">class</span>)) &#123;</span><br><span class="line">            <span class="type">CompileAnnotation</span> annotation = e.getAnnotation(<span class="type">CompileAnnotation</span>.<span class="keyword">class</span>);</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="comment">//以被注解的类名作为文件名,我将其放到E盘了.</span></span><br><span class="line">                <span class="type">File</span> file = <span class="keyword">new</span> <span class="type">File</span>(<span class="string">"E:\\"</span> + e.getSimpleName() + <span class="string">".txt"</span>);</span><br><span class="line">                <span class="type">FileWriter</span> fileWriter = <span class="keyword">new</span> <span class="type">FileWriter</span>(file);</span><br><span class="line">                fileWriter.append(annotation.value());</span><br><span class="line">                fileWriter.flush();</span><br><span class="line">                fileWriter.close();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (<span class="type">IOException</span> e1) &#123;</span><br><span class="line">                e1.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="注册处理器">注册处理器</h3><p>写好了注解处理器之后，需要将注解处理器注册到javac中，为此，我们需要提供一个jar包，意味着我们要把这个项目打成jar包。</p>
+<p>在此之前，还要配置一个文件,需要再<code>resoures</code>文件夹下面创建个<code>META-INF</code>文件夹，再里面创建<code>services</code>文件夹，再里面创建<code>javax.annotation.processing.Processor</code>文件，文件的内容是注解处理器类的全名,每个类占一行。<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">processor</span><span class="class">.CompileAnnotationProcessor</span></span><br></pre></td></tr></table></figure></p>
+<p>如果不想创建这个文件,可以用Google的<a href="https://github.com/google/auto/tree/master/service" target="_blank" rel="external">AutoService</a>，在注解处理器上加上<code>@AutoService(Processor.class)</code>,便可以自动生成这个文件。</p>
+<p>最后，项目结构应该是这样的:<br><img src="/uploads/processor-project.jpg" alt="图"></p>
+<p>然后把这个项目打成jar包，这样我们的处理注解器就算写完了。</p>
+<h4 id="使用编译时注解">使用编译时注解</h4><p>然后我们再新建一个项目,将刚才的jar包导入进来。</p>
+<p>我这个编写2个Java类文件来做测试。<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> Package1;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> annotation.CompileAnnotation;</span><br><span class="line"></span><br><span class="line"><span class="annotation">@CompileAnnotation</span>(value = <span class="string">"this is test value"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> &#123;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> Package2;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> annotation.CompileAnnotation;</span><br><span class="line"></span><br><span class="line"><span class="annotation">@CompileAnnotation</span>(value = <span class="string">"this is test1 value"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test1</span> &#123;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后编译这个新的项目，就会发现E盘生成了2个文本文件,Test.txt和Test1.txt。内容为注解的值。</p>
+<p>编写一个编译时注解的处理器大致过程就是这样。但这里只示范了创建文本文件。<br>但绝大部分情况是需要生成Java代码的，通常使用<a href="https://github.com/square/javapoet" target="_blank" rel="external">javapoet</a>来生成Java源代码。</p>
+<p>更详细的内容请看这篇<a href="http://hannesdorfmann.com/annotation-processing/annotationprocessing101" target="_blank" rel="external">文章</a>,也有哥们翻译成中文了, <a href="http://www.race604.com/annotation-processing/" target="_blank" rel="external">中文版</a></p>
 <hr>
-<h2 id="如何填写配置文件">如何填写配置文件</h2><h3 id="配置文件的例子">配置文件的例子</h3><p><a href="https://github.com/ndrlslz/ternya/blob/master/config.ini" target="_blank" rel="external">example config file</a></p>
-<h3 id="配置信息解释">配置信息解释</h3><p><strong>project_abspath</strong><br>填写你的项目根目录的绝对路径地址。</p>
-<p><strong>packages_scan</strong><br>你的项目中，处理notification的方法所在的package。<br>ternya会扫描你填写的package下的所有py文件，然后注入处理notification的业务逻辑。<br>意思就是处理notification的逻辑放在哪，就填它所在的package。</p>
-<p>举个例子，假如项目目录结构如下：<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">E:\ternya</span><br><span class="line">|<span class="comment">-- my_process_one.py</span></span><br><span class="line">`<span class="comment">-- process</span></span><br><span class="line">   |<span class="comment">-- my_process_two.py</span></span><br><span class="line">   `<span class="comment">-- sub_process</span></span><br><span class="line">       |<span class="comment">-- my_process_three.py</span></span><br><span class="line">`<span class="comment">-- process1</span></span><br><span class="line">   |<span class="comment">-- my_process_four.py</span></span><br></pre></td></tr></table></figure></p>
-<ol>
-<li>如果不填，即 packages_scan =<br>ternya会扫描项目的所有py文件</li>
-<li>如果填process这个package，即 packages_scan = process<br>tenrya会扫描到my_process_two.py和my_process_three.py 这2个py文件。</li>
-<li>如果填process.sub_process这个package，即 packages_scan = process.sub_process<br>ternya会扫描my_process_three.py 这个py文件。</li>
-<li>如果填多个package，之间以分号分割， 即 packages_scan = process.sub_process;process1<br>tenrya会扫描my_process_three.py和my_process_four.py 这2个py文件</li>
-</ol>
-<p>为了内存和速度着想，让tenrya扫描的py文件越少越好，意味着最好只扫描处理notification的那些py文件。</p>
-<p><strong>mq_user</strong><br>openstack mq的username</p>
-<p><strong>mq_password</strong><br>openstack mq的password</p>
-<p><strong>mq_host</strong><br>openstack controller节点的mq的host</p>
-<p><strong>listen_notification</strong><br>是否监听这个组件的notification</p>
-<p><strong>mq_consumer_count</strong><br>对每个组件而言，启用多少个consumer去监听和处理notification。<br>比如启动3个consumer：<br><img src="/uploads/consumer_count.jpg" alt="multi_consumer"><br>queue通过轮询的方式将message负载均衡到多个consumer。</p>
-<hr>
-<h2 id="如何运行ternya">如何运行ternya</h2><ol>
-<li>通过调用read(path)方法加载你的配置文件。</li>
-<li>通过调用work()来启动ternya</li>
-</ol>
-<p>如果在项目中用到ternya，需要启用一个进程来启动ternya。<br>提醒：如果是windows平台，要想启动进程， if <strong>name</strong> == “<strong>main</strong>“是必须要的。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">from ternya <span class="keyword">import</span> Ternya</span><br><span class="line">from multiprocessing <span class="keyword">import</span> Process</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    ternya = Ternya()</span><br><span class="line">    ternya.read(<span class="string">"config.ini"</span>)</span><br><span class="line">    process = Process(target=ternya.work)</span><br><span class="line">    process.start()</span><br></pre></td></tr></table></figure></p>
-<hr>
-<h2 id="如何处理notification">如何处理notification</h2><p>如一开始提到的，ternya的主要目的就是更简单的处理notification。<br>ternya提供了基于注解的方式来处理notification。<br><strong>注解使用方法</strong>: @openstack组件名称(“event_type”)</p>
-<p>举个例子，比如要处理开始创建虚机的notification。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> ternya <span class="keyword">import</span> nova</span><br><span class="line"></span><br><span class="line"><span class="decorator">@nova("compute.instance.create.start")</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">create_instance_start</span><span class="params">(body, message)</span>:</span></span><br><span class="line">    <span class="string">"""</span><br><span class="line">    Service method of dealing with notification.</span><br><span class="line">    body and message parameter is necessary.</span><br><span class="line"></span><br><span class="line">    :param body: notification dict</span><br><span class="line">    :param message: kombu Message class</span><br><span class="line">    """</span></span><br><span class="line">    print(<span class="string">"start to create instance notification."</span>)</span><br><span class="line">    print(body[<span class="string">'event_type'</span>])</span><br><span class="line">    print(body)</span><br></pre></td></tr></table></figure></p>
-<p>通过注解的方式，ternya会记录event_type和业务方法的映射关系，在这个例子中，ternya会记录下用create_instance_start这个方法来处理’compute.instance.create.start’这个event_type。</p>
-<p>ternya的注解也支持<strong>通配符</strong>的方式。<br>比如要处理删除虚机的notification。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> ternya <span class="keyword">import</span> nova</span><br><span class="line"></span><br><span class="line"><span class="decorator">@nova("compute.instance.delete.*"):</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">instance_delete</span><span class="params">(body, message)</span>:</span></span><br><span class="line">    print(<span class="string">"delete instance notification"</span>)</span><br><span class="line">    print(body[<span class="string">'event_type'</span>])</span><br><span class="line">    print(body)</span><br></pre></td></tr></table></figure></p>
-<p>在这个例子中，instance_delete这个方法可以处理2种notification，分别为event_type为”compute.instance.delete.start”和”compute.instance.delete.end”的notification。</p>
-<p>ternya目前支持7种openstack组件的注解。</p>
-<blockquote>
-<p>nova<br>cinder<br>neutron<br>glance<br>swift<br>keystone<br>heat</p>
-</blockquote>
-<hr>
-<h2 id="如何编写处理notification的方法">如何编写处理notification的方法</h2><p>ternya中使用了kombu库，采用kombu提供的方式来编写方法，方法需要接收2个参数，body和message。一般只需要用到body即可。<br><strong>body</strong><br>notification的字典<br><strong>message</strong><br>kombu.transport.base.Message</p>
-<p>ternya默认处理notification的方式是通过log的DEBUG模式输出。</p>
-<hr>
-<h2 id="源码地址">源码地址</h2><p><a href="https://github.com/ndrlslz/ternya" target="_blank" rel="external">ternya源码</a></p>
+<h2 id="参考文档">参考文档</h2><p><a href="http://hannesdorfmann.com/annotation-processing/annotationprocessing101" target="_blank" rel="external">注解处理器</a></p>
 
       
     </div>
@@ -327,17 +311,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/04/30/Java函数式编程/" rel="next" title="Java函数式编程">
-                <i class="fa fa-chevron-left"></i> Java函数式编程
+              <a href="/2016/06/30/Java注解学习-一/" rel="next" title="Java注解学习(一)">
+                <i class="fa fa-chevron-left"></i> Java注解学习(一)
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/05/15/Openstack开发环境搭建/" rel="prev" title="Openstack开发环境搭建">
-                Openstack开发环境搭建 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -363,8 +343,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/05/07/Ternya/"
-           data-title="Ternya" data-url="http://yoursite.com/2016/05/07/Ternya/">
+      <div class="ds-thread" data-thread-key="2016/07/03/Java注解学习-二/"
+           data-title="Java注解学习(二)" data-url="http://yoursite.com/2016/07/03/Java注解学习-二/">
       </div>
     
   </div>
@@ -473,7 +453,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写tenrya的初衷"><span class="nav-number">1.</span> <span class="nav-text">写tenrya的初衷</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装ternya"><span class="nav-number">2.</span> <span class="nav-text">安装ternya</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何填写配置文件"><span class="nav-number">3.</span> <span class="nav-text">如何填写配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置文件的例子"><span class="nav-number">3.1.</span> <span class="nav-text">配置文件的例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置信息解释"><span class="nav-number">3.2.</span> <span class="nav-text">配置信息解释</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何运行ternya"><span class="nav-number">4.</span> <span class="nav-text">如何运行ternya</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何处理notification"><span class="nav-number">5.</span> <span class="nav-text">如何处理notification</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何编写处理notification的方法"><span class="nav-number">6.</span> <span class="nav-text">如何编写处理notification的方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码地址"><span class="nav-number">7.</span> <span class="nav-text">源码地址</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#APT"><span class="nav-number">1.</span> <span class="nav-text">APT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编写注解处理器"><span class="nav-number">2.</span> <span class="nav-text">编写注解处理器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义注解"><span class="nav-number">2.1.</span> <span class="nav-text">自定义注解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编写Processor"><span class="nav-number">2.2.</span> <span class="nav-text">编写Processor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注册处理器"><span class="nav-number">2.3.</span> <span class="nav-text">注册处理器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用编译时注解"><span class="nav-number">2.3.1.</span> <span class="nav-text">使用编译时注解</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">3.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
