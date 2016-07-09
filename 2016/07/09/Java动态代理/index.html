@@ -1,0 +1,846 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.0" />
+
+
+
+
+
+
+<meta name="description" content="动态代理在框架层面大量使用，比如AOP框架, Retrofit等。这里学习下Java的动态代理。
+静态代理静态代理是设计模式中的一种，通过对原始对象提供一个代理类，实现在不改变原始类的情况下，改变原始类的方法。
+静态代理是在程序运行前就需要写好代理类，确定好代理类和被代理类的关系。缺点就是对于每个被代理类，都需要写个代理类与之对应。
+
+动态代理概念与静态代理不同，动态代理的代理类是在运行时创建的，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java动态代理">
+<meta property="og:url" content="http://yoursite.com/2016/07/09/Java动态代理/index.html">
+<meta property="og:site_name" content="霹雳啪啦程序汪">
+<meta property="og:description" content="动态代理在框架层面大量使用，比如AOP框架, Retrofit等。这里学习下Java的动态代理。
+静态代理静态代理是设计模式中的一种，通过对原始对象提供一个代理类，实现在不改变原始类的情况下，改变原始类的方法。
+静态代理是在程序运行前就需要写好代理类，确定好代理类和被代理类的关系。缺点就是对于每个被代理类，都需要写个代理类与之对应。
+
+动态代理概念与静态代理不同，动态代理的代理类是在运行时创建的，">
+<meta property="og:updated_time" content="2016-07-09T14:40:31.036Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java动态代理">
+<meta name="twitter:description" content="动态代理在框架层面大量使用，比如AOP框架, Retrofit等。这里学习下Java的动态代理。
+静态代理静态代理是设计模式中的一种，通过对原始对象提供一个代理类，实现在不改变原始类的情况下，改变原始类的方法。
+静态代理是在程序运行前就需要写好代理类，确定好代理类和被代理类的关系。缺点就是对于每个被代理类，都需要写个代理类与之对应。
+
+动态代理概念与静态代理不同，动态代理的代理类是在运行时创建的，">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: '[object Object]',
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Java动态代理 | 霹雳啪啦程序汪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d5e930abbb82f9699e861f3eb92eb836";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">霹雳啪啦程序汪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Java动态代理
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-09T22:27:52+08:00" content="2016-07-09">
+              2016-07-09
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/07/09/Java动态代理/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/09/Java动态代理/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/07/09/Java动态代理/" class="leancloud_visitors" data-flag-title="Java动态代理">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>动态代理在框架层面大量使用，比如AOP框架, Retrofit等。这里学习下Java的动态代理。</p>
+<h2 id="静态代理">静态代理</h2><p>静态代理是设计模式中的一种，通过对原始对象提供一个代理类，实现在不改变原始类的情况下，改变原始类的方法。</p>
+<p>静态代理是在程序运行前就需要写好代理类，确定好代理类和被代理类的关系。缺点就是对于每个被代理类，都需要写个代理类与之对应。</p>
+<hr>
+<h2 id="动态代理">动态代理</h2><h3 id="概念">概念</h3><p>与静态代理不同，动态代理的代理类是在运行时创建的，即代理类和被代理类的关系是在运行时才确定的。好处在于可以处理被代理类预先不知道的情况，而且也解决了静态代理的缺点，通过一个类便可以代理多个原始类。</p>
+<a id="more"></a>
+<h3 id="创建动态代理">创建动态代理</h3><p><strong>创建方法</strong><br>通过<code>Proxy.newProxyInstance()</code>便可以创建动态代理类。</p>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">/<span class="keyword">*</span><span class="keyword">*</span></span><br><span class="line"> <span class="keyword">*</span> ClassLoader 加载代理类的ClassLoader</span><br><span class="line"> <span class="keyword">*</span> interfaces 被代理的接口数组,即这个代理类需要实现哪些接口中的方法.</span><br><span class="line"> <span class="keyword">*</span> InvocationHandler接口 代理类的主要逻辑, 用来代理，改变原始类中的方法.</span><br><span class="line"> <span class="keyword">*</span>/</span><br><span class="line">public static Object newProxyInstance(ClassLoader loader,</span><br><span class="line">                                      Class<span class="variable">&lt;?&gt;</span>[] interfaces,</span><br><span class="line">                                      InvocationHandler h)</span><br></pre></td></tr></table></figure>
+<p>然后需要实现<code>InvocationHandler</code>接口的<code>invoke()</code>方法。<br><figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 调用被代理类的方法的时候,实际上是调用这个invoke()方法.</span><br><span class="line"> *</span><br><span class="line"> * proxy 生成的动态代理类的引用,一般不会调用它的方法, 可以用来通过反射获得动态代理类的方法，注解等信息。</span><br><span class="line"> * <span class="keyword">method</span> 被代理的方法</span><br><span class="line"> * args 被代理的方法的参数数组</span><br><span class="line"> */</span><br><span class="line">public <span class="type">Object</span> invoke(<span class="type">Object</span> proxy, <span class="type">Method</span> <span class="keyword">method</span>, <span class="type">Object</span>[] args)</span><br></pre></td></tr></table></figure></p>
+<p><strong>动态代理实例</strong><br>这里来实现一个简单的动态代理。<br>传入一个类的Class对象，返回这个类的动态代理类，其中改变了这个实现类的方法。</p>
+<figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">package proxy;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.<span class="type">InvocationHandler</span>;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.<span class="type">Method</span>;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.<span class="type">Proxy</span>;</span><br><span class="line"></span><br><span class="line">public class <span class="type">DynamicProxy</span> &#123;</span><br><span class="line">    public <span class="keyword">static</span> &lt;T&gt; <span class="type">Object</span> proxy(<span class="type">Class</span>&lt;T&gt; clazz) throws <span class="type">IllegalAccessException</span>, <span class="type">InstantiationException</span> &#123;</span><br><span class="line">        T <span class="keyword">object</span> = clazz.newInstance();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="type">Proxy</span>.newProxyInstance(clazz.getClassLoader(),</span><br><span class="line">                clazz.getInterfaces(),</span><br><span class="line">                new <span class="type">InvocationHandler</span>() &#123;</span><br><span class="line">                    @<span class="type">Override</span></span><br><span class="line">                    public <span class="type">Object</span> invoke(<span class="type">Object</span> proxy, <span class="type">Method</span> <span class="keyword">method</span>, <span class="type">Object</span>[] args) throws <span class="type">Throwable</span> &#123;</span><br><span class="line">                        <span class="type">System</span>.<span class="keyword">out</span>.println(<span class="string">"start to inject code"</span>);</span><br><span class="line">                        <span class="type">Object</span> <span class="literal">result</span> = <span class="keyword">method</span>.invoke(<span class="keyword">object</span>, args);</span><br><span class="line">                        <span class="type">System</span>.<span class="keyword">out</span>.println(<span class="string">"end to inject code"</span>);</span><br><span class="line">                        <span class="keyword">return</span> <span class="literal">result</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后我们来使用这个动态代理。<br>需要知道，这种创建动态代理方式的缺点在于它只能针对接口来创建代理类。因为创建出来的代理类已经继承于<code>Proxy</code>类了，而Java是单继承的，只能实现被代理的接口了。</p>
+<p>我们创建一个<code>PersonInterface</code>接口和其实现类<code>Person</code>。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">PersonInterface</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">say</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> <span class="keyword">implements</span> <span class="title">PersonInterface</span></span>&#123;</span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">say</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"hello"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>现在，我们需要动态改变Person类的<code>say</code>方法，利用之前写好的<code>DynamicProxy</code>类来创建动态代理类。<br><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InstantiationException, IllegalAccessException </span>&#123;</span><br><span class="line">    PersonInterface person = (PersonInterface) DynamicProxy.proxy(Person.class);</span><br><span class="line">    person.say();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//start to inject code</span></span><br><span class="line"><span class="comment">//hello</span></span><br><span class="line"><span class="comment">//end to inject code</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="思考Retrofit的create方法">思考Retrofit的create方法</h2><p>下面是Retrofit的<code>create()</code>方法的源码。<br><figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">public &lt;T&gt; T create(final <span class="type">Class</span>&lt;T&gt; service) &#123;</span><br><span class="line">    <span class="type">Utils</span>.validateServiceInterface(service);</span><br><span class="line">    <span class="keyword">if</span>(this.validateEagerly) &#123;</span><br><span class="line">        this.eagerlyValidateMethods(service);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="type">Proxy</span>.newProxyInstance(service.getClassLoader(), new <span class="type">Class</span>[]&#123;service&#125;, new <span class="type">InvocationHandler</span>() &#123;</span><br><span class="line">        private final <span class="type">Platform</span> platform = <span class="type">Platform</span>.get();</span><br><span class="line"></span><br><span class="line">        public <span class="type">Object</span> invoke(<span class="type">Object</span> proxy, <span class="type">Method</span> <span class="keyword">method</span>, <span class="type">Object</span>... args) throws <span class="type">Throwable</span> &#123;</span><br><span class="line">            <span class="keyword">if</span>(<span class="keyword">method</span>.getDeclaringClass() == <span class="type">Object</span>.class) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">method</span>.invoke(this, args);</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span>(this.platform.isDefaultMethod(<span class="keyword">method</span>)) &#123;</span><br><span class="line">                <span class="keyword">return</span> this.platform.invokeDefaultMethod(<span class="keyword">method</span>, service, proxy, args);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="type">ServiceMethod</span> serviceMethod = <span class="type">Retrofit</span>.this.loadServiceMethod(<span class="keyword">method</span>);</span><br><span class="line">                <span class="type">OkHttpCall</span> okHttpCall = new <span class="type">OkHttpCall</span>(serviceMethod, args);</span><br><span class="line">                <span class="keyword">return</span> serviceMethod.callAdapter.adapt(okHttpCall);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看到，它正是使用了Java的动态代理。<br>通过传入用户的接口，返回针对这个接口的代理类。</p>
+<p>之前有一点我没想明白，就是<code>create()</code>方法为什么只需要传接口就可以了。因为通常来说，我们是需要对具体的实现类来进行代理的，而传入的接口是无法实例化的。</p>
+<p>后来我明白了，这正是Retrofit不同的地方。它不需要对具体的实例类进行代理，因为所有的功能都是通过动态代理类来做了，而传入接口的作用是只需要通过接口得到方法的参数，返回值，注解等信息。然后利用这些信息来创建REST请求，对返回结果反序列化等等。</p>
+<hr>
+<h2 id="cglib">cglib</h2><h3 id="概念-1">概念</h3><p>上面这种方式的缺点之前提到了，就是只能对接口的方法进行代理。用<code>cglib</code>这个库的话可以直接对类进行代理。</p>
+<p>cglib底层使用ASM框架，<code>ASM</code>是一个java字节码操纵框架，可以直接产生二进制 class 文件。</p>
+<h3 id="使用方式">使用方式</h3><p>通过实现<code>MethodInterceptor</code>接口的<code>intercept()</code>方法来实现代理功能，这个方法和之前的<code>invoke</code>差不多。<br><figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * obj 生成的动态代理类的引用</span><br><span class="line"> * <span class="keyword">method</span> 被代理的方法</span><br><span class="line"> * args 方法参数数组</span><br><span class="line"> * proxy 代理类的方法的引用, 如果要调用被代理类的方法, 请使用proxy.invokeSuper().</span><br><span class="line"> */</span><br><span class="line">public <span class="type">Object</span> intercept(<span class="type">Object</span> obj, <span class="type">Method</span> <span class="keyword">method</span>, <span class="type">Object</span>[] args, <span class="type">MethodProxy</span> proxy)</span><br></pre></td></tr></table></figure></p>
+<h3 id="创建动态代理实例">创建动态代理实例</h3><p>写个简单的例子来创建动态代理对象。<br><figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public class <span class="type">CglibDynamicProxy</span> &#123;</span><br><span class="line"></span><br><span class="line">    @<span class="type">SuppressWarnings</span>(<span class="string">"unchecked"</span>)</span><br><span class="line">    public <span class="keyword">static</span> &lt;T&gt; T proxy(<span class="type">Class</span>&lt;T&gt; clazz) &#123;</span><br><span class="line">        <span class="type">Enhancer</span> enhancer = new <span class="type">Enhancer</span>();</span><br><span class="line">        enhancer.setSuperclass(clazz);</span><br><span class="line">        enhancer.setCallback((<span class="type">MethodInterceptor</span>) (o, <span class="keyword">method</span>, args, methodProxy) -&gt; &#123;</span><br><span class="line">            <span class="type">System</span>.<span class="keyword">out</span>.println(<span class="string">"start to inject code"</span>);</span><br><span class="line">            <span class="type">Object</span> <span class="literal">result</span> = methodProxy.invokeSuper(o, args);</span><br><span class="line">            <span class="type">System</span>.<span class="keyword">out</span>.println(<span class="string">"end to inject code"</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">result</span>;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">return</span> (T) enhancer.create();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上面的代码，通过<code>setSuperclass()</code>来指定被代理类，因为最后生成的代理类是这个被代理类的子类。<br>通过<code>setCallback()</code>来指定代理的主要操作。<br>通过<code>create()</code>来创建最后的动态代理类。</p>
+<h3 id="使用动态代理">使用动态代理</h3><p>我们创建个类来使用这个动态代理功能。<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Test</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(<span class="params">String[] args</span>) </span>&#123;</span><br><span class="line">        MyClass myClass = CglibDynamicProxy.proxy(MyClass.class);</span><br><span class="line">        myClass.say();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">MyClass</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">say</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        System.<span class="keyword">out</span>.println(<span class="string">"hello"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//start to inject code</span></span><br><span class="line"><span class="comment">//hello</span></span><br><span class="line"><span class="comment">//end to inject code</span></span><br></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="参考文档">参考文档</h2><p><a href="http://www.jasongj.com/design_pattern/dynamic_proxy_cglib/" target="_blank" rel="external">Java动态代理</a><br><a href="http://www.jianshu.com/p/fb8d21978e38" target="_blank" rel="external">Retrofit</a></p>
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/03/Java注解学习-二/" rel="next" title="Java注解学习(二)">
+                <i class="fa fa-chevron-left"></i> Java注解学习(二)
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/07/09/Java动态代理/"
+           data-title="Java动态代理" data-url="http://yoursite.com/2016/07/09/Java动态代理/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.jpg"
+               alt="ndrlslz" />
+          <p class="site-author-name" itemprop="name">ndrlslz</p>
+          <p class="site-description motion-element" itemprop="description">Just Record Something</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ndrlslz" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2772570770" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> Weibo
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#静态代理"><span class="nav-number">1.</span> <span class="nav-text">静态代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动态代理"><span class="nav-number">2.</span> <span class="nav-text">动态代理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#概念"><span class="nav-number">2.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建动态代理"><span class="nav-number">2.2.</span> <span class="nav-text">创建动态代理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#思考Retrofit的create方法"><span class="nav-number">3.</span> <span class="nav-text">思考Retrofit的create方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cglib"><span class="nav-number">4.</span> <span class="nav-text">cglib</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#概念-1"><span class="nav-number">4.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用方式"><span class="nav-number">4.2.</span> <span class="nav-text">使用方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建动态代理实例"><span class="nav-number">4.3.</span> <span class="nav-text">创建动态代理实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用动态代理"><span class="nav-number">4.4.</span> <span class="nav-text">使用动态代理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">5.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ndrlslz</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  
+
+
+  
+
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.0"></script>
+
+
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ndrlslz"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+
+  
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("qsixHuR8yNbcGca2Km89Dqik", "Wvge03uyJtMH1XUl4yvQ2HsA");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+</body>
+</html>
