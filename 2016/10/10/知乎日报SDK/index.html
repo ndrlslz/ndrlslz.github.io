@@ -57,38 +57,19 @@
 
 
 
-<meta name="description" content="记录下openstack中keystone的安装及基本用法。
-环境信息虚机使用virtualBox安装CentOS 7作为节点
-网络创建3张网卡
-
-
-management network：10.20.0.0/24
-private network: 192.168.4.0/24
-external network: 172.16.0.0/24">
+<meta name="description" content="知乎日报SDK之前逛知乎，有个问题是”有什么有趣的API接口”，就顺便找了个知乎日报的API来做了个Java版的SDK。
+话说用Retrofit2这个HttpClient库真是方便，几乎都不用写啥代码了。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="keystone记录">
-<meta property="og:url" content="http://yoursite.com/2015/12/06/keystone记录/index.html">
+<meta property="og:title" content="知乎日报SDK">
+<meta property="og:url" content="http://yoursite.com/2016/10/10/知乎日报SDK/index.html">
 <meta property="og:site_name" content="霹雳啪啦程序汪">
-<meta property="og:description" content="记录下openstack中keystone的安装及基本用法。
-环境信息虚机使用virtualBox安装CentOS 7作为节点
-网络创建3张网卡
-
-
-management network：10.20.0.0/24
-private network: 192.168.4.0/24
-external network: 172.16.0.0/24">
-<meta property="og:image" content="http://yoursite.com/uploads/Keystone-workflow.png">
-<meta property="og:updated_time" content="2016-04-17T10:52:20.913Z">
+<meta property="og:description" content="知乎日报SDK之前逛知乎，有个问题是”有什么有趣的API接口”，就顺便找了个知乎日报的API来做了个Java版的SDK。
+话说用Retrofit2这个HttpClient库真是方便，几乎都不用写啥代码了。">
+<meta property="og:updated_time" content="2016-10-10T13:43:51.971Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="keystone记录">
-<meta name="twitter:description" content="记录下openstack中keystone的安装及基本用法。
-环境信息虚机使用virtualBox安装CentOS 7作为节点
-网络创建3张网卡
-
-
-management network：10.20.0.0/24
-private network: 192.168.4.0/24
-external network: 172.16.0.0/24">
+<meta name="twitter:title" content="知乎日报SDK">
+<meta name="twitter:description" content="知乎日报SDK之前逛知乎，有个问题是”有什么有趣的API接口”，就顺便找了个知乎日报的API来做了个Java版的SDK。
+话说用Retrofit2这个HttpClient库真是方便，几乎都不用写啥代码了。">
 
 
 
@@ -106,7 +87,7 @@ external network: 172.16.0.0/24">
   };
 </script>
 
-  <title> keystone记录 | 霹雳啪啦程序汪 </title>
+  <title> 知乎日报SDK | 霹雳啪啦程序汪 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -234,7 +215,7 @@ external network: 172.16.0.0/24">
             
             
               
-                keystone记录
+                知乎日报SDK
               
             
           </h1>
@@ -246,8 +227,8 @@ external network: 172.16.0.0/24">
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-12-06T16:03:32+08:00" content="2015-12-06">
-              2015-12-06
+            <time itemprop="dateCreated" datetime="2016-10-10T21:39:54+08:00" content="2016-10-10">
+              2016-10-10
             </time>
           </span>
 
@@ -257,8 +238,8 @@ external network: 172.16.0.0/24">
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2015/12/06/keystone记录/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/06/keystone记录/" itemprop="commentsCount"></span>
+                <a href="/2016/10/10/知乎日报SDK/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/10/知乎日报SDK/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -268,7 +249,7 @@ external network: 172.16.0.0/24">
 
           
           
-             <span id="/2015/12/06/keystone记录/" class="leancloud_visitors" data-flag-title="keystone记录">
+             <span id="/2016/10/10/知乎日报SDK/" class="leancloud_visitors" data-flag-title="知乎日报SDK">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -288,50 +269,22 @@ external network: 172.16.0.0/24">
       
 
       
-        <p>记录下openstack中keystone的安装及基本用法。</p>
-<h3 id="环境信息">环境信息</h3><p><strong>虚机</strong><br>使用virtualBox安装CentOS 7作为节点</p>
-<p><strong>网络</strong><br>创建3张网卡</p>
-<blockquote>
-<ul>
-<li>management network：10.20.0.0/24</li>
-<li>private network: 192.168.4.0/24</li>
-<li>external network: 172.16.0.0/24</li>
-</ul>
-</blockquote>
+        <h2 id="知乎日报SDK">知乎日报SDK</h2><p>之前逛知乎，有个问题是”有什么有趣的API接口”，就顺便找了个<a href="https://github.com/izzyleung/ZhihuDailyPurify/wiki/%E7%9F%A5%E4%B9%8E%E6%97%A5%E6%8A%A5-API-%E5%88%86%E6%9E%90" target="_blank" rel="external">知乎日报的API</a>来做了个Java版的SDK。</p>
+<p>话说用Retrofit2这个HttpClient库真是方便，几乎都不用写啥代码了。</p>
 <hr>
 <a id="more"></a>
-<h3 id="安装步骤">安装步骤</h3><ol>
-<li>创建个虚机作为controller节点，我这里给它2个网卡，一个<strong>management</strong>的网卡，用于controller节点与其他节点的通信，一个<strong>NAT</strong>的网卡，让虚机可以上网。进虚机后先把网络配置好。我设置的controller节点的ip为10.20.0.10.</li>
-<li>安装ntp服务，参考 <a href="http://docs.openstack.org/liberty/install-guide-rdo/environment-ntp.html" target="_blank" rel="external">ntp安装</a></li>
-<li>安装epel源和openstack的源 参考 <a href="http://docs.openstack.org/liberty/install-guide-rdo/environment-packages.html" target="_blank" rel="external">安装源</a></li>
-<li>安装mysql和rabbitmq的服务 参考 <a href="http://docs.openstack.org/liberty/install-guide-rdo/environment-sql-database.html" target="_blank" rel="external">mysql</a> <a href="http://docs.openstack.org/liberty/install-guide-rdo/environment-messaging.html" target="_blank" rel="external">rabbitmq</a></li>
-<li>然后就可以安装keystone的服务和进行相关配置了，参考 <a href="http://docs.openstack.org/liberty/install-guide-rdo/keystone-install.html" target="_blank" rel="external">keystone安装</a></li>
-<li>keystone装好后，开始安装keystone service和endpoint 参考 <a href="http://docs.openstack.org/liberty/install-guide-rdo/keystone-services.html" target="_blank" rel="external">service，endpoint</a></li>
-<li>最后再创建好tenant,user,role。 参考<a href="http://docs.openstack.org/liberty/install-guide-rdo/keystone-users.html" target="_blank" rel="external">create tenant,user,role</a></li>
-</ol>
-<p>之后再创建个脚本文件，方便以后命令行操作。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> OS_PROJECT_DOMAIN_ID=<span class="keyword">default</span></span><br><span class="line"><span class="keyword">export</span> OS_USER_DOMAIN_ID=<span class="keyword">default</span></span><br><span class="line"><span class="keyword">export</span> OS_PROJECT_NAME=admin</span><br><span class="line"><span class="keyword">export</span> OS_TENANT_NAME=admin</span><br><span class="line"><span class="keyword">export</span> OS_USERNAME=admin</span><br><span class="line"><span class="keyword">export</span> OS_PASSWORD=ADMIN_PASS</span><br><span class="line"><span class="keyword">export</span> OS_AUTH_URL=http:<span class="comment">//controller:35357/v3</span></span><br><span class="line"><span class="keyword">export</span> OS_IDENTITY_API_VERSION=<span class="number">3</span></span><br></pre></td></tr></table></figure>
-<p>这是官网的脚本内容，但因为keystone命令行客户端在v3版被弃用了，所以在命令行无法使用keystone v3的认证服务，这样用keystone开头的命令会出错，所以需要把版本改成v2.0.</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> OS_AUTH_URL=http:<span class="comment">//controller:35357/v2.0</span></span><br></pre></td></tr></table></figure>
-<p>这样就可以使用keystone CLI了。<br>然后到这些，keystone的基本安装就结束了，一些驱动的配置都是按照官网安装步骤的配置来配的，例如认证方式采用UUID，token的持久化用的memcache。</p>
-<h3 id="keystone认证流程">keystone认证流程</h3><p><a href="/uploads/Keystone-workflow.png"><img src="/uploads/Keystone-workflow.png" alt="keystone流程图"></a></p>
-<h4 id="认证方式">认证方式</h4><p>之前提到的认证方式，现在keystone有UUID，PKI，ZPKI三种方式，不同点可以参考 <a href="https://www.mirantis.com/blog/understanding-openstack-authentication-keystone-pki/" target="_blank" rel="external">keystone认证方式</a></p>
-<p>大概总结一下：<br><strong>UUID</strong><br>UUID方式通过keystone生成32位的字符串token，然后保存在backend中，并返回给申请者，之后拿到这个token去请求其他的openstack组件，而其他组件会再通过keystone验证这个token是否有效。<br>这个方式可能会有几个问题：</p>
-<ol>
-<li>其他组件都会来keystone进行token验证，keystone很容易成为系统的瓶颈，特别对于多region的情况，所以可以考虑对keystone做HA。</li>
-<li>如果backend采用sql，默认不会清理token，所以token数量增大，查询效率会降低。<br>这里keystone-manage token-flush命令可以把过期token删掉，并把token有效期设为1小时。backend也可以采用memcahce。</li>
-</ol>
-<p><strong>PKI</strong><br>PKI方式的keystone相当于一个Certificate Authority，当请求token时，它会生成包含catalog，metadata等的json，然后用自己的密钥和证书来签署，生成token。而其它组件会有自己的一份公钥和证书，对token进行解密得到json串，所以不必再去请求keystone进行验证，它自己就可以进行验证了，降低了keystone的负载。<br>这个方式也可能会存在问题：</p>
-<ol>
-<li>pki的本身性能比UUID要低。</li>
-<li>UUID方式只需要拿32位字符串这个token去请求其他组件即可，而PKI需要拿整个json串的token去请求，数据包很大。</li>
-</ol>
-<p><strong>ZPKI</strong><br>ZPKI方式就是对PKI方式的token进行zlib压缩。</p>
-<h4 id="具体用法">具体用法</h4><p>我这里是采用uuid的方式进行认证。去调keystone的REST API即可。 API参考 <a href="http://developer.openstack.org/api-ref-identity-v3.html" target="_blank" rel="external">keystone API</a></p>
-<p>先定义好请求的json串 vim auth.json<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"auth"</span>: &#123;</span><br><span class="line">        <span class="string">"identity"</span>: &#123;</span><br><span class="line">            <span class="string">"methods"</span>: [</span><br><span class="line">                <span class="string">"password"</span>      </span><br><span class="line">            ],          </span><br><span class="line">            <span class="string">"password"</span>: &#123;</span><br><span class="line">                <span class="string">"user"</span>: &#123;       </span><br><span class="line">                    <span class="string">"id"</span>: <span class="string">"ADMIN_USER_ID"</span>,</span><br><span class="line">                    <span class="string">"password"</span>: <span class="string">"ADMIN_USER_PASSWORD"</span></span><br><span class="line">                &#125;               </span><br><span class="line">            &#125;           </span><br><span class="line">        &#125;,      </span><br><span class="line">        <span class="string">"scope"</span>: &#123;</span><br><span class="line">            <span class="string">"project"</span>: &#123;</span><br><span class="line">                <span class="string">"id"</span>: <span class="string">"ADMIN_PROJECT_ID"</span></span><br><span class="line">            &#125;           </span><br><span class="line">        &#125;       </span><br><span class="line">    &#125;   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>然后我这里用curl调api<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl -i -X POST -H <span class="string">"Content-Type: application/json"</span> <span class="operator">-d</span> <span class="string">"`cat auth.json`"</span> \</span><br><span class="line">http://<span class="number">10.20</span>.<span class="number">0.10</span>:<span class="number">5000</span>/v3/auth/tokens</span><br></pre></td></tr></table></figure></p>
-<p>返回的消息的头部如下<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">HTTP/<span class="number">1.1</span> <span class="number">201</span> Created</span><br><span class="line">Date: Thu, <span class="number">10</span> Dec <span class="number">2015</span> <span class="number">20</span>:<span class="number">42</span>:<span class="number">31</span> GMT</span><br><span class="line">Server: Apache/<span class="number">2.4</span><span class="number">.6</span> (CentOS) mod_wsgi/<span class="number">3.4</span> Python/<span class="number">2.7</span><span class="number">.5</span></span><br><span class="line">X-Subject-Token: d576cfe5c3d54b46a8aa2d9a153979b0</span><br><span class="line">Vary: X-Auth-Token</span><br><span class="line">x-openstack-request-id: req-<span class="number">7</span>d3d627a-c77f-<span class="number">49</span>b0-a93b-<span class="number">755</span>d93ff5646</span><br><span class="line">Content-Length: <span class="number">1065</span></span><br><span class="line">Content-Type: application/json</span><br></pre></td></tr></table></figure></p>
-<p>这样就得到了keystone返回的token，body体中还有catalog等信息我没截出来。<br>然后取Header中的X-Subject-Token去向catalog中的某个endpoint发送请求即可。其他组件得到这个token后，再向keystone验证token的有效性，执行相应操作。keystone大致流程就是这样。</p>
+<h2 id="项目地址">项目地址</h2><p><a href="https://github.com/ndrlslz/zhihuDaily-sdk" target="_blank" rel="external">知乎日报SDK</a></p>
+<hr>
+<h2 id="快速了解">快速了解</h2><p><strong>获取ZhihuDailyClient</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//首先，获取ZhihuDaily对象</span></span><br><span class="line">ZhihuDaily zhihuDaily = ZhihuDailyClient.create();</span><br></pre></td></tr></table></figure></p>
+<p><strong>同步或异步调用</strong><br>你可以同步或异步的去调用知乎日报的API。</p>
+<p>同步方式，通过调用<code>execute()</code><br><figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">//同步调用</span><br><span class="line">DailyNews dailyNews = zhihuDaily.getLatestNews().execute()<span class="comment">;</span></span><br><span class="line">dailyNews.getStories().forEach(System.out<span class="number">::</span>println)<span class="comment">;</span></span><br></pre></td></tr></table></figure></p>
+<p>异步方式，通过调用<code>enqueue()</code><br><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//异步调用</span></span><br><span class="line">zhihuDaily.getLatestNews().enqueue(<span class="keyword">new</span> ServiceCallback&lt;DailyNews&gt;() &#123;</span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onResponse</span><span class="params">(DailyNews object)</span> </span>&#123;</span><br><span class="line">        object.getStories().forEach(System.out::println);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onFailure</span><span class="params">(HttpException exception)</span> </span>&#123;</span><br><span class="line">        System.out.println(exception.getMessage());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="安装方式">安装方式</h2><p>需要使用Java8及以上。</p>
+<p><strong>Maven</strong><br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">groupId</span>&gt;</span>com.github.ndrlslz<span class="tag">&lt;/<span class="title">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">artifactId</span>&gt;</span>zhihuDaily-java-client<span class="tag">&lt;/<span class="title">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">version</span>&gt;</span>0.1.2<span class="tag">&lt;/<span class="title">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">dependency</span></span></span><br></pre></td></tr></table></figure></p>
+<p><strong>Gradle</strong><br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">compile</span> <span class="string">'com.github.ndrlslz:zhihuDaily-java-client:0.1.2'</span></span><br></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="更多例子">更多例子</h2><p><a href="https://github.com/ndrlslz/zhihuDaily-sdk/blob/master/zhihuDaily-java-examples/src/main/java/com/github/ndrlslz/Examples.java" target="_blank" rel="external">zhihuDaily-sdk实例</a></p>
 
       
     </div>
@@ -343,13 +296,13 @@ external network: 172.16.0.0/24">
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2016/08/15/Github项目引入持续集成/" rel="next" title="Github项目引入持续集成">
+                <i class="fa fa-chevron-left"></i> Github项目引入持续集成
+              </a>
+            
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2015/12/26/斗鱼弹幕抓取/" rel="prev" title="斗鱼弹幕抓取">
-                斗鱼弹幕抓取 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -375,8 +328,8 @@ external network: 172.16.0.0/24">
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2015/12/06/keystone记录/"
-           data-title="keystone记录" data-url="http://yoursite.com/2015/12/06/keystone记录/">
+      <div class="ds-thread" data-thread-key="2016/10/10/知乎日报SDK/"
+           data-title="知乎日报SDK" data-url="http://yoursite.com/2016/10/10/知乎日报SDK/">
       </div>
     
   </div>
@@ -485,7 +438,7 @@ external network: 172.16.0.0/24">
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#环境信息"><span class="nav-number">1.</span> <span class="nav-text">环境信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装步骤"><span class="nav-number">2.</span> <span class="nav-text">安装步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#keystone认证流程"><span class="nav-number">3.</span> <span class="nav-text">keystone认证流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#认证方式"><span class="nav-number">3.1.</span> <span class="nav-text">认证方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#具体用法"><span class="nav-number">3.2.</span> <span class="nav-text">具体用法</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#知乎日报SDK"><span class="nav-number">1.</span> <span class="nav-text">知乎日报SDK</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#项目地址"><span class="nav-number">2.</span> <span class="nav-text">项目地址</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#快速了解"><span class="nav-number">3.</span> <span class="nav-text">快速了解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装方式"><span class="nav-number">4.</span> <span class="nav-text">安装方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更多例子"><span class="nav-number">5.</span> <span class="nav-text">更多例子</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
