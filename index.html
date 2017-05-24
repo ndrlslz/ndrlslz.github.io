@@ -220,6 +220,126 @@
             
               
                 
+                <a class="post-title-link" href="/2017/05/24/Parser学习/" itemprop="url">
+                  Parser学习
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-05-24T21:17:06+08:00" content="2017-05-24">
+              2017-05-24
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/05/24/Parser学习/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/05/24/Parser学习/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/05/24/Parser学习/" class="leancloud_visitors" data-flag-title="Parser学习">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>编译器 vs 解释器</p>
+<p><img src="/uploads/compiler_vs.png" alt="编译器VS解释器"></p>
+<p>编译器： 输入源代码，输出AST（抽象语法树）或者目标代码（通常是更低级的语言）。比如对Java来说，Java的编译器就是输出字节码（指令序列）。</p>
+<p>解释器： 输入源代码，输出执行的结果。 但是解释器也不是平白无故就能解释源代码。 针对解释器的实现，很多解释器内部也是由编译器＋虚拟机的方式实现的，比如Python，虽然Python被叫做编译型语言，但实际上是有编译＋解释步骤的。</p>
+<h2 id="编译器">编译器</h2><p><img src="/uploads/compiler_proc.png" alt="编译器"></p>
+<h3 id="词法分析">词法分析</h3><h4 id="概念">概念</h4><p>词法分析器(Lexer)的作用就是完成源代码-&gt;Token流的转换。Token是指词法单元，将源代码拆分成一个个最小的单元，并且在这过程中，需要识别出Token的类型。<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Token</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> TokenType tokenType;</span><br><span class="line">    <span class="keyword">private</span> Object <span class="keyword">object</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>比如说输入下面的代码：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> num = <span class="number">1</span> + <span class="number">2</span>;</span><br></pre></td></tr></table></figure></p>
+<p>转换成Token Stream如下：<br>| 类型   | 值 |<br>| —-   | – |<br>| 关键字 | int|<br>| 标识符 | num|<br>| 赋值操作符 | = |<br>| 数字       | 1 |<br>| 加法操作符 | + |<br>| 数组       | 2 |<br>| 结束符号   | ; |<br><code>int num = 1 + 2;</code> -&gt; <code>int</code> <code>num</code> <code>=</code> <code>1</code> <code>+</code> <code>2</code> <code>;</code></p>
+<h4 id="实现">实现</h4><p>目前主流的实现还是通过状态机。状态机分为DFA（确定的有限状态机）和NFA（不确定的无穷状态机）。<br><strong>DFA</strong>是指状态A通过事件B只能转换到状态C。<br>但<strong>NFA</strong>的状态A通过事件B可以转换到状态C和状态D。<br>换句话说，同样的状态，通过同样的事件，DFA只能到另外一种状态，但是NFA可以到另外多种状态。</p>
+<p>这是一个状态机的例子：<br><img src="/uploads/compile_state_machine.png" alt="状态机"><br>从初始状态，检测下一个字符是什么，如果是<code>&quot;</code>，则切换到String状态，这时候期待读入一个字符串，然后在String状态的时候，若检测到下一个字符又是<code>&quot;</code>，则回到初始状态。</p>
+<h3 id="语法分析">语法分析</h3><h4 id="概念-1">概念</h4><p>语法分析（Parser）的作用是将上一步生成的Token Stream转换成AST（抽象语法树）。<br><img src="/uploads/compiler_parser.png" alt="语法分析"></p>
+<h4 id="实现-1">实现</h4><h5 id="文法">文法</h5><p>首先介绍一下<code>文法</code>，构成文法的东西叫<code>产生式</code>，比如下面就是<br><figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">E</span> → id</span><br><span class="line"><span class="keyword">E</span> → <span class="keyword">E</span> + <span class="keyword">E</span></span><br><span class="line"><span class="keyword">E</span> → ( <span class="keyword">E</span> )</span><br></pre></td></tr></table></figure></p>
+<p><code>→</code>左边叫非终结符，<code>→</code>右边表示非终结符可以产生的东西，像<code>id</code>,<code>(</code>,<code>)</code>,<code>+</code>这种无法继续推导的东西叫终结符。产生式经过推导，可以产生由终结符组成的表达式，比如推表达式<code>(a+b)+c</code>.<br><figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">E</span>  =&gt;  <span class="keyword">E</span> + <span class="keyword">E</span>  =&gt;  (<span class="keyword">E</span>) + <span class="keyword">E</span>  =&gt;  (<span class="keyword">E</span> + <span class="keyword">E</span>) + <span class="keyword">E</span>  =&gt;  (a + <span class="keyword">E</span>) + <span class="keyword">E</span>  =&gt;  (a + b) + <span class="keyword">E</span>  =&gt;  (a + b) + c</span><br></pre></td></tr></table></figure></p>
+<p>这种每次都从最左边的非终结符开始推导的方式叫<code>最左推导</code>,<code>最右推导</code>就是从最右边的非终结符开始推导。</p>
+<h5 id="自顶向下和自底向上">自顶向下和自底向上</h5><p>语法分析主要分为自顶向下和自底向上的实现方式。<br><strong>自顶向下</strong>就是从文法的开始符号出发，按最左推导的方式推出输入串。常见的方式由递归下降，LL(1)，LL(k).<br><strong>自底向上</strong>是从输入串开始，反复查找当前句型的句柄，使用规则，规约成非终结符，最终规约到文法的开始符号。</p>
+<p>目前主流的实现方式还是自顶向下。</p>
+<h5 id="递归下降">递归下降</h5><p>递归下降的思路是将每个非终结符，定义一个程序来完成该非终结符语法的分析和定义。举个简单的例子，比如下面的文法。<br><figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">E</span> → id</span><br><span class="line"><span class="keyword">E</span> → (<span class="keyword">E</span>)</span><br></pre></td></tr></table></figure></p>
+<p>id表示任意字母。对上面的文法，E这个非终结符后面可以有2种情况，要么是字母，要么是(。<br>那当我们输入串为<code>(a)</code>的时候，检测到第一个字符为(,那么用E → (E)来解析。然后(后面，我会期待输入一个非终结符E，而我们实际得到的是a，所以这时用E → id来解析。所以解析过程就是：<br><figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">E → <span class="comment">(E)</span> → <span class="comment">(id)</span> → <span class="comment">(a)</span></span><br></pre></td></tr></table></figure></p>
+<p>而对于LL(1)和LL(k), 第一个L是指从左到右扫描输入串，第二个L是指最左推导。而(1)表示需要向前看多少符号。因为有时候，只根据一个输入字符是无法判断应该用哪种产生式来推导的，需要再往后看1个或n个符号。(k)就是只最多往后看多少个字符。</p>
+<h2 id="简单的表达式Parser">简单的表达式Parser</h2><p>学习着写的简单的四则运算的Parser。<br>大致过程是用Lexer将输入串转换成Token流，然后用Parser将Token流解析成抽象语法树，然后用asm库来生成字节码。<br><a href="https://github.com/ndrlslz/arithmetic-parser" target="_blank" rel="external">Github地址</a></p>
+<h2 id="参考">参考</h2><p><a href="http://rednaxelafx.iteye.com/blog/492667" target="_blank" rel="external">虚拟机随谈</a><br><a href="http://www.cnblogs.com/Ninputer/archive/2011/06/18/2084383.html" target="_blank" rel="external">文法</a><br><a href="http://www.cnblogs.com/Ninputer/archive/2011/06/21/2085527.html" target="_blank" rel="external">递归向下</a></p>
+
+          
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2017/02/28/Protobuf学习/" itemprop="url">
                   Protobuf学习
                 </a>
@@ -1138,117 +1258,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/06/04/Java-concurrent包学习-二/" itemprop="url">
-                  Java concurrent包学习(二)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-06-04T19:54:50+08:00" content="2016-06-04">
-              2016-06-04
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/06/04/Java-concurrent包学习-二/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/04/Java-concurrent包学习-二/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-             <span id="/2016/06/04/Java-concurrent包学习-二/" class="leancloud_visitors" data-flag-title="Java concurrent包学习(二)">
-               &nbsp; | &nbsp;
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               <span class="post-meta-item-text">阅读次数 </span>
-               <span class="leancloud-visitors-count"></span>
-              </span>
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>在Java8 stream部分和上一篇博客都有用到ForkJoinPool，这个是ForkJoin框架创建的线程池。所以开始了解下这个是ForkJoin框架是什么。</p>
-<hr>
-<h2 id="线程池">线程池</h2><p>先学习下线程池的知识。</p>
-<p><strong>概念</strong><br>线程池是一种预先创建多个线程的机制。预先启动若干个线程，放入池子中，让线程处于睡眠状态，这样不会耗费CPU资源。当一个请求来到的时候，从线程池中唤醒一个睡眠的线程来处理这个请求，请求完成后，再让线程回到睡眠状态。</p>
-<p><strong>好处</strong></p>
-<ol>
-<li>避免线程的反复创建，销毁产生的开销。</li>
-<li>请求任务来到的时候，直接从线程池中取出线程来用，提高响应速度，无需等待新线程的创建。</li>
-<li>线程池可以有效管理线程的数量，避免无节制的创建线程。</li>
-</ol>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/06/04/Java-concurrent包学习-二/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1295,7 +1304,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">23</span>
+              <span class="site-state-item-count">24</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

@@ -57,38 +57,29 @@
 
 
 
-<meta name="description" content="记录下openstack中keystone的安装及基本用法。
-环境信息虚机使用virtualBox安装CentOS 7作为节点
-网络创建3张网卡
+<meta name="description" content="编译器 vs 解释器
 
-
-management network：10.20.0.0/24
-private network: 192.168.4.0/24
-external network: 172.16.0.0/24">
+编译器： 输入源代码，输出AST（抽象语法树）或者目标代码（通常是更低级的语言）。比如对Java来说，Java的编译器就是输出字节码（指令序列）。
+解释器： 输入源代码，输出执行的结果。 但是解释器也不是平白无故就能解释源代码。 针对解释器的实现，很多解释器内部也是由编译器＋虚拟机的方式实现的，比如Python，虽然Python被叫做编译型语言，但实际上是有编译＋解释步骤的">
 <meta property="og:type" content="article">
-<meta property="og:title" content="keystone记录">
-<meta property="og:url" content="http://yoursite.com/2015/12/06/keystone记录/index.html">
+<meta property="og:title" content="Parser学习">
+<meta property="og:url" content="http://yoursite.com/2017/05/24/Parser学习/index.html">
 <meta property="og:site_name" content="霹雳啪啦程序汪">
-<meta property="og:description" content="记录下openstack中keystone的安装及基本用法。
-环境信息虚机使用virtualBox安装CentOS 7作为节点
-网络创建3张网卡
+<meta property="og:description" content="编译器 vs 解释器
 
-
-management network：10.20.0.0/24
-private network: 192.168.4.0/24
-external network: 172.16.0.0/24">
-<meta property="og:image" content="http://yoursite.com/uploads/Keystone-workflow.png">
-<meta property="og:updated_time" content="2016-04-17T10:52:20.913Z">
+编译器： 输入源代码，输出AST（抽象语法树）或者目标代码（通常是更低级的语言）。比如对Java来说，Java的编译器就是输出字节码（指令序列）。
+解释器： 输入源代码，输出执行的结果。 但是解释器也不是平白无故就能解释源代码。 针对解释器的实现，很多解释器内部也是由编译器＋虚拟机的方式实现的，比如Python，虽然Python被叫做编译型语言，但实际上是有编译＋解释步骤的">
+<meta property="og:image" content="http://yoursite.com/uploads/compiler_vs.png">
+<meta property="og:image" content="http://yoursite.com/uploads/compiler_proc.png">
+<meta property="og:image" content="http://yoursite.com/uploads/compile_state_machine.png">
+<meta property="og:image" content="http://yoursite.com/uploads/compiler_parser.png">
+<meta property="og:updated_time" content="2017-05-24T13:20:23.084Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="keystone记录">
-<meta name="twitter:description" content="记录下openstack中keystone的安装及基本用法。
-环境信息虚机使用virtualBox安装CentOS 7作为节点
-网络创建3张网卡
+<meta name="twitter:title" content="Parser学习">
+<meta name="twitter:description" content="编译器 vs 解释器
 
-
-management network：10.20.0.0/24
-private network: 192.168.4.0/24
-external network: 172.16.0.0/24">
+编译器： 输入源代码，输出AST（抽象语法树）或者目标代码（通常是更低级的语言）。比如对Java来说，Java的编译器就是输出字节码（指令序列）。
+解释器： 输入源代码，输出执行的结果。 但是解释器也不是平白无故就能解释源代码。 针对解释器的实现，很多解释器内部也是由编译器＋虚拟机的方式实现的，比如Python，虽然Python被叫做编译型语言，但实际上是有编译＋解释步骤的">
 
 
 
@@ -106,7 +97,7 @@ external network: 172.16.0.0/24">
   };
 </script>
 
-  <title> keystone记录 | 霹雳啪啦程序汪 </title>
+  <title> Parser学习 | 霹雳啪啦程序汪 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -234,7 +225,7 @@ external network: 172.16.0.0/24">
             
             
               
-                keystone记录
+                Parser学习
               
             
           </h1>
@@ -246,8 +237,8 @@ external network: 172.16.0.0/24">
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-12-06T16:03:32+08:00" content="2015-12-06">
-              2015-12-06
+            <time itemprop="dateCreated" datetime="2017-05-24T21:17:06+08:00" content="2017-05-24">
+              2017-05-24
             </time>
           </span>
 
@@ -257,8 +248,8 @@ external network: 172.16.0.0/24">
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2015/12/06/keystone记录/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/06/keystone记录/" itemprop="commentsCount"></span>
+                <a href="/2017/05/24/Parser学习/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/05/24/Parser学习/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -268,7 +259,7 @@ external network: 172.16.0.0/24">
 
           
           
-             <span id="/2015/12/06/keystone记录/" class="leancloud_visitors" data-flag-title="keystone记录">
+             <span id="/2017/05/24/Parser学习/" class="leancloud_visitors" data-flag-title="Parser学习">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -288,50 +279,27 @@ external network: 172.16.0.0/24">
       
 
       
-        <p>记录下openstack中keystone的安装及基本用法。</p>
-<h3 id="环境信息">环境信息</h3><p><strong>虚机</strong><br>使用virtualBox安装CentOS 7作为节点</p>
-<p><strong>网络</strong><br>创建3张网卡</p>
-<blockquote>
-<ul>
-<li>management network：10.20.0.0/24</li>
-<li>private network: 192.168.4.0/24</li>
-<li>external network: 172.16.0.0/24</li>
-</ul>
-</blockquote>
-<hr>
-<a id="more"></a>
-<h3 id="安装步骤">安装步骤</h3><ol>
-<li>创建个虚机作为controller节点，我这里给它2个网卡，一个<strong>management</strong>的网卡，用于controller节点与其他节点的通信，一个<strong>NAT</strong>的网卡，让虚机可以上网。进虚机后先把网络配置好。我设置的controller节点的ip为10.20.0.10.</li>
-<li>安装ntp服务，参考 <a href="http://docs.openstack.org/liberty/install-guide-rdo/environment-ntp.html" target="_blank" rel="external">ntp安装</a></li>
-<li>安装epel源和openstack的源 参考 <a href="http://docs.openstack.org/liberty/install-guide-rdo/environment-packages.html" target="_blank" rel="external">安装源</a></li>
-<li>安装mysql和rabbitmq的服务 参考 <a href="http://docs.openstack.org/liberty/install-guide-rdo/environment-sql-database.html" target="_blank" rel="external">mysql</a> <a href="http://docs.openstack.org/liberty/install-guide-rdo/environment-messaging.html" target="_blank" rel="external">rabbitmq</a></li>
-<li>然后就可以安装keystone的服务和进行相关配置了，参考 <a href="http://docs.openstack.org/liberty/install-guide-rdo/keystone-install.html" target="_blank" rel="external">keystone安装</a></li>
-<li>keystone装好后，开始安装keystone service和endpoint 参考 <a href="http://docs.openstack.org/liberty/install-guide-rdo/keystone-services.html" target="_blank" rel="external">service，endpoint</a></li>
-<li>最后再创建好tenant,user,role。 参考<a href="http://docs.openstack.org/liberty/install-guide-rdo/keystone-users.html" target="_blank" rel="external">create tenant,user,role</a></li>
-</ol>
-<p>之后再创建个脚本文件，方便以后命令行操作。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> OS_PROJECT_DOMAIN_ID=<span class="keyword">default</span></span><br><span class="line"><span class="keyword">export</span> OS_USER_DOMAIN_ID=<span class="keyword">default</span></span><br><span class="line"><span class="keyword">export</span> OS_PROJECT_NAME=admin</span><br><span class="line"><span class="keyword">export</span> OS_TENANT_NAME=admin</span><br><span class="line"><span class="keyword">export</span> OS_USERNAME=admin</span><br><span class="line"><span class="keyword">export</span> OS_PASSWORD=ADMIN_PASS</span><br><span class="line"><span class="keyword">export</span> OS_AUTH_URL=http:<span class="comment">//controller:35357/v3</span></span><br><span class="line"><span class="keyword">export</span> OS_IDENTITY_API_VERSION=<span class="number">3</span></span><br></pre></td></tr></table></figure>
-<p>这是官网的脚本内容，但因为keystone命令行客户端在v3版被弃用了，所以在命令行无法使用keystone v3的认证服务，这样用keystone开头的命令会出错，所以需要把版本改成v2.0.</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> OS_AUTH_URL=http:<span class="comment">//controller:35357/v2.0</span></span><br></pre></td></tr></table></figure>
-<p>这样就可以使用keystone CLI了。<br>然后到这些，keystone的基本安装就结束了，一些驱动的配置都是按照官网安装步骤的配置来配的，例如认证方式采用UUID，token的持久化用的memcache。</p>
-<h3 id="keystone认证流程">keystone认证流程</h3><p><a href="/uploads/Keystone-workflow.png"><img src="/uploads/Keystone-workflow.png" alt="keystone流程图"></a></p>
-<h4 id="认证方式">认证方式</h4><p>之前提到的认证方式，现在keystone有UUID，PKI，ZPKI三种方式，不同点可以参考 <a href="https://www.mirantis.com/blog/understanding-openstack-authentication-keystone-pki/" target="_blank" rel="external">keystone认证方式</a></p>
-<p>大概总结一下：<br><strong>UUID</strong><br>UUID方式通过keystone生成32位的字符串token，然后保存在backend中，并返回给申请者，之后拿到这个token去请求其他的openstack组件，而其他组件会再通过keystone验证这个token是否有效。<br>这个方式可能会有几个问题：</p>
-<ol>
-<li>其他组件都会来keystone进行token验证，keystone很容易成为系统的瓶颈，特别对于多region的情况，所以可以考虑对keystone做HA。</li>
-<li>如果backend采用sql，默认不会清理token，所以token数量增大，查询效率会降低。<br>这里keystone-manage token-flush命令可以把过期token删掉，并把token有效期设为1小时。backend也可以采用memcahce。</li>
-</ol>
-<p><strong>PKI</strong><br>PKI方式的keystone相当于一个Certificate Authority，当请求token时，它会生成包含catalog，metadata等的json，然后用自己的密钥和证书来签署，生成token。而其它组件会有自己的一份公钥和证书，对token进行解密得到json串，所以不必再去请求keystone进行验证，它自己就可以进行验证了，降低了keystone的负载。<br>这个方式也可能会存在问题：</p>
-<ol>
-<li>pki的本身性能比UUID要低。</li>
-<li>UUID方式只需要拿32位字符串这个token去请求其他组件即可，而PKI需要拿整个json串的token去请求，数据包很大。</li>
-</ol>
-<p><strong>ZPKI</strong><br>ZPKI方式就是对PKI方式的token进行zlib压缩。</p>
-<h4 id="具体用法">具体用法</h4><p>我这里是采用uuid的方式进行认证。去调keystone的REST API即可。 API参考 <a href="http://developer.openstack.org/api-ref-identity-v3.html" target="_blank" rel="external">keystone API</a></p>
-<p>先定义好请求的json串 vim auth.json<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"auth"</span>: &#123;</span><br><span class="line">        <span class="string">"identity"</span>: &#123;</span><br><span class="line">            <span class="string">"methods"</span>: [</span><br><span class="line">                <span class="string">"password"</span>      </span><br><span class="line">            ],          </span><br><span class="line">            <span class="string">"password"</span>: &#123;</span><br><span class="line">                <span class="string">"user"</span>: &#123;       </span><br><span class="line">                    <span class="string">"id"</span>: <span class="string">"ADMIN_USER_ID"</span>,</span><br><span class="line">                    <span class="string">"password"</span>: <span class="string">"ADMIN_USER_PASSWORD"</span></span><br><span class="line">                &#125;               </span><br><span class="line">            &#125;           </span><br><span class="line">        &#125;,      </span><br><span class="line">        <span class="string">"scope"</span>: &#123;</span><br><span class="line">            <span class="string">"project"</span>: &#123;</span><br><span class="line">                <span class="string">"id"</span>: <span class="string">"ADMIN_PROJECT_ID"</span></span><br><span class="line">            &#125;           </span><br><span class="line">        &#125;       </span><br><span class="line">    &#125;   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>然后我这里用curl调api<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl -i -X POST -H <span class="string">"Content-Type: application/json"</span> <span class="operator">-d</span> <span class="string">"`cat auth.json`"</span> \</span><br><span class="line">http://<span class="number">10.20</span>.<span class="number">0.10</span>:<span class="number">5000</span>/v3/auth/tokens</span><br></pre></td></tr></table></figure></p>
-<p>返回的消息的头部如下<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">HTTP/<span class="number">1.1</span> <span class="number">201</span> Created</span><br><span class="line">Date: Thu, <span class="number">10</span> Dec <span class="number">2015</span> <span class="number">20</span>:<span class="number">42</span>:<span class="number">31</span> GMT</span><br><span class="line">Server: Apache/<span class="number">2.4</span><span class="number">.6</span> (CentOS) mod_wsgi/<span class="number">3.4</span> Python/<span class="number">2.7</span><span class="number">.5</span></span><br><span class="line">X-Subject-Token: d576cfe5c3d54b46a8aa2d9a153979b0</span><br><span class="line">Vary: X-Auth-Token</span><br><span class="line">x-openstack-request-id: req-<span class="number">7</span>d3d627a-c77f-<span class="number">49</span>b0-a93b-<span class="number">755</span>d93ff5646</span><br><span class="line">Content-Length: <span class="number">1065</span></span><br><span class="line">Content-Type: application/json</span><br></pre></td></tr></table></figure></p>
-<p>这样就得到了keystone返回的token，body体中还有catalog等信息我没截出来。<br>然后取Header中的X-Subject-Token去向catalog中的某个endpoint发送请求即可。其他组件得到这个token后，再向keystone验证token的有效性，执行相应操作。keystone大致流程就是这样。</p>
+        <p>编译器 vs 解释器</p>
+<p><img src="/uploads/compiler_vs.png" alt="编译器VS解释器"></p>
+<p>编译器： 输入源代码，输出AST（抽象语法树）或者目标代码（通常是更低级的语言）。比如对Java来说，Java的编译器就是输出字节码（指令序列）。</p>
+<p>解释器： 输入源代码，输出执行的结果。 但是解释器也不是平白无故就能解释源代码。 针对解释器的实现，很多解释器内部也是由编译器＋虚拟机的方式实现的，比如Python，虽然Python被叫做编译型语言，但实际上是有编译＋解释步骤的。</p>
+<h2 id="编译器">编译器</h2><p><img src="/uploads/compiler_proc.png" alt="编译器"></p>
+<h3 id="词法分析">词法分析</h3><h4 id="概念">概念</h4><p>词法分析器(Lexer)的作用就是完成源代码-&gt;Token流的转换。Token是指词法单元，将源代码拆分成一个个最小的单元，并且在这过程中，需要识别出Token的类型。<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Token</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> TokenType tokenType;</span><br><span class="line">    <span class="keyword">private</span> Object <span class="keyword">object</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>比如说输入下面的代码：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> num = <span class="number">1</span> + <span class="number">2</span>;</span><br></pre></td></tr></table></figure></p>
+<p>转换成Token Stream如下：<br>| 类型   | 值 |<br>| —-   | – |<br>| 关键字 | int|<br>| 标识符 | num|<br>| 赋值操作符 | = |<br>| 数字       | 1 |<br>| 加法操作符 | + |<br>| 数组       | 2 |<br>| 结束符号   | ; |<br><code>int num = 1 + 2;</code> -&gt; <code>int</code> <code>num</code> <code>=</code> <code>1</code> <code>+</code> <code>2</code> <code>;</code></p>
+<h4 id="实现">实现</h4><p>目前主流的实现还是通过状态机。状态机分为DFA（确定的有限状态机）和NFA（不确定的无穷状态机）。<br><strong>DFA</strong>是指状态A通过事件B只能转换到状态C。<br>但<strong>NFA</strong>的状态A通过事件B可以转换到状态C和状态D。<br>换句话说，同样的状态，通过同样的事件，DFA只能到另外一种状态，但是NFA可以到另外多种状态。</p>
+<p>这是一个状态机的例子：<br><img src="/uploads/compile_state_machine.png" alt="状态机"><br>从初始状态，检测下一个字符是什么，如果是<code>&quot;</code>，则切换到String状态，这时候期待读入一个字符串，然后在String状态的时候，若检测到下一个字符又是<code>&quot;</code>，则回到初始状态。</p>
+<h3 id="语法分析">语法分析</h3><h4 id="概念-1">概念</h4><p>语法分析（Parser）的作用是将上一步生成的Token Stream转换成AST（抽象语法树）。<br><img src="/uploads/compiler_parser.png" alt="语法分析"></p>
+<h4 id="实现-1">实现</h4><h5 id="文法">文法</h5><p>首先介绍一下<code>文法</code>，构成文法的东西叫<code>产生式</code>，比如下面就是<br><figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">E</span> → id</span><br><span class="line"><span class="keyword">E</span> → <span class="keyword">E</span> + <span class="keyword">E</span></span><br><span class="line"><span class="keyword">E</span> → ( <span class="keyword">E</span> )</span><br></pre></td></tr></table></figure></p>
+<p><code>→</code>左边叫非终结符，<code>→</code>右边表示非终结符可以产生的东西，像<code>id</code>,<code>(</code>,<code>)</code>,<code>+</code>这种无法继续推导的东西叫终结符。产生式经过推导，可以产生由终结符组成的表达式，比如推表达式<code>(a+b)+c</code>.<br><figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">E</span>  =&gt;  <span class="keyword">E</span> + <span class="keyword">E</span>  =&gt;  (<span class="keyword">E</span>) + <span class="keyword">E</span>  =&gt;  (<span class="keyword">E</span> + <span class="keyword">E</span>) + <span class="keyword">E</span>  =&gt;  (a + <span class="keyword">E</span>) + <span class="keyword">E</span>  =&gt;  (a + b) + <span class="keyword">E</span>  =&gt;  (a + b) + c</span><br></pre></td></tr></table></figure></p>
+<p>这种每次都从最左边的非终结符开始推导的方式叫<code>最左推导</code>,<code>最右推导</code>就是从最右边的非终结符开始推导。</p>
+<h5 id="自顶向下和自底向上">自顶向下和自底向上</h5><p>语法分析主要分为自顶向下和自底向上的实现方式。<br><strong>自顶向下</strong>就是从文法的开始符号出发，按最左推导的方式推出输入串。常见的方式由递归下降，LL(1)，LL(k).<br><strong>自底向上</strong>是从输入串开始，反复查找当前句型的句柄，使用规则，规约成非终结符，最终规约到文法的开始符号。</p>
+<p>目前主流的实现方式还是自顶向下。</p>
+<h5 id="递归下降">递归下降</h5><p>递归下降的思路是将每个非终结符，定义一个程序来完成该非终结符语法的分析和定义。举个简单的例子，比如下面的文法。<br><figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">E</span> → id</span><br><span class="line"><span class="keyword">E</span> → (<span class="keyword">E</span>)</span><br></pre></td></tr></table></figure></p>
+<p>id表示任意字母。对上面的文法，E这个非终结符后面可以有2种情况，要么是字母，要么是(。<br>那当我们输入串为<code>(a)</code>的时候，检测到第一个字符为(,那么用E → (E)来解析。然后(后面，我会期待输入一个非终结符E，而我们实际得到的是a，所以这时用E → id来解析。所以解析过程就是：<br><figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">E → <span class="comment">(E)</span> → <span class="comment">(id)</span> → <span class="comment">(a)</span></span><br></pre></td></tr></table></figure></p>
+<p>而对于LL(1)和LL(k), 第一个L是指从左到右扫描输入串，第二个L是指最左推导。而(1)表示需要向前看多少符号。因为有时候，只根据一个输入字符是无法判断应该用哪种产生式来推导的，需要再往后看1个或n个符号。(k)就是只最多往后看多少个字符。</p>
+<h2 id="简单的表达式Parser">简单的表达式Parser</h2><p>学习着写的简单的四则运算的Parser。<br>大致过程是用Lexer将输入串转换成Token流，然后用Parser将Token流解析成抽象语法树，然后用asm库来生成字节码。<br><a href="https://github.com/ndrlslz/arithmetic-parser" target="_blank" rel="external">Github地址</a></p>
+<h2 id="参考">参考</h2><p><a href="http://rednaxelafx.iteye.com/blog/492667" target="_blank" rel="external">虚拟机随谈</a><br><a href="http://www.cnblogs.com/Ninputer/archive/2011/06/18/2084383.html" target="_blank" rel="external">文法</a><br><a href="http://www.cnblogs.com/Ninputer/archive/2011/06/21/2085527.html" target="_blank" rel="external">递归向下</a></p>
 
       
     </div>
@@ -343,13 +311,13 @@ external network: 172.16.0.0/24">
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2017/02/28/Protobuf学习/" rel="next" title="Protobuf学习">
+                <i class="fa fa-chevron-left"></i> Protobuf学习
+              </a>
+            
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2015/12/26/斗鱼弹幕抓取/" rel="prev" title="斗鱼弹幕抓取">
-                斗鱼弹幕抓取 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -375,8 +343,8 @@ external network: 172.16.0.0/24">
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2015/12/06/keystone记录/"
-           data-title="keystone记录" data-url="http://yoursite.com/2015/12/06/keystone记录/">
+      <div class="ds-thread" data-thread-key="2017/05/24/Parser学习/"
+           data-title="Parser学习" data-url="http://yoursite.com/2017/05/24/Parser学习/">
       </div>
     
   </div>
@@ -485,7 +453,7 @@ external network: 172.16.0.0/24">
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#环境信息"><span class="nav-number">1.</span> <span class="nav-text">环境信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装步骤"><span class="nav-number">2.</span> <span class="nav-text">安装步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#keystone认证流程"><span class="nav-number">3.</span> <span class="nav-text">keystone认证流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#认证方式"><span class="nav-number">3.1.</span> <span class="nav-text">认证方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#具体用法"><span class="nav-number">3.2.</span> <span class="nav-text">具体用法</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#编译器"><span class="nav-number">1.</span> <span class="nav-text">编译器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#词法分析"><span class="nav-number">1.1.</span> <span class="nav-text">词法分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#概念"><span class="nav-number">1.1.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实现"><span class="nav-number">1.1.2.</span> <span class="nav-text">实现</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#语法分析"><span class="nav-number">1.2.</span> <span class="nav-text">语法分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#概念-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实现-1"><span class="nav-number">1.2.2.</span> <span class="nav-text">实现</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#文法"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">文法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#自顶向下和自底向上"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">自顶向下和自底向上</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#递归下降"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">递归下降</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单的表达式Parser"><span class="nav-number">2.</span> <span class="nav-text">简单的表达式Parser</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
