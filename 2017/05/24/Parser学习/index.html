@@ -57,29 +57,20 @@
 
 
 
-<meta name="description" content="编译器 vs 解释器
-
-编译器： 输入源代码，输出AST（抽象语法树）或者目标代码（通常是更低级的语言）。比如对Java来说，Java的编译器就是输出字节码（指令序列）。
-解释器： 输入源代码，输出执行的结果。 但是解释器也不是平白无故就能解释源代码。 针对解释器的实现，很多解释器内部也是由编译器＋虚拟机的方式实现的，比如Python，虽然Python被叫做编译型语言，但实际上是有编译＋解释步骤的">
+<meta name="description" content="编译器 vs 解释器">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Parser学习">
 <meta property="og:url" content="http://yoursite.com/2017/05/24/Parser学习/index.html">
 <meta property="og:site_name" content="霹雳啪啦程序汪">
-<meta property="og:description" content="编译器 vs 解释器
-
-编译器： 输入源代码，输出AST（抽象语法树）或者目标代码（通常是更低级的语言）。比如对Java来说，Java的编译器就是输出字节码（指令序列）。
-解释器： 输入源代码，输出执行的结果。 但是解释器也不是平白无故就能解释源代码。 针对解释器的实现，很多解释器内部也是由编译器＋虚拟机的方式实现的，比如Python，虽然Python被叫做编译型语言，但实际上是有编译＋解释步骤的">
+<meta property="og:description" content="编译器 vs 解释器">
 <meta property="og:image" content="http://yoursite.com/uploads/compiler_vs.png">
 <meta property="og:image" content="http://yoursite.com/uploads/compiler_proc.png">
 <meta property="og:image" content="http://yoursite.com/uploads/compile_state_machine.png">
 <meta property="og:image" content="http://yoursite.com/uploads/compiler_parser.png">
-<meta property="og:updated_time" content="2017-05-24T13:20:23.084Z">
+<meta property="og:updated_time" content="2017-05-24T13:33:55.279Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Parser学习">
-<meta name="twitter:description" content="编译器 vs 解释器
-
-编译器： 输入源代码，输出AST（抽象语法树）或者目标代码（通常是更低级的语言）。比如对Java来说，Java的编译器就是输出字节码（指令序列）。
-解释器： 输入源代码，输出执行的结果。 但是解释器也不是平白无故就能解释源代码。 针对解释器的实现，很多解释器内部也是由编译器＋虚拟机的方式实现的，比如Python，虽然Python被叫做编译型语言，但实际上是有编译＋解释步骤的">
+<meta name="twitter:description" content="编译器 vs 解释器">
 
 
 
@@ -279,14 +270,53 @@
       
 
       
-        <p>编译器 vs 解释器</p>
-<p><img src="/uploads/compiler_vs.png" alt="编译器VS解释器"></p>
-<p>编译器： 输入源代码，输出AST（抽象语法树）或者目标代码（通常是更低级的语言）。比如对Java来说，Java的编译器就是输出字节码（指令序列）。</p>
-<p>解释器： 输入源代码，输出执行的结果。 但是解释器也不是平白无故就能解释源代码。 针对解释器的实现，很多解释器内部也是由编译器＋虚拟机的方式实现的，比如Python，虽然Python被叫做编译型语言，但实际上是有编译＋解释步骤的。</p>
+        <h2 id="编译器_vs_解释器">编译器 vs 解释器</h2><p><img src="/uploads/compiler_vs.png" alt="编译器VS解释器"></p>
+<a id="more"></a>
+<p><strong>编译器</strong>： 输入源代码，输出AST（抽象语法树）或者目标代码（通常是更低级的语言）。比如对Java来说，Java的编译器就是输出字节码（指令序列）。</p>
+<p><strong>解释器</strong>： 输入源代码，输出执行的结果。 但是解释器也不是平白无故就能解释源代码。 针对解释器的实现，很多解释器内部也是由编译器＋虚拟机的方式实现的，比如Python，虽然Python被叫做编译型语言，但实际上是有编译＋解释步骤的。</p>
 <h2 id="编译器">编译器</h2><p><img src="/uploads/compiler_proc.png" alt="编译器"></p>
 <h3 id="词法分析">词法分析</h3><h4 id="概念">概念</h4><p>词法分析器(Lexer)的作用就是完成源代码-&gt;Token流的转换。Token是指词法单元，将源代码拆分成一个个最小的单元，并且在这过程中，需要识别出Token的类型。<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Token</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> TokenType tokenType;</span><br><span class="line">    <span class="keyword">private</span> Object <span class="keyword">object</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>比如说输入下面的代码：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> num = <span class="number">1</span> + <span class="number">2</span>;</span><br></pre></td></tr></table></figure></p>
-<p>转换成Token Stream如下：<br>| 类型   | 值 |<br>| —-   | – |<br>| 关键字 | int|<br>| 标识符 | num|<br>| 赋值操作符 | = |<br>| 数字       | 1 |<br>| 加法操作符 | + |<br>| 数组       | 2 |<br>| 结束符号   | ; |<br><code>int num = 1 + 2;</code> -&gt; <code>int</code> <code>num</code> <code>=</code> <code>1</code> <code>+</code> <code>2</code> <code>;</code></p>
+<p>转换成Token Stream如下：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>关键字</td>
+<td>int</td>
+</tr>
+<tr>
+<td>标识符</td>
+<td>num</td>
+</tr>
+<tr>
+<td>赋值操作符</td>
+<td>=</td>
+</tr>
+<tr>
+<td>数字</td>
+<td>1</td>
+</tr>
+<tr>
+<td>加法操作符</td>
+<td>+</td>
+</tr>
+<tr>
+<td>数组</td>
+<td>2</td>
+</tr>
+<tr>
+<td>结束符号</td>
+<td>;</td>
+</tr>
+</tbody>
+</table>
+<p><code>int num = 1 + 2;</code> -&gt; <code>int</code> <code>num</code> <code>=</code> <code>1</code> <code>+</code> <code>2</code> <code>;</code></p>
 <h4 id="实现">实现</h4><p>目前主流的实现还是通过状态机。状态机分为DFA（确定的有限状态机）和NFA（不确定的无穷状态机）。<br><strong>DFA</strong>是指状态A通过事件B只能转换到状态C。<br>但<strong>NFA</strong>的状态A通过事件B可以转换到状态C和状态D。<br>换句话说，同样的状态，通过同样的事件，DFA只能到另外一种状态，但是NFA可以到另外多种状态。</p>
 <p>这是一个状态机的例子：<br><img src="/uploads/compile_state_machine.png" alt="状态机"><br>从初始状态，检测下一个字符是什么，如果是<code>&quot;</code>，则切换到String状态，这时候期待读入一个字符串，然后在String状态的时候，若检测到下一个字符又是<code>&quot;</code>，则回到初始状态。</p>
 <h3 id="语法分析">语法分析</h3><h4 id="概念-1">概念</h4><p>语法分析（Parser）的作用是将上一步生成的Token Stream转换成AST（抽象语法树）。<br><img src="/uploads/compiler_parser.png" alt="语法分析"></p>
@@ -453,7 +483,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#编译器"><span class="nav-number">1.</span> <span class="nav-text">编译器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#词法分析"><span class="nav-number">1.1.</span> <span class="nav-text">词法分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#概念"><span class="nav-number">1.1.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实现"><span class="nav-number">1.1.2.</span> <span class="nav-text">实现</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#语法分析"><span class="nav-number">1.2.</span> <span class="nav-text">语法分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#概念-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实现-1"><span class="nav-number">1.2.2.</span> <span class="nav-text">实现</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#文法"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">文法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#自顶向下和自底向上"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">自顶向下和自底向上</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#递归下降"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">递归下降</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单的表达式Parser"><span class="nav-number">2.</span> <span class="nav-text">简单的表达式Parser</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#编译器_vs_解释器"><span class="nav-number">1.</span> <span class="nav-text">编译器 vs 解释器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编译器"><span class="nav-number">2.</span> <span class="nav-text">编译器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#词法分析"><span class="nav-number">2.1.</span> <span class="nav-text">词法分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#概念"><span class="nav-number">2.1.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实现"><span class="nav-number">2.1.2.</span> <span class="nav-text">实现</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#语法分析"><span class="nav-number">2.2.</span> <span class="nav-text">语法分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#概念-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实现-1"><span class="nav-number">2.2.2.</span> <span class="nav-text">实现</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#文法"><span class="nav-number">2.2.2.1.</span> <span class="nav-text">文法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#自顶向下和自底向上"><span class="nav-number">2.2.2.2.</span> <span class="nav-text">自顶向下和自底向上</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#递归下降"><span class="nav-number">2.2.2.3.</span> <span class="nav-text">递归下降</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单的表达式Parser"><span class="nav-number">3.</span> <span class="nav-text">简单的表达式Parser</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
