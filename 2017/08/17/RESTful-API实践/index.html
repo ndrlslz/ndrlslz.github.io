@@ -1,0 +1,846 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.0" />
+
+
+
+
+
+
+<meta name="description" content="RESTful API对于后端开发来说，就如同UI对于前端开发一样，我们希望尽可能的保证API提供的服务是规范，易懂，友好的。所以需要遵守一些规范和实践，但也不要过度纠结一些标准，Github API也有地方和标准不一样，但一样是业界的标准。本篇博客不会罗列REST API的规范，只会写写自己的部分实践。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RESTful API实践">
+<meta property="og:url" content="http://yoursite.com/2017/08/17/RESTful-API实践/index.html">
+<meta property="og:site_name" content="霹雳啪啦程序汪">
+<meta property="og:description" content="RESTful API对于后端开发来说，就如同UI对于前端开发一样，我们希望尽可能的保证API提供的服务是规范，易懂，友好的。所以需要遵守一些规范和实践，但也不要过度纠结一些标准，Github API也有地方和标准不一样，但一样是业界的标准。本篇博客不会罗列REST API的规范，只会写写自己的部分实践。">
+<meta property="og:updated_time" content="2017-08-17T13:06:09.422Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RESTful API实践">
+<meta name="twitter:description" content="RESTful API对于后端开发来说，就如同UI对于前端开发一样，我们希望尽可能的保证API提供的服务是规范，易懂，友好的。所以需要遵守一些规范和实践，但也不要过度纠结一些标准，Github API也有地方和标准不一样，但一样是业界的标准。本篇博客不会罗列REST API的规范，只会写写自己的部分实践。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: '[object Object]',
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> RESTful API实践 | 霹雳啪啦程序汪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d5e930abbb82f9699e861f3eb92eb836";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">霹雳啪啦程序汪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                RESTful API实践
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-08-17T21:05:09+08:00" content="2017-08-17">
+              2017-08-17
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/08/17/RESTful-API实践/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/08/17/RESTful-API实践/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/08/17/RESTful-API实践/" class="leancloud_visitors" data-flag-title="RESTful API实践">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>RESTful API对于后端开发来说，就如同UI对于前端开发一样，我们希望尽可能的保证API提供的服务是规范，易懂，友好的。所以需要遵守一些规范和实践，但也不要过度纠结一些标准，Github API也有地方和标准不一样，但一样是业界的标准。本篇博客不会罗列REST API的规范，只会写写自己的部分实践。</p>
+<hr>
+<a id="more"></a>
+<h3 id="HATEOAS(Hypermedia_as_the_Engine_of_Application_State)">HATEOAS(Hypermedia as the Engine of Application State)</h3><p>HATEOAS是一项规范，在API的返回中，使用超链接来进行导航，比如<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    "<span class="attribute">name</span>": <span class="value"><span class="string">"Alice"</span></span>,</span><br><span class="line"></span><br><span class="line">    "<span class="attribute">links</span>": <span class="value">[ &#123;</span><br><span class="line"></span><br><span class="line">        "<span class="attribute">rel</span>": <span class="value"><span class="string">"self"</span></span>,</span><br><span class="line"></span><br><span class="line">        "<span class="attribute">href</span>": <span class="value"><span class="string">"http://localhost:8080/customer/1"</span></span><br><span class="line"></span><br><span class="line">    </span>&#125; ]</span><br><span class="line"></span><br><span class="line"></span>&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Spring hateoas库提供了很好的支持。它有下面几个常用的概念：<br><code>Resource</code>表示一个实体类的封装，它封装了一些Link。<br><code>Resources</code>表示Resource的集合。<br><code>PagedResources</code>表示一个Resources集合加一些分页的信息。<br><code>ResourceAssembler</code>表示将一个实体类转换成Resource对象。</p>
+<p>比如我们已经有个User的Entity类，要对它实现hateoas，思路如下：<br>定义UserResource用来存储User信息以及Link的信息，定义UserResourceAssembler用来将User实体类转换成UserResource类，在这个过程中，可以隐藏你不想从数据库暴露的信息，以及添加Link的信息。<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserResource</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">ResourceSupport</span> &#123;</span> … &#125;</span><br><span class="line"></span><br><span class="line"> <span class="class"><span class="keyword">class</span> <span class="title">UserResourceAssembler</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">ResourceAssemblerSupport&lt;User</span>, <span class="title">UserResource&gt;</span> &#123;</span> … &#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后使用的时候<br><figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">PagedResourcesAssembler<span class="variable">&lt;User&gt;</span> parAssembler = … // Autowired</span><br><span class="line">UserResourceAssembler <span class="keyword">user</span>ResourceAssembler = … // Autowired</span><br><span class="line"></span><br><span class="line">Page<span class="variable">&lt;User&gt;</span> users = <span class="keyword">user</span>Repository.findAll();</span><br><span class="line"></span><br><span class="line">// 遍历users，将<span class="keyword">user</span>转换成<span class="keyword">user</span>Resource，pagedUserResource对象包含了UserResource的集合，一些Link信息，以及分页信息</span><br><span class="line">PagedResources<span class="variable">&lt;UserResource&gt;</span> pagedUserResource = parAssembler.<span class="keyword">to</span>Resource(users, <span class="keyword">user</span>ResourceAssembler);</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h3 id="Criteria_API">Criteria API</h3><p>当使用JPA进行条件查询的时候，比如按名字查找，<code>findByName(String name)</code>就可以轻松实现，但是当查询的条件很多的时候，用这种方式就需要定义很多的方法。这个时候使用Criteria API就非常方便了。<br>让你的Repository类继承<code>JpaSpecificationExecutor</code>，它提供一些方法，接收<code>Specification</code>作为参数，Specification表示一些查询的集合，你可以根据你的查询条件，构造一个Specification，也可以构造多个Specification。<br>Spring也提供了Fluent API的接口，很方便。使用例子如下：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">SpecificationFactory</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Specification <span class="title">like</span>(<span class="params">String attribute, String <span class="keyword">value</span></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (root, query, cb) -&gt; cb.like(root.<span class="keyword">get</span>(attribute), <span class="string">"%"</span> + <span class="keyword">value</span> + <span class="string">"%"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Specification <span class="title">equal</span>(<span class="params">String attribute, String <span class="keyword">value</span></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (root, query, cb) -&gt; cb.equal(root.<span class="keyword">get</span>(attribute), <span class="keyword">value</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight sml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">SearchParameter</span> searchParameter;</span><br><span class="line"><span class="type">Specification</span> specification = <span class="type">Specifications</span></span><br><span class="line">        .<span class="keyword">where</span>(equal(<span class="string">"name"</span>, searchParameter.getName<span class="literal">()</span>))</span><br><span class="line">        .<span class="keyword">and</span>(like(<span class="string">"email"</span>, searchParameter.getEmail<span class="literal">()</span>));</span><br><span class="line"></span><br><span class="line"><span class="type">Page</span>&lt;<span class="type">User</span>&gt; users = repository.findAll(specification);</span><br></pre></td></tr></table></figure>
+<p>但是上面这种方式有个弊端，当查询的参数可以为空的时候，就不好处理了。所以封装了方法来解决这个问题。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpecificationHelper</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> List&lt;Predicate&gt; predicates;</span><br><span class="line">    <span class="keyword">private</span> Root&lt;T&gt; root;</span><br><span class="line">    <span class="keyword">private</span> CriteriaBuilder criteriaBuilder;</span><br><span class="line">    <span class="keyword">private</span> CriteriaQuery criteriaQuery;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SpecificationHelper</span><span class="params">(Root&lt;T&gt; root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.predicates = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">this</span>.root = root;</span><br><span class="line">        <span class="keyword">this</span>.criteriaBuilder = criteriaBuilder;</span><br><span class="line">        <span class="keyword">this</span>.criteriaQuery = criteriaQuery;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">SpecificationHelper&lt;T&gt; <span class="title">create</span><span class="params">(Root&lt;T&gt; root, CriteriaQuery&lt;?&gt; query, CriteriaBuilder criteriaBuilder)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> SpecificationHelper&lt;&gt;(root, query, criteriaBuilder);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> SpecificationHelper&lt;T&gt; <span class="title">nameEquals</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        eq(<span class="string">"name"</span>, name);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> SpecificationHelper&lt;T&gt; <span class="title">emailEquals</span><span class="params">(String email)</span> </span>&#123;</span><br><span class="line">        eq(<span class="string">"email"</span>, email);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> SpecificationHelper&lt;T&gt; <span class="title">eq</span><span class="params">(String tableName, String value)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">assert</span> tableName != <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (value != <span class="keyword">null</span>) &#123;</span><br><span class="line">            predicates.add(criteriaBuilder.equal(root.get(tableName), value));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> SpecificationHelper&lt;T&gt; <span class="title">condition</span><span class="params">(Specification&lt;T&gt; specification)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (specification != <span class="keyword">null</span>) &#123;</span><br><span class="line">            predicates.add(specification.toPredicate(root, criteriaQuery, criteriaBuilder));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Predicate <span class="title">build</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> criteriaBuilder.and(predicates.stream().filter(p -&gt; p != <span class="keyword">null</span>).toArray(Predicate[]::<span class="keyword">new</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>使用这个类也很简单<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">UserSpecfication</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Specification&lt;UserEntity&gt; <span class="title">findUsers</span>(<span class="params">String name, String email</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (root, query, cb) -&gt; SpecificationHelper</span><br><span class="line">                .create(root, query, cb)</span><br><span class="line">                .nameEquals(name)</span><br><span class="line">                .emailEquals(email)</span><br><span class="line">                .condition(nameEquals(name))</span><br><span class="line">                .build();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Specification&lt;UserEntity&gt; <span class="title">nameEquals</span>(<span class="params">String name</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (root, query, cb) -&gt; name == <span class="keyword">null</span>? <span class="keyword">null</span>: cb.equal(root.<span class="keyword">get</span>(<span class="string">"name"</span>), name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h3 id="认证">认证</h3><p>API的认证方式有多种，常见的有<code>Basic</code>,<code>Token</code>,<code>JWT</code>,<code>OAuth</code>。</p>
+<h4 id="Basic">Basic</h4><p><code>Basic</code>即每次访问API都需要提供username和password。优点即代码非常简单，缺点是安全性很低。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Configuration</span></span><br><span class="line"><span class="annotation">@EnableWebSecurity</span></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">WebSecurityConfig</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">WebSecurityConfigurerAdapter</span> &#123;</span></span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> void configure(<span class="type">HttpSecurity</span> http) <span class="keyword">throws</span> <span class="type">Exception</span> &#123;</span><br><span class="line">        http</span><br><span class="line">                .authorizeRequests().antMatchers(<span class="string">"/**"</span>).hasAnyRole(<span class="string">"ADMIN"</span>)</span><br><span class="line">                .and()</span><br><span class="line">                .httpBasic()</span><br><span class="line">                .and()</span><br><span class="line">                .csrf().disable();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> void configure(<span class="type">AuthenticationManagerBuilder</span> auth) <span class="keyword">throws</span> <span class="type">Exception</span> &#123;</span><br><span class="line">        auth.inMemoryAuthentication()</span><br><span class="line">                .withUser(<span class="string">"username"</span>).password(<span class="string">"password"</span>).roles(<span class="string">"ADMIN"</span>)</span><br><span class="line">                .and()</span><br><span class="line">                .withUser(<span class="string">"test"</span>).password(<span class="string">"test"</span>).roles(<span class="string">"TEST"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Token">Token</h4><p><code>Token</code>即客户端先通过username和password调认证的服务，得到一个随机的Token，这个Token会被存到服务端，然后客户端在调其他服务的时候，带上这个Token即可。<br>优点：</p>
+<ul>
+<li>编码简单</li>
+<li>当想撤销Token的时候，只需要从数据库删除即可</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>每次请求都会去查数据库</li>
+<li>当调用API的人很多的时候，Token的存储量大幅增长，可能导致认证这步成为瓶颈。</li>
+</ul>
+<h4 id="JWT">JWT</h4><p>上面的Token一般是随机生成的，而使用Json Web Token，允许客户端携带一些payload，然后服务端通过secret key来加密生成一个Token返回给客户端。然后之后的请求，服务端会使用这个key验证客户端发过来的Token是否有效。<br>优点：</p>
+<ul>
+<li>服务端的存储问题没有了</li>
+<li>客户端编码简单</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>JWT的大小比上面的Token要大</li>
+<li>服务端的key如果泄露了，那么它就能发有效的token给服务端了。</li>
+<li>不容易实现撤销Token。</li>
+</ul>
+<hr>
+<h3 id="参考文档">参考文档</h3><p><a href="https://jverhoelen.github.io/spring-data-queries-jpa-criteria-api/" target="_blank" rel="external">Criteria API</a><br><a href="https://auth0.com/blog/securing-spring-boot-with-jwts/" target="_blank" rel="external">JWT</a></p>
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/27/Spring-Batch实践/" rel="next" title="Spring Batch实践">
+                <i class="fa fa-chevron-left"></i> Spring Batch实践
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/08/17/RESTful-API实践/"
+           data-title="RESTful API实践" data-url="http://yoursite.com/2017/08/17/RESTful-API实践/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.jpg"
+               alt="ndrlslz" />
+          <p class="site-author-name" itemprop="name">ndrlslz</p>
+          <p class="site-description motion-element" itemprop="description">Just Record Something</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">26</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ndrlslz" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2772570770" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> Weibo
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#HATEOAS(Hypermedia_as_the_Engine_of_Application_State)"><span class="nav-number">1.</span> <span class="nav-text">HATEOAS(Hypermedia as the Engine of Application State)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Criteria_API"><span class="nav-number">2.</span> <span class="nav-text">Criteria API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#认证"><span class="nav-number">3.</span> <span class="nav-text">认证</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Basic"><span class="nav-number">3.1.</span> <span class="nav-text">Basic</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Token"><span class="nav-number">3.2.</span> <span class="nav-text">Token</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JWT"><span class="nav-number">3.3.</span> <span class="nav-text">JWT</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文档"><span class="nav-number">4.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ndrlslz</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  
+
+
+  
+
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.0"></script>
+
+
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ndrlslz"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+
+  
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("qsixHuR8yNbcGca2Km89Dqik", "Wvge03uyJtMH1XUl4yvQ2HsA");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+</body>
+</html>

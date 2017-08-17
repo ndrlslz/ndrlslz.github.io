@@ -225,6 +225,111 @@
             
               
                 
+                <a class="post-title-link" href="/2016/06/22/Java-concurrent包学习-四/" itemprop="url">
+                  Java concurrent包学习(四)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-22T00:42:19+08:00" content="2016-06-22">
+              2016-06-22
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/06/22/Java-concurrent包学习-四/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/22/Java-concurrent包学习-四/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/06/22/Java-concurrent包学习-四/" class="leancloud_visitors" data-flag-title="Java concurrent包学习(四)">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>上一篇通过使用锁来保证线程安全，这一篇学习使用原子变量。</p>
+<hr>
+<h2 id="CAS(compare-and-swap)">CAS(compare-and-swap)</h2><p><strong>概念</strong><br>CAS是在CPU层面支持的指令，现代的CPU大部分都支持这个指令，它能对内存的共享数据进行原子的操作，因此可以保证线程安全。</p>
+<p><strong>语义</strong><br>这个操作用C语言来描述，就是下面的代码:<br><figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">compare_and_swap</span> <span class="params">(<span class="keyword">int</span>* reg, <span class="keyword">int</span> oldval, <span class="keyword">int</span> newval)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> old_reg_val = *reg;</span><br><span class="line">  <span class="keyword">if</span> (old_reg_val == oldval)</span><br><span class="line">     *reg = newval;</span><br><span class="line">  <span class="keyword">return</span> old_reg_val;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/06/22/Java-concurrent包学习-四/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/06/08/Java-concurrent包学习-三/" itemprop="url">
                   Java concurrent包学习(三)
                 </a>
@@ -1150,113 +1255,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/03/03/Salt自定义module/" itemprop="url">
-                  Salt自定义module
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-03-03T20:06:41+08:00" content="2016-03-03">
-              2016-03-03
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/03/03/Salt自定义module/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/03/Salt自定义module/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-             <span id="/2016/03/03/Salt自定义module/" class="leancloud_visitors" data-flag-title="Salt自定义module">
-               &nbsp; | &nbsp;
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               <span class="post-meta-item-text">阅读次数 </span>
-               <span class="leancloud-visitors-count"></span>
-              </span>
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>Saltstack自带了很多module供使用，但需要自己实现一些功能的时候，就需要来自定义module了。</p>
-<h3 id="Salt_Modules">Salt Modules</h3><h4 id="State_Modules和Execution_Modules">State Modules和Execution Modules</h4><p>Salt有2种Modules，State Modules和Execution Modules。</p>
-<ol>
-<li>Execution Modules: 它是通过salt的命令行调用的。当执行相应的execution module的时候，会发送给minion相应的命令，让其马上执行这个命令。</li>
-<li>State Modules: 它是通过states文件调用的。它更倾向于让minion保持某种状态或结果。和Execution Modules不同的是，当执行State Modules的时候，它会检测minion有没有达到state modules想让它达到的效果，比如pkg.installed，它会检测minion有没有装这个软件，如果没有，才会去安装。</li>
-</ol>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/03/03/Salt自定义module/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1303,7 +1301,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">25</span>
+              <span class="site-state-item-count">26</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
