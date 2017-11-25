@@ -57,22 +57,25 @@
 
 
 
-<meta name="description" content="AMQP好处先谈谈不用amqp的情况，以Java为例，通常使用JMS API来做message client，和一个支持JMS的message broker来传输。 那如果我们需要跨语言的平台来进行交互，比如Java message client和Ruby message client，那就需要一个支持Java OpenWire协议和Ruby STOMP协议的message broker，然后我们">
+<meta name="description" content="最近需要开发一个控制TrafficManager(一种应用层负载均衡产品)的工具，原理非常简单，就只需要通过输入来调用TrafficManager提供的API而已。只不过需要已Gradle插件的形式来写这个工具，所以也学习了下怎么样写一个Gradle Plugin。
+
+编写插件
+新建HelloPlugin的文件夹，进去后初始化一个Groovy的项目： gradle init --type=groo">
 <meta property="og:type" content="article">
-<meta property="og:title" content="RabbitMQ学习">
-<meta property="og:url" content="http://yoursite.com/2016/04/25/RabbitMQ学习/index.html">
+<meta property="og:title" content="gradle插件编写">
+<meta property="og:url" content="http://yoursite.com/2017/11/25/gradle插件编写/index.html">
 <meta property="og:site_name" content="霹雳啪啦程序汪">
-<meta property="og:description" content="AMQP好处先谈谈不用amqp的情况，以Java为例，通常使用JMS API来做message client，和一个支持JMS的message broker来传输。 那如果我们需要跨语言的平台来进行交互，比如Java message client和Ruby message client，那就需要一个支持Java OpenWire协议和Ruby STOMP协议的message broker，然后我们">
-<meta property="og:image" content="http://yoursite.com/uploads/amqp_ruby_csharp.png">
-<meta property="og:image" content="http://yoursite.com/uploads/amqp_java_ruby.png">
-<meta property="og:image" content="http://yoursite.com/uploads/amqp_model.png">
-<meta property="og:image" content="http://yoursite.com/uploads/rabbitmq-direct.png">
-<meta property="og:image" content="http://yoursite.com/uploads/rabbitmq-fanout.png">
-<meta property="og:image" content="http://yoursite.com/uploads/rabbitmq-topic.png">
-<meta property="og:updated_time" content="2016-04-25T13:43:33.581Z">
+<meta property="og:description" content="最近需要开发一个控制TrafficManager(一种应用层负载均衡产品)的工具，原理非常简单，就只需要通过输入来调用TrafficManager提供的API而已。只不过需要已Gradle插件的形式来写这个工具，所以也学习了下怎么样写一个Gradle Plugin。
+
+编写插件
+新建HelloPlugin的文件夹，进去后初始化一个Groovy的项目： gradle init --type=groo">
+<meta property="og:updated_time" content="2017-11-25T13:19:46.594Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="RabbitMQ学习">
-<meta name="twitter:description" content="AMQP好处先谈谈不用amqp的情况，以Java为例，通常使用JMS API来做message client，和一个支持JMS的message broker来传输。 那如果我们需要跨语言的平台来进行交互，比如Java message client和Ruby message client，那就需要一个支持Java OpenWire协议和Ruby STOMP协议的message broker，然后我们">
+<meta name="twitter:title" content="gradle插件编写">
+<meta name="twitter:description" content="最近需要开发一个控制TrafficManager(一种应用层负载均衡产品)的工具，原理非常简单，就只需要通过输入来调用TrafficManager提供的API而已。只不过需要已Gradle插件的形式来写这个工具，所以也学习了下怎么样写一个Gradle Plugin。
+
+编写插件
+新建HelloPlugin的文件夹，进去后初始化一个Groovy的项目： gradle init --type=groo">
 
 
 
@@ -90,7 +93,7 @@
   };
 </script>
 
-  <title> RabbitMQ学习 | 霹雳啪啦程序汪 </title>
+  <title> gradle插件编写 | 霹雳啪啦程序汪 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -218,7 +221,7 @@
             
             
               
-                RabbitMQ学习
+                gradle插件编写
               
             
           </h1>
@@ -230,8 +233,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-25T21:12:51+08:00" content="2016-04-25">
-              2016-04-25
+            <time itemprop="dateCreated" datetime="2017-11-25T21:19:01+08:00" content="2017-11-25">
+              2017-11-25
             </time>
           </span>
 
@@ -241,8 +244,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/04/25/RabbitMQ学习/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/25/RabbitMQ学习/" itemprop="commentsCount"></span>
+                <a href="/2017/11/25/gradle插件编写/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/11/25/gradle插件编写/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -252,7 +255,7 @@
 
           
           
-             <span id="/2016/04/25/RabbitMQ学习/" class="leancloud_visitors" data-flag-title="RabbitMQ学习">
+             <span id="/2017/11/25/gradle插件编写/" class="leancloud_visitors" data-flag-title="gradle插件编写">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -272,45 +275,32 @@
       
 
       
-        <h3 id="AMQP">AMQP</h3><h4 id="好处">好处</h4><p>先谈谈不用amqp的情况，以Java为例，通常使用JMS API来做message client，和一个支持JMS的message broker来传输。 那如果我们需要跨语言的平台来进行交互，比如Java message client和Ruby message client，那就需要一个支持Java OpenWire协议和Ruby STOMP协议的message broker，然后我们找到了支持这种的ActiveMQ。但是如果我们需要在C#和Ruby之间传输呢，就需要一个支持C#的MSMQ和Ruby的STOMP协议的message broker。<br><img src="/uploads/amqp_ruby_csharp.png" alt="amqp_ruby_C#图"></p>
-<a id="more"></a>
-<p>即使你找到了，在你需要进行平台的切换的时候，又需要为每个message client改变源码，消息库，配置等。 所以可以看出来，厂商之间的封闭性加大了producer和consumer的耦合。</p>
-<p>所以有了AMQP(高级消息队列协议)，它提供了一个跨平台的标准的消息协议。你可以使用任意的支持AMQP的message client library和支持AMQP的message broker。比如之间的Java和Ruby的通信，你甚至可以用Qpid的client library来连接Rabbitmq的broker。<br><img src="/uploads/amqp_java_ruby.png" alt="amqp_java_ruby图"></p>
-<p>这样就对producer和consumer之间进行了解耦，producer和consumer之间无需关心对方的实现方式，producer只需要把消息发给broker，consumer只需要从broker取回消息就好。</p>
+        <p>最近需要开发一个控制TrafficManager(一种应用层负载均衡产品)的工具，原理非常简单，就只需要通过输入来调用TrafficManager提供的API而已。<br>只不过需要已Gradle插件的形式来写这个工具，所以也学习了下怎么样写一个Gradle Plugin。</p>
 <hr>
-<h4 id="相关概念">相关概念</h4><p><img src="/uploads/amqp_model.png" alt="amqp_model图"></p>
-<p><strong>Virtual Host</strong><br>用来对mq-server进行权限隔离，每个virtual host都有自己的exchange和queue，意味着如果你有多个application需要用自己的mq，可以用同一个mq-server，通过virtual host来隔离他们</p>
-<p><strong>Exchange</strong><br>接收producer发来的消息，并转发给binding在exchange上的queue。有4种type的exchange</p>
-<p>属性:</p>
-<blockquote>
-<ul>
-<li>持久性: Duration设置可以对exchange持久化</li>
-<li>自动删除: exchange所bind的queue删除完后，会自动删除exchange(默认不会自动删除)</li>
-<li>惰性: 不会自动创建，需要声明exchange，否则报错</li>
-</ul>
-</blockquote>
-<p><strong>Queue</strong><br>消息队列，用于存储exchange转发过来的消息。</p>
-<p>属性:</p>
-<blockquote>
-<ul>
-<li>持久性: Duration设置可以对queue持久化</li>
-<li>自动删除: queue会在consumer停止后删除自己。</li>
-<li>惰性: 不会自动创建，需要声明queue，否则报错</li>
-</ul>
-</blockquote>
-<p><strong>Binding</strong><br>bingding是将exchange和queue进行绑定，绑定的关键字为route_key。当exchange接收到消息后，它会提取消息的route_key，通过route_key和exchange type将消息路由到相应的queue。</p>
-<p><strong>Channel</strong><br>信道，client与broker创建连接后，还需要创建channel才可以通信。</p>
+<h3 id="编写插件">编写插件</h3><ol>
+<li>新建HelloPlugin的文件夹，进去后初始化一个Groovy的项目： <code>gradle init --type=groovy-library</code></li>
+<li><p>修改<code>build.gradle</code>文件</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">apply plugin: <span class="string">'idea'</span></span><br><span class="line">apply plugin: <span class="string">'groovy'</span></span><br><span class="line">apply plugin: <span class="string">'maven'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">dependencies</span> &#123;</span><br><span class="line">    <span class="keyword">compile</span> gradleApi()</span><br><span class="line">    <span class="keyword">compile</span> localGroovy()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">repositories</span> &#123;</span><br><span class="line">    mavenCentral()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">group</span>=<span class="string">'com.test'</span></span><br><span class="line">version=<span class="string">'1.0.0'</span></span><br><span class="line"></span><br><span class="line">uploadArchives &#123;</span><br><span class="line">    <span class="keyword">repositories</span> &#123;</span><br><span class="line">        mavenDeployer &#123;</span><br><span class="line">            repository(url: uri(<span class="string">'../repo'</span>))</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过继承Plugin<t>接口可以定义我们自己的插件,当我们这个插件被具体Project用到的时候，Gradle会实例化这个HelloPlugin类，然后会调用apply(T)方法，把Project作为参数穿进去。<br>这样的话我们可以在这个插件里面配置这个Project。包括创建task等。</t></p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> HelloPlugin <span class="keyword">implements</span> Plugin&lt;<span class="keyword">Project</span>&gt;&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> String PLUGIN_NAME = <span class="string">"hello"</span></span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    <span class="keyword">void</span> apply(<span class="keyword">Project</span> <span class="keyword">project</span>) &#123;</span><br><span class="line">        <span class="keyword">project</span>.extensions.create(PLUGIN_NAME, HelloExtension)</span><br><span class="line">        <span class="keyword">project</span>.tasks.create(PLUGIN_NAME, HelloTask)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>定义Extension。通常的插件都需要从外部接收配置参数，Gradle的每个Project都有一个ExtensionContainner,用来保存所有的配置参数。<br>我们可以通过添加自己的Extension到ExtensionContainer中，这样就可以从外部接收参数了。通过上一步可以看到我们把HelloExtension加到Project中了。</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HelloExtension</span> </span>&#123;</span><br><span class="line">    <span class="built_in">String</span> message = <span class="string">"hello"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>定义Task,通过继承DefaultTask</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HelloTask</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">DefaultTask</span> &#123;</span></span><br><span class="line">    <span class="type">HelloExtension</span> extension;</span><br><span class="line"></span><br><span class="line">    <span class="annotation">@TaskAction</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">hello</span>(</span>) &#123;</span><br><span class="line">        extension = project.extensions.findByType(<span class="type">HelloExtension</span>.<span class="keyword">class</span>)</span><br><span class="line">        println extension.message</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>定义插件的ID<br>当其他项目要用到我们的插件的时候，通过<code>apply plugin: &#39;your-plugin-id&#39;</code>即可，这里就是使用的插件的ID。<br>创建文件<code>src/main/resources/META-INF/gradle-plugins/hello-plugin.properties</code>，插件ID即为文件的名字(hello-plugin)，然后内容为<br><code>implementation-class=com.test.HelloPlugin</code>,实现类指向我们的插件类。</p>
+</li>
+<li><p>发布插件<br>如果想要发布到公共库，参考<a href="https://plugins.gradle.org/docs/submit" target="_blank" rel="external">发布到公共环境</a><br>但我们这只发布到本地的文件系统即可，通过第2步可以看到。</p>
+</li>
+</ol>
 <hr>
-<h4 id="Exchange_type">Exchange type</h4><p><strong>direct</strong></p>
-<p><img src="/uploads/rabbitmq-direct.png" alt="direct图"><br>queue通过route_key与exchange进行绑定，当消息发送到exchange后，检测消息中的route_key，然后发送到用相同route_key进行绑定的queue中，如上图，如果消息中的route_key为orange，则发到Q1 queue，如果是black或green，则发到Q2。<br>如果exchange绑定的多个queue的route_key相同，则会给每个queue都转发消息。</p>
-<p><strong>fanout</strong></p>
-<p><img src="/uploads/rabbitmq-fanout.png" alt="fanout图"><br>这种方式，exchange不会管route_key，它会把消息广播到每个和它连接的queue中。</p>
-<p><strong>topic</strong></p>
-<p><img src="/uploads/rabbitmq-topic.png" alt="topic图"><br>这种方式和direct差不多，不同之处在于它支持通配符，”*”匹配单个单词，”#”匹配多个单词，标记之间需要用”.”来分割。</p>
+<h3 id="使用插件">使用插件</h3><p>当我们将插件发布到本地文件系统后，新创建一个项目来使用它，在新项目的<code>build.gradle</code>中添加下面代码<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">buildscript</span> &#123;</span><br><span class="line">    <span class="title">repositories</span> &#123;</span><br><span class="line">        <span class="title">maven</span> &#123;</span><br><span class="line">            <span class="title">url</span> uri(<span class="string">'../repo'</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    dependencies &#123;</span><br><span class="line">        <span class="title">classpath</span> group: <span class="string">'com.test'</span>, name: <span class="string">'HelloPlugin'</span>,</span><br><span class="line">                  version: <span class="string">'1.0.0'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">apply plugin: <span class="string">'hello-plugin'</span></span><br><span class="line"></span><br><span class="line">hello &#123;</span><br><span class="line">  <span class="title">message</span> = <span class="string">"hello plugin!"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后便可以使用我们插件的中hello方法了<code>gradlew hello</code></p>
 <hr>
-<h4 id="可靠性">可靠性</h4><p><strong>ack</strong></p>
-<p>当consumer从queue取得消息后，但这时consumer宕掉了，这时消息就没了。 所以rabbitmq可以开启autoAck，即当consumer处理完消息后，会发回给queue ack，这时queue才删除掉消息。<br>如果有多个consumer订阅同一个queue，那消息只会被某一个consumer收到，queue默认采用round robin(轮询)的策略来选择consumer。现在consumerA和consumerB订阅同一个queue，queue先把messageA发给consumerA，consumerA处理完后，返回ack表示处理完成，queue删掉messageA，messageB来了，queue把它分给consumerB，但这时consumerB宕掉了，断开了channel，queue检测到后重新把messageB发给consumerA。</p>
-<p><strong>持久化</strong><br>rabbitmq默认是不持久化exchange和queue的，如果server重启了，那这些都会消失。<br>rabbitmq提供了持久化机制，需要将exchange和queue的durable设置为true，并将producer发送消息是的dilivery mode设置为2。</p>
+<h3 id="参考文档">参考文档</h3><p><a href="https://docs.gradle.org/current/userguide/custom_plugins.html" target="_blank" rel="external">官方文档</a></p>
 
       
     </div>
@@ -322,17 +312,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/03/28/Openstack-cinder学习/" rel="next" title="Openstack cinder学习">
-                <i class="fa fa-chevron-left"></i> Openstack cinder学习
+              <a href="/2017/08/17/RESTful-API实践/" rel="next" title="RESTful API实践">
+                <i class="fa fa-chevron-left"></i> RESTful API实践
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/04/30/Java函数式编程/" rel="prev" title="Java函数式编程">
-                Java函数式编程 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -358,8 +344,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/04/25/RabbitMQ学习/"
-           data-title="RabbitMQ学习" data-url="http://yoursite.com/2016/04/25/RabbitMQ学习/">
+      <div class="ds-thread" data-thread-key="2017/11/25/gradle插件编写/"
+           data-title="gradle插件编写" data-url="http://yoursite.com/2017/11/25/gradle插件编写/">
       </div>
     
   </div>
@@ -468,7 +454,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#AMQP"><span class="nav-number">1.</span> <span class="nav-text">AMQP</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#好处"><span class="nav-number">1.1.</span> <span class="nav-text">好处</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#相关概念"><span class="nav-number">1.2.</span> <span class="nav-text">相关概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Exchange_type"><span class="nav-number">1.3.</span> <span class="nav-text">Exchange type</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可靠性"><span class="nav-number">1.4.</span> <span class="nav-text">可靠性</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#编写插件"><span class="nav-number">1.</span> <span class="nav-text">编写插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用插件"><span class="nav-number">2.</span> <span class="nav-text">使用插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文档"><span class="nav-number">3.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
