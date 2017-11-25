@@ -57,25 +57,16 @@
 
 
 
-<meta name="description" content="最近需要开发一个控制TrafficManager(一种应用层负载均衡产品)的工具，原理非常简单，就只需要通过输入来调用TrafficManager提供的API而已。只不过需要已Gradle插件的形式来写这个工具，所以也学习了下怎么样写一个Gradle Plugin。
-
-编写插件
-新建HelloPlugin的文件夹，进去后初始化一个Groovy的项目： gradle init --type=groo">
+<meta name="description" content="最近需要开发一个控制TrafficManager(一种应用层负载均衡产品)的工具，原理非常简单，就只需要通过输入来调用TrafficManager提供的API而已。只不过需要已Gradle插件的形式来写这个工具，所以也学习了下怎么样写一个Gradle Plugin。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="gradle插件编写">
 <meta property="og:url" content="http://yoursite.com/2017/11/25/gradle插件编写/index.html">
 <meta property="og:site_name" content="霹雳啪啦程序汪">
-<meta property="og:description" content="最近需要开发一个控制TrafficManager(一种应用层负载均衡产品)的工具，原理非常简单，就只需要通过输入来调用TrafficManager提供的API而已。只不过需要已Gradle插件的形式来写这个工具，所以也学习了下怎么样写一个Gradle Plugin。
-
-编写插件
-新建HelloPlugin的文件夹，进去后初始化一个Groovy的项目： gradle init --type=groo">
-<meta property="og:updated_time" content="2017-11-25T13:19:46.594Z">
+<meta property="og:description" content="最近需要开发一个控制TrafficManager(一种应用层负载均衡产品)的工具，原理非常简单，就只需要通过输入来调用TrafficManager提供的API而已。只不过需要已Gradle插件的形式来写这个工具，所以也学习了下怎么样写一个Gradle Plugin。">
+<meta property="og:updated_time" content="2017-11-25T13:28:37.029Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="gradle插件编写">
-<meta name="twitter:description" content="最近需要开发一个控制TrafficManager(一种应用层负载均衡产品)的工具，原理非常简单，就只需要通过输入来调用TrafficManager提供的API而已。只不过需要已Gradle插件的形式来写这个工具，所以也学习了下怎么样写一个Gradle Plugin。
-
-编写插件
-新建HelloPlugin的文件夹，进去后初始化一个Groovy的项目： gradle init --type=groo">
+<meta name="twitter:description" content="最近需要开发一个控制TrafficManager(一种应用层负载均衡产品)的工具，原理非常简单，就只需要通过输入来调用TrafficManager提供的API而已。只不过需要已Gradle插件的形式来写这个工具，所以也学习了下怎么样写一个Gradle Plugin。">
 
 
 
@@ -277,6 +268,7 @@
       
         <p>最近需要开发一个控制TrafficManager(一种应用层负载均衡产品)的工具，原理非常简单，就只需要通过输入来调用TrafficManager提供的API而已。<br>只不过需要已Gradle插件的形式来写这个工具，所以也学习了下怎么样写一个Gradle Plugin。</p>
 <hr>
+<a id="more"></a>
 <h3 id="编写插件">编写插件</h3><ol>
 <li>新建HelloPlugin的文件夹，进去后初始化一个Groovy的项目： <code>gradle init --type=groovy-library</code></li>
 <li><p>修改<code>build.gradle</code>文件</p>
@@ -285,7 +277,7 @@
 <li><p>通过继承Plugin<t>接口可以定义我们自己的插件,当我们这个插件被具体Project用到的时候，Gradle会实例化这个HelloPlugin类，然后会调用apply(T)方法，把Project作为参数穿进去。<br>这样的话我们可以在这个插件里面配置这个Project。包括创建task等。</t></p>
 <figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> HelloPlugin <span class="keyword">implements</span> Plugin&lt;<span class="keyword">Project</span>&gt;&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> String PLUGIN_NAME = <span class="string">"hello"</span></span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    <span class="keyword">void</span> apply(<span class="keyword">Project</span> <span class="keyword">project</span>) &#123;</span><br><span class="line">        <span class="keyword">project</span>.extensions.create(PLUGIN_NAME, HelloExtension)</span><br><span class="line">        <span class="keyword">project</span>.tasks.create(PLUGIN_NAME, HelloTask)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>定义Extension。通常的插件都需要从外部接收配置参数，Gradle的每个Project都有一个ExtensionContainner,用来保存所有的配置参数。<br>我们可以通过添加自己的Extension到ExtensionContainer中，这样就可以从外部接收参数了。通过上一步可以看到我们把HelloExtension加到Project中了。</p>
+<li><p>定义Extension。通常的插件都需要从外部接收配置参数，Gradle的每个Project都有一个ExtensionContainer,用来保存所有的配置参数。<br>我们可以通过添加自己的Extension到ExtensionContainer中，这样就可以从外部接收参数了。通过上一步可以看到我们把HelloExtension加到Project中了。</p>
 <figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HelloExtension</span> </span>&#123;</span><br><span class="line">    <span class="built_in">String</span> message = <span class="string">"hello"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>定义Task,通过继承DefaultTask</p>
