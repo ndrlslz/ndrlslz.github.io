@@ -57,20 +57,20 @@
 
 
 
-<meta name="description" content="写tenrya的初衷现在部门做的项目是个基于openstack的云平台，其中一个模块是需要监听openstack的notification来进行响应，现有后台代码是用Java写的，逻辑是用switch-case判断notification的event_type来调用对应的响应类。可以想象到这段switch-case有多长。
-希望用更优雅的方式来做这个事，所以就把这块抽离了出来，写个了简单的pyth">
+<meta name="description" content="Spring Cloud Hystrix在微服务的环境中，往往由多个独立部署的服务组成，服务间通过远程调用来相互交互。通常一个服务会被多个服务依赖，一个服务也会依赖多个其他的服务。但是如果依赖的服务发生延迟或者故障，导致调用方也发生延迟，随着请求的增加，线程无法释放，导致调用方自身的服务也奔溃。进而甚至导致整个系统雪崩。
+因此出现了Hystrix这种服务隔离方案，Spring Cloud Hyst">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Ternya">
-<meta property="og:url" content="http://yoursite.com/2016/05/07/Ternya/index.html">
+<meta property="og:title" content="Spring Cloud(三)">
+<meta property="og:url" content="http://yoursite.com/2018/07/15/Spring-Cloud-三/index.html">
 <meta property="og:site_name" content="霹雳啪啦程序汪">
-<meta property="og:description" content="写tenrya的初衷现在部门做的项目是个基于openstack的云平台，其中一个模块是需要监听openstack的notification来进行响应，现有后台代码是用Java写的，逻辑是用switch-case判断notification的event_type来调用对应的响应类。可以想象到这段switch-case有多长。
-希望用更优雅的方式来做这个事，所以就把这块抽离了出来，写个了简单的pyth">
-<meta property="og:image" content="http://yoursite.com/uploads/consumer_count.jpg">
-<meta property="og:updated_time" content="2016-05-07T14:28:12.984Z">
+<meta property="og:description" content="Spring Cloud Hystrix在微服务的环境中，往往由多个独立部署的服务组成，服务间通过远程调用来相互交互。通常一个服务会被多个服务依赖，一个服务也会依赖多个其他的服务。但是如果依赖的服务发生延迟或者故障，导致调用方也发生延迟，随着请求的增加，线程无法释放，导致调用方自身的服务也奔溃。进而甚至导致整个系统雪崩。
+因此出现了Hystrix这种服务隔离方案，Spring Cloud Hyst">
+<meta property="og:image" content="http://yoursite.com/uploads/hystrix.png">
+<meta property="og:updated_time" content="2018-07-15T05:25:27.684Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Ternya">
-<meta name="twitter:description" content="写tenrya的初衷现在部门做的项目是个基于openstack的云平台，其中一个模块是需要监听openstack的notification来进行响应，现有后台代码是用Java写的，逻辑是用switch-case判断notification的event_type来调用对应的响应类。可以想象到这段switch-case有多长。
-希望用更优雅的方式来做这个事，所以就把这块抽离了出来，写个了简单的pyth">
+<meta name="twitter:title" content="Spring Cloud(三)">
+<meta name="twitter:description" content="Spring Cloud Hystrix在微服务的环境中，往往由多个独立部署的服务组成，服务间通过远程调用来相互交互。通常一个服务会被多个服务依赖，一个服务也会依赖多个其他的服务。但是如果依赖的服务发生延迟或者故障，导致调用方也发生延迟，随着请求的增加，线程无法释放，导致调用方自身的服务也奔溃。进而甚至导致整个系统雪崩。
+因此出现了Hystrix这种服务隔离方案，Spring Cloud Hyst">
 
 
 
@@ -88,7 +88,7 @@
   };
 </script>
 
-  <title> Ternya | 霹雳啪啦程序汪 </title>
+  <title> Spring Cloud(三) | 霹雳啪啦程序汪 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -216,7 +216,7 @@
             
             
               
-                Ternya
+                Spring Cloud(三)
               
             
           </h1>
@@ -228,8 +228,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-07T22:10:15+08:00" content="2016-05-07">
-              2016-05-07
+            <time itemprop="dateCreated" datetime="2018-07-15T13:10:15+08:00" content="2018-07-15">
+              2018-07-15
             </time>
           </span>
 
@@ -239,8 +239,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/05/07/Ternya/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/07/Ternya/" itemprop="commentsCount"></span>
+                <a href="/2018/07/15/Spring-Cloud-三/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/07/15/Spring-Cloud-三/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -250,7 +250,7 @@
 
           
           
-             <span id="/2016/05/07/Ternya/" class="leancloud_visitors" data-flag-title="Ternya">
+             <span id="/2018/07/15/Spring-Cloud-三/" class="leancloud_visitors" data-flag-title="Spring Cloud(三)">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -270,52 +270,35 @@
       
 
       
-        <h2 id="写tenrya的初衷">写tenrya的初衷</h2><p>现在部门做的项目是个基于openstack的云平台，其中一个模块是需要监听openstack的notification来进行响应，现有后台代码是用Java写的，逻辑是用switch-case判断notification的event_type来调用对应的响应类。可以想象到这段switch-case有多长。</p>
-<p>希望用更优雅的方式来做这个事，所以就把这块抽离了出来，写个了简单的python library。<br>ternya的目的是为了更方便的接收和处理openstack notification。</p>
+        <h2 id="Spring_Cloud_Hystrix">Spring Cloud Hystrix</h2><p>在微服务的环境中，往往由多个独立部署的服务组成，服务间通过远程调用来相互交互。<br>通常一个服务会被多个服务依赖，一个服务也会依赖多个其他的服务。但是如果依赖的服务发生延迟或者故障，导致调用方也发生延迟，随着请求的增加，线程无法释放，导致调用方自身的服务也奔溃。进而甚至导致整个系统雪崩。</p>
+<p>因此出现了Hystrix这种服务隔离方案，Spring Cloud Hystrix是基于Netflix的开源Hystrix框架实现的，它提供了服务降级，服务熔断，线程隔离，监控等服务。</p>
 <a id="more"></a>
-<hr>
-<h2 id="安装ternya">安装ternya</h2><p>3种方式都可以：</p>
-<blockquote>
-<p>pip install ternya<br>easy_install ternya<br>python setup.py install</p>
-</blockquote>
-<hr>
-<h2 id="如何填写配置文件">如何填写配置文件</h2><h3 id="配置文件的例子">配置文件的例子</h3><p><a href="https://github.com/ndrlslz/ternya/blob/master/config.ini" target="_blank" rel="external">example config file</a></p>
-<h3 id="配置信息解释">配置信息解释</h3><p><strong>project_abspath</strong><br>填写你的项目根目录的绝对路径地址。</p>
-<p><strong>packages_scan</strong><br>你的项目中，处理notification的方法所在的package。<br>ternya会扫描你填写的package下的所有py文件，然后注入处理notification的业务逻辑。<br>意思就是处理notification的逻辑放在哪，就填它所在的package。</p>
-<p>举个例子，假如项目目录结构如下：<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">E:\ternya</span><br><span class="line">|<span class="comment">-- my_process_one.py</span></span><br><span class="line">`<span class="comment">-- process</span></span><br><span class="line">   |<span class="comment">-- my_process_two.py</span></span><br><span class="line">   `<span class="comment">-- sub_process</span></span><br><span class="line">       |<span class="comment">-- my_process_three.py</span></span><br><span class="line">`<span class="comment">-- process1</span></span><br><span class="line">   |<span class="comment">-- my_process_four.py</span></span><br></pre></td></tr></table></figure></p>
-<ol>
-<li>如果不填，即 packages_scan =<br>ternya会扫描项目的所有py文件</li>
-<li>如果填process这个package，即 packages_scan = process<br>tenrya会扫描到my_process_two.py和my_process_three.py 这2个py文件。</li>
-<li>如果填process.sub_process这个package，即 packages_scan = process.sub_process<br>ternya会扫描my_process_three.py 这个py文件。</li>
-<li>如果填多个package，之间以分号分割， 即 packages_scan = process.sub_process;process1<br>tenrya会扫描my_process_three.py和my_process_four.py 这2个py文件</li>
-</ol>
-<p>为了内存和速度着想，让tenrya扫描的py文件越少越好，意味着最好只扫描处理notification的那些py文件。</p>
-<p><strong>mq_user</strong><br>openstack mq的username</p>
-<p><strong>mq_password</strong><br>openstack mq的password</p>
-<p><strong>mq_host</strong><br>openstack controller节点的mq的host</p>
-<p><strong>listen_notification</strong><br>是否监听这个组件的notification</p>
-<p><strong>mq_consumer_count</strong><br>对每个组件而言，启用多少个consumer去监听和处理notification。<br>比如启动3个consumer：<br><img src="/uploads/consumer_count.jpg" alt="multi_consumer"><br>queue通过轮询的方式将message负载均衡到多个consumer。</p>
-<hr>
-<h2 id="如何运行ternya">如何运行ternya</h2><ol>
-<li>通过调用read(path)方法加载你的配置文件。</li>
-<li>通过调用work()来启动ternya</li>
-</ol>
-<p>如果在项目中用到ternya，需要启用一个进程来启动ternya。<br>提醒：如果是windows平台，要想启动进程， if <strong>name</strong> == “<strong>main</strong>“是必须要的。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">from ternya <span class="keyword">import</span> Ternya</span><br><span class="line">from multiprocessing <span class="keyword">import</span> Process</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    ternya = Ternya()</span><br><span class="line">    ternya.read(<span class="string">"config.ini"</span>)</span><br><span class="line">    process = Process(target=ternya.work)</span><br><span class="line">    process.start()</span><br></pre></td></tr></table></figure></p>
-<hr>
-<h2 id="如何处理notification">如何处理notification</h2><p>如一开始提到的，ternya的主要目的就是更简单的处理notification。<br>ternya提供了基于注解的方式来处理notification。<br><strong>注解使用方法</strong>: @openstack组件名称(“event_type”)</p>
-<p>举个例子，比如要处理开始创建虚机的notification。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> ternya <span class="keyword">import</span> nova</span><br><span class="line"></span><br><span class="line"><span class="decorator">@nova("compute.instance.create.start")</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">create_instance_start</span><span class="params">(body, message)</span>:</span></span><br><span class="line">    <span class="string">"""</span><br><span class="line">    Service method of dealing with notification.</span><br><span class="line">    body and message parameter is necessary.</span><br><span class="line"></span><br><span class="line">    :param body: notification dict</span><br><span class="line">    :param message: kombu Message class</span><br><span class="line">    """</span></span><br><span class="line">    print(<span class="string">"start to create instance notification."</span>)</span><br><span class="line">    print(body[<span class="string">'event_type'</span>])</span><br><span class="line">    print(body)</span><br></pre></td></tr></table></figure></p>
-<p>通过注解的方式，ternya会记录event_type和业务方法的映射关系，在这个例子中，ternya会记录下用create_instance_start这个方法来处理’compute.instance.create.start’这个event_type。</p>
-<p>ternya的注解也支持<strong>通配符</strong>的方式。<br>比如要处理删除虚机的notification。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> ternya <span class="keyword">import</span> nova</span><br><span class="line"></span><br><span class="line"><span class="decorator">@nova("compute.instance.delete.*"):</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">instance_delete</span><span class="params">(body, message)</span>:</span></span><br><span class="line">    print(<span class="string">"delete instance notification"</span>)</span><br><span class="line">    print(body[<span class="string">'event_type'</span>])</span><br><span class="line">    print(body)</span><br></pre></td></tr></table></figure></p>
-<p>在这个例子中，instance_delete这个方法可以处理2种notification，分别为event_type为”compute.instance.delete.start”和”compute.instance.delete.end”的notification。</p>
-<p>ternya目前支持7种openstack组件的注解。</p>
-<blockquote>
-<p>nova<br>cinder<br>neutron<br>glance<br>swift<br>keystone<br>heat</p>
-</blockquote>
-<hr>
-<h2 id="如何编写处理notification的方法">如何编写处理notification的方法</h2><p>ternya中使用了kombu库，采用kombu提供的方式来编写方法，方法需要接收2个参数，body和message。一般只需要用到body即可。<br><strong>body</strong><br>notification的字典<br><strong>message</strong><br>kombu.transport.base.Message</p>
-<p>ternya默认处理notification的方式是通过log的DEBUG模式输出。</p>
-<hr>
-<h2 id="源码地址">源码地址</h2><p><a href="https://github.com/ndrlslz/ternya" target="_blank" rel="external">ternya源码</a></p>
+<h3 id="基本用法">基本用法</h3><p>添加<code>@EnableCircuitBreaker</code>注解到启动类上，或者直接用<code>@SpringCloudApplication</code>注解。</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ConsumerService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="annotation">@Autowired</span></span><br><span class="line">    RestTemplate restTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="annotation">@HystrixCommand</span>(groupKey = <span class="string">"helloGroup"</span>, commandKey = <span class="string">"helloKey"</span>, fallbackMethod = <span class="string">"fallback"</span>)</span><br><span class="line">    <span class="keyword">public</span> <span class="function">String <span class="title">hello</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">return</span> restTemplate.<span class="title">getForObject</span><span class="params">(<span class="string">"http://hello-service/greetings"</span>, String.class)</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function">String <span class="title">fallback</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"fallback"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过在方法上添加<code>@HystrixCommand</code>注解，然后该方法会被HystrixCommandAspect切面拦截，生成HystrixInvokable来调用。注解上参数的用法：</p>
+<ul>
+<li>fallbackMethod 定义服务降级方法，降级方法的方法签名需要一样，并在同一个类中。</li>
+<li>groupKey 定义hystrix操作的组名，之后可以在配置文件中定制化该group的设置。</li>
+<li>commandKey 定义hystrix操作的命令名，之后可以在配置文件中定制化该command的设置。</li>
+</ul>
+<p>定制化配置例子<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#定义commandKey为helloKey的过期时间为<span class="number">3s</span></span><br><span class="line">hystrix<span class="class">.command</span><span class="class">.helloKey</span><span class="class">.execution</span><span class="class">.isolation</span><span class="class">.thread</span><span class="class">.timeoutInMilliseconds</span>=<span class="number">3000</span></span><br><span class="line">#定义所有的默认过期时间为<span class="number">5s</span>，不再是默认是<span class="number">1s</span>。优先级小于上面配置</span><br><span class="line">hystrix<span class="class">.command</span><span class="class">.default</span><span class="class">.execution</span><span class="class">.isolation</span><span class="class">.thread</span><span class="class">.timeoutInMilliseconds</span>=<span class="number">5000</span></span><br><span class="line">#定义threadPoolKey为helloGroup的线程池大小为<span class="number">15</span></span><br><span class="line">hystrix<span class="class">.threadpool</span><span class="class">.helloGroup</span><span class="class">.coreSize</span>=<span class="number">15</span></span><br><span class="line">#定义所有的线程池大小为为<span class="number">5</span>，不再是默认是<span class="number">10</span>。优先级小于上面配置</span><br><span class="line">hystrix<span class="class">.threadpool</span><span class="class">.default</span><span class="class">.coreSize</span>=<span class="number">5</span></span><br></pre></td></tr></table></figure></p>
+<p>当hello-service挂掉了，或者延迟时间超过了Hystrix的Timeout，Hystrix便会进行降级处理，调用fallback方法返回。这样就起到了对自己服务的保护机制。</p>
+<h3 id="依赖隔离">依赖隔离</h3><p>通过Hystrix包装的请求：<br><img src="/uploads/hystrix.png" alt="Spring Hystrix"></p>
+<ul>
+<li>hystrix通过线程池或信号量来实现服务的依赖隔离，如果选择使用线程池(默认)，会为每个command创建一个单独的线程池。</li>
+<li>当某个command的依赖服务出现问题，也只会让它所属的线程池被影响，不会影响其他服务。</li>
+<li>当线程池被占满后，之后的command会拒绝服务，而不会等待可用线程。</li>
+<li>熔断器机制，依赖服务失效达到一定条件，会切断该服务。</li>
+</ul>
+<p>除了使用线程池来进行隔离，还可以使用信号量来控制访问依赖服务的并发量。<br>使用线程池还是信号量取决于依赖服务的类型，如果是需要通过网络访问的，比如第三方API，就需要使用线程池，因为信号量不支持设置超时和实现异步访问。<br>信号量适用于无网络的高并发请求，因为对于无网络的请求，线程池的开销反而得不偿失。</p>
+<h3 id="熔断器">熔断器</h3><p>虽然Hystrix已经提供了服务降级功能，但是如果依赖服务挂掉了的话，还是需要等待到超时时间再服务降级，还是可能会产生线程堆积，所以就有了熔断器。<br>当熔断器触发的时候，便会直接切断该依赖服务，不会等到超时，而是直接调用降级服务。<br>开启熔断器的条件取决于3个配置：</p>
+<ul>
+<li><code>metrics.rollingStats.timeInMilliseconds</code> 滑动时间窗口, 默认为10秒， Hystrix会在这个时间窗口内统计请求失败数是失败率。</li>
+<li><code>circuitBreaker.requestVolumeThreshold</code> 一个滑动窗口内，触发熔断的最少请求量，默认为20。意味着如果在一个滑动时间窗口内有19个请求，即使19个请求全部失败了，也不会触发熔断。</li>
+<li><code>circuitBreaker.errorThresholdPercentage</code>, 触发熔断的失败率，默认为50%, 在滑动时间窗口内，请求数量达到20，其中超过10个失败了，便会触发熔断。</li>
+</ul>
+<p>当断路器打开，对主逻辑进行熔断之后，hystrix会启动一个休眠时间窗，<br>在这个时间窗内，降级逻辑是临时的成为主逻辑，当休眠时间窗到期，断路器将进入半开状态，释放一次请求到原来的主逻辑上，如果此次请求正常返回，那么断路器关闭，主逻辑恢复，<br>如果这次请求依然有问题，断路器继续进入打开状态，休眠时间窗重新计时。</p>
+<h3 id="参考文档">参考文档</h3><p><a href="http://blog.didispace.com/spring-cloud-starter-dalston-4-1/" target="_blank" rel="external">服务降级</a><br><a href="http://blog.didispace.com/spring-cloud-starter-dalston-4-2/" target="_blank" rel="external">依赖隔离</a><br><a href="http://blog.didispace.com/spring-cloud-starter-dalston-4-3/" target="_blank" rel="external">熔断器</a><br><a href="http://tech.lede.com/2017/06/15/rd/server/hystrix/" target="_blank" rel="external">Hystrix</a><br><a href="http://tietang.wang/2016/02/25/hystrix/Hystrix%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3/" target="_blank" rel="external">Hystrix参数</a></p>
 
       
     </div>
@@ -327,17 +310,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/04/30/Java函数式编程/" rel="next" title="Java函数式编程">
-                <i class="fa fa-chevron-left"></i> Java函数式编程
+              <a href="/2018/05/05/Spring-Cloud-二/" rel="next" title="Spring Cloud(二)">
+                <i class="fa fa-chevron-left"></i> Spring Cloud(二)
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/05/15/Openstack开发环境搭建/" rel="prev" title="Openstack开发环境搭建">
-                Openstack开发环境搭建 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -363,8 +342,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/05/07/Ternya/"
-           data-title="Ternya" data-url="http://yoursite.com/2016/05/07/Ternya/">
+      <div class="ds-thread" data-thread-key="2018/07/15/Spring-Cloud-三/"
+           data-title="Spring Cloud(三)" data-url="http://yoursite.com/2018/07/15/Spring-Cloud-三/">
       </div>
     
   </div>
@@ -473,7 +452,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写tenrya的初衷"><span class="nav-number">1.</span> <span class="nav-text">写tenrya的初衷</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装ternya"><span class="nav-number">2.</span> <span class="nav-text">安装ternya</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何填写配置文件"><span class="nav-number">3.</span> <span class="nav-text">如何填写配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置文件的例子"><span class="nav-number">3.1.</span> <span class="nav-text">配置文件的例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置信息解释"><span class="nav-number">3.2.</span> <span class="nav-text">配置信息解释</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何运行ternya"><span class="nav-number">4.</span> <span class="nav-text">如何运行ternya</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何处理notification"><span class="nav-number">5.</span> <span class="nav-text">如何处理notification</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何编写处理notification的方法"><span class="nav-number">6.</span> <span class="nav-text">如何编写处理notification的方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码地址"><span class="nav-number">7.</span> <span class="nav-text">源码地址</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring_Cloud_Hystrix"><span class="nav-number">1.</span> <span class="nav-text">Spring Cloud Hystrix</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本用法"><span class="nav-number">1.1.</span> <span class="nav-text">基本用法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#依赖隔离"><span class="nav-number">1.2.</span> <span class="nav-text">依赖隔离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#熔断器"><span class="nav-number">1.3.</span> <span class="nav-text">熔断器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文档"><span class="nav-number">1.4.</span> <span class="nav-text">参考文档</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
