@@ -220,6 +220,109 @@
             
               
                 
+                <a class="post-title-link" href="/2018/08/28/Spring-Cloud-四/" itemprop="url">
+                  Spring Cloud(四)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-08-28T21:29:53+08:00" content="2018-08-28">
+              2018-08-28
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/08/28/Spring-Cloud-四/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/08/28/Spring-Cloud-四/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2018/08/28/Spring-Cloud-四/" class="leancloud_visitors" data-flag-title="Spring Cloud(四)">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="Spring_Cloud_Config">Spring Cloud Config</h2><h3 id="简介">简介</h3><p>在微服务的环境中，有众多的单个服务，每个服务都有自己的一套配置，那么如何更好管理这些配置呢。<br>我们现在的项目(Spring Boot项目，还没用Spring Cloud)是通过创建一个单独的Configuration的Git仓库，然后在部署的时候，自动化脚本会去Git仓库拉取对应项目的配置，放到config文件夹下，作为一个external的配置。<br>优势就是集中化管理了所有项目的配置，但是劣势是需要自己在部署脚本中写好拉取配置的代码，以及每次更新了配置，需要重新触发部署才会生效。</p>
+<p>Spring Cloud Config是用来集中式的管理分布式项目中的各个项目各个环境的配置。它提供服务端和客户端的支持。<br>服务端就是一个应用，用来管理所有项目配置，并暴露出接口来访问对应项目，对应profile的配置信息。客户端在启动的时候，通过服务端提供的接口去获取自己的配置信息，</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2018/08/28/Spring-Cloud-四/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2018/07/15/Spring-Cloud-三/" itemprop="url">
                   Spring Cloud(三)
                 </a>
@@ -1120,110 +1223,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/01/19/SPI实现可插拔组件/" itemprop="url">
-                  SPI实现可插拔组件
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-01-19T21:19:31+08:00" content="2017-01-19">
-              2017-01-19
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2017/01/19/SPI实现可插拔组件/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/19/SPI实现可插拔组件/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-             <span id="/2017/01/19/SPI实现可插拔组件/" class="leancloud_visitors" data-flag-title="SPI实现可插拔组件">
-               &nbsp; | &nbsp;
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               <span class="post-meta-item-text">阅读次数 </span>
-               <span class="leancloud-visitors-count"></span>
-              </span>
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="概念">概念</h3><p><strong>SPI(Service Provider Interface)</strong>, 从字面上理解是给服务提供者的接口。 一个接口可以有多种实现方式，通过SPI机制, 我们可以找到这个接口的某个或者所有的实现方式,有点类似与服务发现,通常在写Library或者Framework的时候需要用到。</p>
-<hr>
-<h3 id="基本用法">基本用法</h3><p>我们尝试定义1个接口和2个实现类,然后通过SPI机制来通过这个接口找到2个实现类。</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2017/01/19/SPI实现可插拔组件/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1270,7 +1269,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">31</span>
+              <span class="site-state-item-count">32</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

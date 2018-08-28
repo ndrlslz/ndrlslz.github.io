@@ -57,25 +57,19 @@
 
 
 
-<meta name="description" content="概念SPI(Service Provider Interface), 从字面上理解是给服务提供者的接口。 一个接口可以有多种实现方式，通过SPI机制, 我们可以找到这个接口的某个或者所有的实现方式,有点类似与服务发现,通常在写Library或者Framework的时候需要用到。
-
-基本用法我们尝试定义1个接口和2个实现类,然后通过SPI机制来通过这个接口找到2个实现类。">
+<meta name="description" content="Spring Cloud Config简介在微服务的环境中，有众多的单个服务，每个服务都有自己的一套配置，那么如何更好管理这些配置呢。我们现在的项目(Spring Boot项目，还没用Spring Cloud)是通过创建一个单独的Configuration的Git仓库，然后在部署的时候，自动化脚本会去Git仓库拉取对应项目的配置，放到config文件夹下，作为一个external的配置。优势就是集">
 <meta property="og:type" content="article">
-<meta property="og:title" content="SPI实现可插拔组件">
-<meta property="og:url" content="http://yoursite.com/2017/01/19/SPI实现可插拔组件/index.html">
+<meta property="og:title" content="Spring Cloud(四)">
+<meta property="og:url" content="http://yoursite.com/2018/08/28/Spring-Cloud-四/index.html">
 <meta property="og:site_name" content="霹雳啪啦程序汪">
-<meta property="og:description" content="概念SPI(Service Provider Interface), 从字面上理解是给服务提供者的接口。 一个接口可以有多种实现方式，通过SPI机制, 我们可以找到这个接口的某个或者所有的实现方式,有点类似与服务发现,通常在写Library或者Framework的时候需要用到。
-
-基本用法我们尝试定义1个接口和2个实现类,然后通过SPI机制来通过这个接口找到2个实现类。">
-<meta property="og:image" content="http://yoursite.com/uploads/spi-basic-usage.png">
-<meta property="og:image" content="http://yoursite.com/uploads/spi-module-design.png">
-<meta property="og:image" content="http://yoursite.com/uploads/spi-module-implemention.png">
-<meta property="og:updated_time" content="2017-01-19T13:30:16.339Z">
+<meta property="og:description" content="Spring Cloud Config简介在微服务的环境中，有众多的单个服务，每个服务都有自己的一套配置，那么如何更好管理这些配置呢。我们现在的项目(Spring Boot项目，还没用Spring Cloud)是通过创建一个单独的Configuration的Git仓库，然后在部署的时候，自动化脚本会去Git仓库拉取对应项目的配置，放到config文件夹下，作为一个external的配置。优势就是集">
+<meta property="og:image" content="http://yoursite.com/uploads/config_data.png">
+<meta property="og:image" content="http://yoursite.com/uploads/config_ha.png">
+<meta property="og:image" content="http://yoursite.com/uploads/config_bus.png">
+<meta property="og:updated_time" content="2018-08-28T13:37:01.872Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SPI实现可插拔组件">
-<meta name="twitter:description" content="概念SPI(Service Provider Interface), 从字面上理解是给服务提供者的接口。 一个接口可以有多种实现方式，通过SPI机制, 我们可以找到这个接口的某个或者所有的实现方式,有点类似与服务发现,通常在写Library或者Framework的时候需要用到。
-
-基本用法我们尝试定义1个接口和2个实现类,然后通过SPI机制来通过这个接口找到2个实现类。">
+<meta name="twitter:title" content="Spring Cloud(四)">
+<meta name="twitter:description" content="Spring Cloud Config简介在微服务的环境中，有众多的单个服务，每个服务都有自己的一套配置，那么如何更好管理这些配置呢。我们现在的项目(Spring Boot项目，还没用Spring Cloud)是通过创建一个单独的Configuration的Git仓库，然后在部署的时候，自动化脚本会去Git仓库拉取对应项目的配置，放到config文件夹下，作为一个external的配置。优势就是集">
 
 
 
@@ -93,7 +87,7 @@
   };
 </script>
 
-  <title> SPI实现可插拔组件 | 霹雳啪啦程序汪 </title>
+  <title> Spring Cloud(四) | 霹雳啪啦程序汪 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -221,7 +215,7 @@
             
             
               
-                SPI实现可插拔组件
+                Spring Cloud(四)
               
             
           </h1>
@@ -233,8 +227,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-01-19T21:19:31+08:00" content="2017-01-19">
-              2017-01-19
+            <time itemprop="dateCreated" datetime="2018-08-28T21:29:53+08:00" content="2018-08-28">
+              2018-08-28
             </time>
           </span>
 
@@ -244,8 +238,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2017/01/19/SPI实现可插拔组件/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/19/SPI实现可插拔组件/" itemprop="commentsCount"></span>
+                <a href="/2018/08/28/Spring-Cloud-四/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/08/28/Spring-Cloud-四/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -255,7 +249,7 @@
 
           
           
-             <span id="/2017/01/19/SPI实现可插拔组件/" class="leancloud_visitors" data-flag-title="SPI实现可插拔组件">
+             <span id="/2018/08/28/Spring-Cloud-四/" class="leancloud_visitors" data-flag-title="Spring Cloud(四)">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -275,24 +269,34 @@
       
 
       
-        <h3 id="概念">概念</h3><p><strong>SPI(Service Provider Interface)</strong>, 从字面上理解是给服务提供者的接口。 一个接口可以有多种实现方式，通过SPI机制, 我们可以找到这个接口的某个或者所有的实现方式,有点类似与服务发现,通常在写Library或者Framework的时候需要用到。</p>
-<hr>
-<h3 id="基本用法">基本用法</h3><p>我们尝试定义1个接口和2个实现类,然后通过SPI机制来通过这个接口找到2个实现类。</p>
+        <h2 id="Spring_Cloud_Config">Spring Cloud Config</h2><h3 id="简介">简介</h3><p>在微服务的环境中，有众多的单个服务，每个服务都有自己的一套配置，那么如何更好管理这些配置呢。<br>我们现在的项目(Spring Boot项目，还没用Spring Cloud)是通过创建一个单独的Configuration的Git仓库，然后在部署的时候，自动化脚本会去Git仓库拉取对应项目的配置，放到config文件夹下，作为一个external的配置。<br>优势就是集中化管理了所有项目的配置，但是劣势是需要自己在部署脚本中写好拉取配置的代码，以及每次更新了配置，需要重新触发部署才会生效。</p>
+<p>Spring Cloud Config是用来集中式的管理分布式项目中的各个项目各个环境的配置。它提供服务端和客户端的支持。<br>服务端就是一个应用，用来管理所有项目配置，并暴露出接口来访问对应项目，对应profile的配置信息。客户端在启动的时候，通过服务端提供的接口去获取自己的配置信息，</p>
 <a id="more"></a>
-<h4 id="接口和实现类">接口和实现类</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//interface</span></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">IService</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//implemention one</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HttpService</span> <span class="keyword">implements</span> <span class="title">IService</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Http Service"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//implemention two</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RpcService</span> <span class="keyword">implements</span> <span class="title">IService</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Rpc service"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="定义接口和对应实现的文件">定义接口和对应实现的文件</h4><p>然后需要在resources文件夹下创建<code>META-INF</code>文件夹，再下面创建<code>services</code>文件夹,然后创建文件，文件名为接口的路径(包含包名)，文件内容为实现类的路径(包含包名)。<br>在这个例子中，项目结构为：<br><img src="/uploads/spi-basic-usage.png" alt="spi基本用法图"></p>
-<h4 id="使用方式">使用方式</h4><p>通过SPI，我们指定IServcie这个接口，它可以找到我们指定在文件中的实现类。<br><figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public class <span class="type">Main</span> &#123;</span><br><span class="line">    public <span class="keyword">static</span> <span class="type">void</span> main(<span class="type">String</span>[] args) &#123;</span><br><span class="line">        <span class="type">Iterator</span>&lt;<span class="type">IService</span>&gt; <span class="keyword">iterator</span> = <span class="type">ServiceLoader</span>.load(<span class="type">IService</span>.class).<span class="keyword">iterator</span>();</span><br><span class="line"></span><br><span class="line">        <span class="type">IService</span> service;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">iterator</span>.hasNext()) &#123;</span><br><span class="line">            service = <span class="keyword">iterator</span>.next();</span><br><span class="line">            service.run();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//<span class="type">Http</span> <span class="type">Service</span></span><br><span class="line">//<span class="type">Rpc</span> service</span><br></pre></td></tr></table></figure></p>
-<hr>
-<h3 id="可插拔组件的实现">可插拔组件的实现</h3><p>在上一篇的sdk中用到了Retrofit,其中有一段代码是:<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">return</span> <span class="tag">new</span> <span class="tag">Retrofit</span><span class="class">.Builder</span>()</span><br><span class="line">        <span class="class">.baseUrl</span>(<span class="tag">baseUrl</span>)</span><br><span class="line">        <span class="class">.addConverterFactory</span>(<span class="tag">GsonConverterFactory</span><span class="class">.create</span>(<span class="tag">gson</span>))</span><br><span class="line">        <span class="class">.addCallAdapterFactory</span>(<span class="tag">ServiceCallAdapterFactory</span><span class="class">.create</span>())</span><br><span class="line">        <span class="class">.client</span>(<span class="tag">client</span>)</span><br><span class="line">        <span class="class">.build</span>()</span><br><span class="line">        <span class="class">.create</span>(<span class="tag">ZhihuDaily</span><span class="class">.class</span>);</span><br></pre></td></tr></table></figure></p>
-<p>在第三行我们可以定义序列化的实现方式，如果我们想把Gson改成Jackson的话就需要改第三行。现在，我们用SPI的机制来提供一个库，当使用者想从Gson改成Jackson的话，不用更改代码，只需更改依赖就可以实现。</p>
-<p>现在假设我们要实现下面这个多组件的项目。其中，Core模块是核心模块，它调用了另一个负责序列化的模块，但是另一个模块的实现方式是可选的，可以用Gson或者Jackson。<br><img src="/uploads/spi-module-design.png" alt="spi模块设计图"></p>
-<h4 id="Core模块">Core模块</h4><p>先定义一个序列化的接口。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.test.core;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IService</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">process</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>然后定义一个提供给用户使用的类，其中这个类使用了SPI，会去找IService接口的所有实现方式，但只选择第一个。<br><figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">package com.test.core;</span><br><span class="line"></span><br><span class="line">public class <span class="type">Retrofit</span> &#123;</span><br><span class="line">    public <span class="keyword">static</span> <span class="type">void</span> run() &#123;</span><br><span class="line">        <span class="type">Iterator</span>&lt;<span class="type">IService</span>&gt; <span class="keyword">iterator</span> = <span class="type">ServiceLoader</span>.load(<span class="type">IService</span>.class).<span class="keyword">iterator</span>();</span><br><span class="line">        <span class="type">IService</span> service;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">iterator</span>.hasNext()) &#123;</span><br><span class="line">            service = <span class="keyword">iterator</span>.next();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            throw new <span class="type">RuntimeException</span>(<span class="string">"No implementation of IService."</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        service.process();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="Gson模块">Gson模块</h4><p>Gson模块会依赖Core模块，因为会实现IService接口。 定义个GsonServcie实现类。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.test.gson;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GsonService</span> <span class="keyword">implements</span> <span class="title">IService</span> </span>&#123;</span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">process</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"invoke Gson service"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>然后创建接口和实现的文件。<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//resources/META-INF/services/com.test.core.IService</span></span><br><span class="line">com<span class="class">.test</span><span class="class">.gson</span><span class="class">.GsonService</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="Jackson模块">Jackson模块</h4><p>参考Gson模块。</p>
-<p>整体项目图：<br><img src="/uploads/spi-module-implemention.png" alt="spi模块实现图"></p>
-<h4 id="使用方式-1">使用方式</h4><p>然后当用户调用Core模块中的Retrofit的时候，通过改变依赖来改变使用的序列化方式。Core模块一定要导入，然后Gson和Jackson模块导入其中一个即可，导入哪个，Core模块就会自动使用那个模块，切换的话也只需要改变依赖即可。<br>如果用户对使用哪个序列化库无所谓的话，就导入整个库(包含Core，Gson和Jackson)，项目会默认选择第一个(依据Gson和Jackson的排列位置)。</p>
+<h3 id="基本用法">基本用法</h3><h4 id="服务端">服务端</h4><p>导入依赖<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">compile</span><span class="params">(<span class="string">'org.springframework.cloud:spring-cloud-config-server'</span>)</span></span></span><br></pre></td></tr></table></figure></p>
+<p>在启动类上加上<code>@EnableConfigServer</code>注解<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@SpringBootApplication</span></span><br><span class="line"><span class="annotation">@EnableConfigServer</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Application</span> &#123;</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="typename">void</span> main(String[] args) &#123;</span><br><span class="line">        SpringApplication.run(Application.<span class="keyword">class</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>添加配置<br><figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  application:</span><br><span class="line">    name: config-<span class="keyword">server</span></span><br><span class="line">  cloud:</span><br><span class="line">    config:</span><br><span class="line">      <span class="keyword">server</span>:</span><br><span class="line">        git:</span><br><span class="line">          uri: https:<span class="comment">//github.com/ndrlslz/micro-service</span></span><br><span class="line">          search-paths: <span class="string">'/config-data/&#123;application&#125;/&#123;profile&#125;'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">server</span>:</span><br><span class="line">  port: <span class="number">1201</span></span><br></pre></td></tr></table></figure></p>
+<p>我的配置长下面这样：<br><img src="/uploads/config_data.png" alt="config_data"></p>
+<p>启动服务之后，访问配置的URL和配置文件的映射如下：</p>
+<ul>
+<li>/{application}/{profile}[/{label}]</li>
+<li>/{application}-{profile}.yml</li>
+<li>/{label}/{application}-{profile}.yml</li>
+<li>/{application}-{profile}.properties</li>
+<li>/{label}/{application}-{profile}.properties</li>
+</ul>
+<p>上面的URL会访问<code>{application}-{profile}.properties</code>文件, 上面的label表示git的branch。比如<code>http://localhost:1201/service-order/docker</code>可以访问到上图我的配置中的<code>/config-data/service-order/docker/application.yml</code>配置。</p>
+<h4 id="客户端">客户端</h4><p>导入依赖<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">compile</span><span class="params">(<span class="string">"org.springframework.cloud:spring-cloud-starter-config"</span>)</span></span></span><br></pre></td></tr></table></figure></p>
+<p>在<code>bootstrap.properties</code>中配置服务端的信息。<br><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">spring</span>:</span><br><span class="line">  <span class="attribute">application</span>:</span><br><span class="line">    <span class="attribute">name</span>: bff</span><br><span class="line">  <span class="attribute">cloud</span>:</span><br><span class="line">    <span class="attribute">config</span>:</span><br><span class="line">      <span class="attribute">enabled</span>: true</span><br><span class="line">      <span class="attribute">fail-fast</span>: true <span class="comment">//如果无法获取配置，则在启动阶段就失败。</span></span><br><span class="line">      <span class="attribute">uri</span>: <span class="attribute">http</span>:<span class="comment">//localhost:1201/</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">management</span>:</span><br><span class="line">  <span class="attribute">security</span>:</span><br><span class="line">    <span class="attribute">enabled</span>: false</span><br></pre></td></tr></table></figure></p>
+<p>这样bff服务在启动的时候，因为<code>spring.application.name=bff</code>, profile默认为<code>default</code>， 所以便会去获取<code>/config-data/bff/default/application.yml</code></p>
+<h3 id="高可用">高可用</h3><p>在生产环境中，由于其他服务高度依赖于配置中心，通常将配置中心部署为高可用的集群。<br><img src="/uploads/config_ha.png" alt="config_ha"></p>
+<p>让配置中心的集群都指向同一个Git配置仓库，并且将配置中心也注册到Eureka中，这样客户端可以通过客户端负载均衡从其中一个配置中心拉取配置。</p>
+<p>将配置信息通过常规做法，引入eureka，将其注册到Eureka Server上，然后客户端通过serviceId去eureka上发现配置中心的服务。<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">spring<span class="class">.cloud</span><span class="class">.config</span><span class="class">.discovery</span><span class="class">.enabled</span>=true</span><br><span class="line">spring<span class="class">.cloud</span><span class="class">.config</span><span class="class">.discovery</span><span class="class">.serviceId</span>=config-server</span><br></pre></td></tr></table></figure></p>
+<h3 id="配置刷新">配置刷新</h3><p>由于这些配置是在客户端启动的时候去拉取的，如果要实现应用在运行过程中刷新，需要引入<code>actuator</code>监控模块。其中引入了<code>/refresh</code>功能。</p>
+<p>在需要支持刷新的变量的类上面加注解<code>@RefreshScope</code>。<br><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">@RestController</span></span><br><span class="line"><span class="variable">@RefreshScope</span></span><br><span class="line">public class ShopController &#123;</span><br><span class="line">    <span class="variable">@Value</span>(<span class="string">"$&#123;custom_param&#125;"</span>)</span><br><span class="line">    private String customParam;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>当配置发生变化的时候，发送POST请求到<code>/refresh</code>的endpoint，便可以实现配置刷新。 如果项目简单，可以结合Git的Webhook来实现自动刷新。<br>但由于微服务的地址是动态改变的，以及微服务往往有很多的单独的服务，所以无法去维护Webhook，这时需要依赖Spring Cloud Bus。</p>
+<p><img src="/uploads/config_bus.png" alt="config_bus"></p>
+<p>1、提交代码触发post请求给bus/refresh<br>2、server端接收到请求并发送给Spring Cloud Bus<br>3、Spring Cloud bus接到消息并通知给其它客户端<br>4、其它客户端接收到通知，请求Server端获取最新配置<br>5、全部客户端均获取到最新的配置</p>
+<h3 id="参考文档">参考文档</h3><p><a href="http://blog.didispace.com/spring-cloud-starter-dalston-3/" target="_blank" rel="external">配置中心</a><br><a href="http://tech.lede.com/2017/06/12/rd/server/springCloudConfig/" target="_blank" rel="external">网易博客</a><br><a href="http://www.ityouknow.com/springcloud/2017/05/26/springcloud-config-eureka-bus.html" target="_blank" rel="external">配置刷新</a></p>
 
       
     </div>
@@ -304,17 +308,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/10/10/知乎日报SDK/" rel="next" title="知乎日报SDK">
-                <i class="fa fa-chevron-left"></i> 知乎日报SDK
+              <a href="/2018/07/15/Spring-Cloud-三/" rel="next" title="Spring Cloud(三)">
+                <i class="fa fa-chevron-left"></i> Spring Cloud(三)
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/02/28/Protobuf学习/" rel="prev" title="Protobuf学习">
-                Protobuf学习 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -340,8 +340,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/01/19/SPI实现可插拔组件/"
-           data-title="SPI实现可插拔组件" data-url="http://yoursite.com/2017/01/19/SPI实现可插拔组件/">
+      <div class="ds-thread" data-thread-key="2018/08/28/Spring-Cloud-四/"
+           data-title="Spring Cloud(四)" data-url="http://yoursite.com/2018/08/28/Spring-Cloud-四/">
       </div>
     
   </div>
@@ -450,7 +450,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#概念"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本用法"><span class="nav-number">2.</span> <span class="nav-text">基本用法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#接口和实现类"><span class="nav-number">2.1.</span> <span class="nav-text">接口和实现类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#定义接口和对应实现的文件"><span class="nav-number">2.2.</span> <span class="nav-text">定义接口和对应实现的文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用方式"><span class="nav-number">2.3.</span> <span class="nav-text">使用方式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可插拔组件的实现"><span class="nav-number">3.</span> <span class="nav-text">可插拔组件的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Core模块"><span class="nav-number">3.1.</span> <span class="nav-text">Core模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Gson模块"><span class="nav-number">3.2.</span> <span class="nav-text">Gson模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Jackson模块"><span class="nav-number">3.3.</span> <span class="nav-text">Jackson模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用方式-1"><span class="nav-number">3.4.</span> <span class="nav-text">使用方式</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring_Cloud_Config"><span class="nav-number">1.</span> <span class="nav-text">Spring Cloud Config</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#简介"><span class="nav-number">1.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本用法"><span class="nav-number">1.2.</span> <span class="nav-text">基本用法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#服务端"><span class="nav-number">1.2.1.</span> <span class="nav-text">服务端</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#客户端"><span class="nav-number">1.2.2.</span> <span class="nav-text">客户端</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高可用"><span class="nav-number">1.3.</span> <span class="nav-text">高可用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置刷新"><span class="nav-number">1.4.</span> <span class="nav-text">配置刷新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文档"><span class="nav-number">1.5.</span> <span class="nav-text">参考文档</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
