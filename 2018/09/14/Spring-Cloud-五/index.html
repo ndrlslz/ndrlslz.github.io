@@ -57,22 +57,31 @@
 
 
 
-<meta name="description" content="因为之前学习了saltstack，所以有个简单的想法，想写个salt management UI，这样就不用输入繁琐的命令，方便管理和运维。由于没多少时间，就做了个简单的demo，仅仅写了登陆，key管理，远程执行minion的cmd命令的功能，在这里记录下。
-涉及框架demo采用springMVC + velocity + bootstrap框架。">
+<meta name="description" content="Zuul简介之前的微服务都是内部之间相互调用，但是如果让外部来调用我们的微服务，我们需要服务网关来作为统一的入口。
+
+通过提供统一的Endpoint入口，来降低外部客户端的调用复杂度，外部客户端只需要把它当成一个服务即可，不需要关心内部众多的微服务。
+将和业务逻辑无关的服务剥离出来，比如认证鉴权，限流，审计等等。
+通过网关，可以容易的实现蓝绿部署，金丝雀部署等。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Salt UI Demo">
-<meta property="og:url" content="http://yoursite.com/2016/01/16/Salt-UI-Demo/index.html">
+<meta property="og:title" content="Spring Cloud(五)">
+<meta property="og:url" content="http://yoursite.com/2018/09/14/Spring-Cloud-五/index.html">
 <meta property="og:site_name" content="霹雳啪啦程序汪">
-<meta property="og:description" content="因为之前学习了saltstack，所以有个简单的想法，想写个salt management UI，这样就不用输入繁琐的命令，方便管理和运维。由于没多少时间，就做了个简单的demo，仅仅写了登陆，key管理，远程执行minion的cmd命令的功能，在这里记录下。
-涉及框架demo采用springMVC + velocity + bootstrap框架。">
-<meta property="og:image" content="http://yoursite.com/uploads/cmd.jpg">
-<meta property="og:image" content="http://yoursite.com/uploads/key_ui.jpg">
-<meta property="og:image" content="http://yoursite.com/uploads/cmd_ui.jpg">
-<meta property="og:updated_time" content="2016-04-17T10:53:16.710Z">
+<meta property="og:description" content="Zuul简介之前的微服务都是内部之间相互调用，但是如果让外部来调用我们的微服务，我们需要服务网关来作为统一的入口。
+
+通过提供统一的Endpoint入口，来降低外部客户端的调用复杂度，外部客户端只需要把它当成一个服务即可，不需要关心内部众多的微服务。
+将和业务逻辑无关的服务剥离出来，比如认证鉴权，限流，审计等等。
+通过网关，可以容易的实现蓝绿部署，金丝雀部署等。">
+<meta property="og:image" content="http://yoursite.com/uploads/zuul_filter.png">
+<meta property="og:image" content="http://yoursite.com/uploads/sleuth_trace.png">
+<meta property="og:image" content="http://yoursite.com/uploads/zipkin.png">
+<meta property="og:updated_time" content="2018-09-14T15:35:33.066Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Salt UI Demo">
-<meta name="twitter:description" content="因为之前学习了saltstack，所以有个简单的想法，想写个salt management UI，这样就不用输入繁琐的命令，方便管理和运维。由于没多少时间，就做了个简单的demo，仅仅写了登陆，key管理，远程执行minion的cmd命令的功能，在这里记录下。
-涉及框架demo采用springMVC + velocity + bootstrap框架。">
+<meta name="twitter:title" content="Spring Cloud(五)">
+<meta name="twitter:description" content="Zuul简介之前的微服务都是内部之间相互调用，但是如果让外部来调用我们的微服务，我们需要服务网关来作为统一的入口。
+
+通过提供统一的Endpoint入口，来降低外部客户端的调用复杂度，外部客户端只需要把它当成一个服务即可，不需要关心内部众多的微服务。
+将和业务逻辑无关的服务剥离出来，比如认证鉴权，限流，审计等等。
+通过网关，可以容易的实现蓝绿部署，金丝雀部署等。">
 
 
 
@@ -90,7 +99,7 @@
   };
 </script>
 
-  <title> Salt UI Demo | 霹雳啪啦程序汪 </title>
+  <title> Spring Cloud(五) | 霹雳啪啦程序汪 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -218,7 +227,7 @@
             
             
               
-                Salt UI Demo
+                Spring Cloud(五)
               
             
           </h1>
@@ -230,8 +239,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-01-16T00:13:25+08:00" content="2016-01-16">
-              2016-01-16
+            <time itemprop="dateCreated" datetime="2018-09-14T23:28:59+08:00" content="2018-09-14">
+              2018-09-14
             </time>
           </span>
 
@@ -241,8 +250,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/01/16/Salt-UI-Demo/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/16/Salt-UI-Demo/" itemprop="commentsCount"></span>
+                <a href="/2018/09/14/Spring-Cloud-五/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/09/14/Spring-Cloud-五/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -252,7 +261,7 @@
 
           
           
-             <span id="/2016/01/16/Salt-UI-Demo/" class="leancloud_visitors" data-flag-title="Salt UI Demo">
+             <span id="/2018/09/14/Spring-Cloud-五/" class="leancloud_visitors" data-flag-title="Spring Cloud(五)">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -272,29 +281,51 @@
       
 
       
-        <p>因为之前学习了saltstack，所以有个简单的想法，想写个salt management UI，这样就不用输入繁琐的命令，方便管理和运维。<br>由于没多少时间，就做了个简单的demo，仅仅写了登陆，key管理，远程执行minion的cmd命令的功能，在这里记录下。</p>
-<h3 id="涉及框架">涉及框架</h3><p>demo采用springMVC + velocity + bootstrap框架。</p>
-<hr>
+        <h2 id="Zuul">Zuul</h2><h3 id="简介">简介</h3><p>之前的微服务都是内部之间相互调用，但是如果让外部来调用我们的微服务，我们需要服务网关来作为统一的入口。</p>
+<ul>
+<li>通过提供统一的Endpoint入口，来降低外部客户端的调用复杂度，外部客户端只需要把它当成一个服务即可，不需要关心内部众多的微服务。</li>
+<li>将和业务逻辑无关的服务剥离出来，比如认证鉴权，限流，审计等等。</li>
+<li>通过网关，可以容易的实现蓝绿部署，金丝雀部署等。</li>
+</ul>
 <a id="more"></a>
-<h3 id="方法介绍">方法介绍</h3><p>原理主要还是通过调用salt-api来实现各种操作。</p>
-<h4 id="1-Key_management">1.Key management</h4><p>salt中， <strong>Wheel</strong> module是对key操作的一个封装， 通过调用wheel模块的api，实现key的accept，delete，reject，list等操作。</p>
-<p>Wheel api参考： <a href="https://docs.saltstack.com/en/latest/ref/wheel/all/salt.wheel.key.html#module-salt.wheel.key" target="_blank" rel="external">Wheel API</a></p>
-<p>调用方式，这里用list key举例。</p>
-<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">curl -X <span class="keyword">POST</span> -Ssk -i https:<span class="comment">//&lt;master ip&gt;:8000/login \</span></span><br><span class="line">-<span class="keyword">H</span> <span class="string">"Accept: application/x-yaml"</span> -<span class="keyword">d</span> username=&lt;your username&gt; \</span><br><span class="line">-<span class="keyword">d</span> password=&lt;your password&gt; -<span class="keyword">d</span> eauth=pam | awk '/<span class="keyword">token</span>/ &#123;printf <span class="label">$2&#125;</span>' &gt; ~/<span class="keyword">token</span></span><br><span class="line"></span><br><span class="line">curl -Ssk -i https:<span class="comment">//&lt;master ip&gt;:8000/ \</span></span><br><span class="line">-<span class="keyword">H</span> <span class="string">"X-Auth-Token: `cat ~/token`"</span> -<span class="keyword">H</span> <span class="string">"Accept: application/x-yaml"</span> \</span><br><span class="line">-<span class="keyword">d</span> client='wheel' -<span class="keyword">d</span> fun='key.list_all'</span><br></pre></td></tr></table></figure>
-<h4 id="2-Run_cmd">2.Run cmd</h4><p><strong>Execution</strong> module是远程执行一些function的模块，其中，cmd.run这个function就是执行minion的shell命令了。当然，其他function也可以执行，我的demo里只实现了cmd.run这个function。</p>
-<p>Execution module参考： <a href="https://docs.saltstack.com/en/latest/ref/modules/all/index.html" target="_blank" rel="external">Execution module</a><br>cmd.run function参考: <a href="https://docs.saltstack.com/en/latest/ref/modules/all/salt.modules.cmdmod.html#module-salt.modules.cmdmod" target="_blank" rel="external">cmd.run funciton</a></p>
-<p>调用方式举例：</p>
-<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">curl -X <span class="keyword">POST</span> -Ssk -i https:<span class="comment">//&lt;master ip&gt;:8000/login \</span></span><br><span class="line">-<span class="keyword">H</span> <span class="string">"Accept: application/x-yaml"</span> -<span class="keyword">d</span> username=&lt;your username&gt; \</span><br><span class="line">-<span class="keyword">d</span> password=&lt;your password&gt; -<span class="keyword">d</span> eauth=pam | awk '/<span class="keyword">token</span>/ &#123;printf <span class="label">$2&#125;</span>' &gt; ~/<span class="keyword">token</span></span><br><span class="line"></span><br><span class="line">curl -Ssk -i https:<span class="comment">//&lt;master ip&gt;:8000/ \</span></span><br><span class="line">-<span class="keyword">H</span> <span class="string">"X-Auth-Token: `cat ~/token`"</span> -<span class="keyword">H</span> <span class="string">"Accept: application/x-yaml"</span> \</span><br><span class="line">-<span class="keyword">d</span> client='<span class="keyword">local</span>' -<span class="keyword">d</span> fun='cmd.<span class="keyword">run</span>' -<span class="keyword">d</span> tgt='minion_id' -<span class="keyword">d</span> arg='df -<span class="keyword">h</span>'</span><br></pre></td></tr></table></figure>
-<p><img src="/uploads/cmd.jpg" alt="cmd运行结果"></p>
-<hr>
-<h3 id="UI">UI</h3><p>然后就是调用api来实现功能，展示页面了。<br>调api部分，我比较懒，直接用了我们项目的httpclient库了。<br>页面部分，我从bootstrap官网下载的页面来用。</p>
-<p><strong>Key Management UI</strong></p>
-<p><img src="/uploads/key_ui.jpg" alt="key management ui"></p>
-<p><strong>Cmd Run UI</strong></p>
-<p><img src="/uploads/cmd_ui.jpg" alt="cmd run ui"></p>
-<hr>
-<h3 id="demo配置">demo配置</h3><p>如果要运行demo，需要：<br>1.salt-api正确配置，参考： <a href="http://www.saltstack.cn/projects/cssug-kb/wiki/salt-api-deploy-and-use" target="_blank" rel="external">salt-api配置</a><br>2.salt user权限正确配置，可参考上一篇文章。<br>3.demo中，classpath下account.properties，需要配置ip_url,username和password。</p>
-<p>代码地址： <a href="https://github.com/ndrlslz/SaltManagement" target="_blank" rel="external">demo代码</a></p>
+<h3 id="基本用法">基本用法</h3><p>在应用上添加注解<code>@EnableZuulProxy</code>， 并将其注册到Eureka上，<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@SpringCloudApplication</span></span><br><span class="line"><span class="annotation">@EnableZuulProxy</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Application</span> &#123;</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="typename">void</span> main(String[] args) &#123;</span><br><span class="line">        <span class="keyword">new</span> SpringApplicationBuilder(Application.<span class="keyword">class</span>).web(<span class="literal">true</span>).run(args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>由于整合了Eureka，网关默认会添加一些路由，它会去注册中心获取服务，自动的加上对应的路由。<br>比如说注册中心有个<code>hello-service</code>服务，网关会自动将<code>/hello-service/**</code>的转发给<code>hello-service</code>服务。</p>
+<h3 id="过滤器">过滤器</h3><p>Filter用来对通过网关的请求进行过滤，它有4个生命周期，<code>pre</code>, <code>route</code>, <code>post</code>, <code>error</code>， 如下图所示：<br><img src="/uploads/zuul_filter.png" alt="zuul_filter"></p>
+<ul>
+<li><strong>PRE</strong>： 这种过滤器在请求被路由之前调用。我们可利用这种过滤器实现身份验证、在集群中选择请求的微服务、记录调试信息等。</li>
+<li><strong>ROUTING</strong>：这种过滤器将请求路由到微服务。这种过滤器用于构建发送给微服务的请求，并使用Apache HttpClient或Netfilx Ribbon请求微服务。</li>
+<li><strong>POST</strong>：这种过滤器在路由到微服务以后执行。这种过滤器可用来为响应添加标准的HTTP Header、收集统计信息和指标、将响应从微服务发送给客户端等。</li>
+<li><strong>ERROR</strong>：在其他阶段发生错误时执行该过滤器。 除了默认的过滤器类型，Zuul还允许我们创建自定义的过滤器类型。例如，我们可以定制一种STATIC类型的过滤器，直接在Zuul中生成响应，而不将请求转发到后端的微服务。</li>
+</ul>
+<p>通过继承<code>ZuulFilter</code>可以自定义Filter。</p>
+<h2 id="Sleuth_&amp;_Zipkin">Sleuth &amp; Zipkin</h2><p>在微服务中，服务之间的调用关系复杂，通常来自客户端的请求，在后端会经过多个不同的微服务，形成一条分布式的链路。那么Sleuth和Zipkin就是用来进行分布式链路的跟踪，可以很容易的发现一条链路上到底哪里出了问题，或者哪里耗时比较长等等。Sleuth用于收集分布式的链路信息，将其通过http或mq发送给Zipkin展示出来。</p>
+<h3 id="基本用法-1">基本用法</h3><p>搭建Zipkin server。 单独起个Zipkin服务来收集信息。</p>
+<ol>
+<li><p>引入依赖</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">compile</span><span class="params">(<span class="string">'io.zipkin.java:zipkin-server'</span>)</span></span></span><br><span class="line"><span class="function"><span class="title">compile</span><span class="params">(<span class="string">'io.zipkin.java:zipkin-autoconfigure-ui'</span>)</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动类添加<code>@EnableZipkinServer</code>注解</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@SpringBootApplication</span></span><br><span class="line"><span class="annotation">@EnableZipkinServer</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Application</span> &#123;</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="typename">void</span> main(String[] args) &#123;</span><br><span class="line">        SpringApplication.run(Application.<span class="keyword">class</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置如下</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">spring</span>:</span><br><span class="line">  <span class="attribute">application</span>:</span><br><span class="line">    <span class="attribute">name</span>: zipkin-server</span><br><span class="line"></span><br><span class="line"><span class="attribute">server</span>:</span><br><span class="line">  <span class="attribute">port</span>: <span class="number">9411</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">eureka</span>:</span><br><span class="line">  <span class="attribute">client</span>:</span><br><span class="line">    <span class="attribute">serviceUrl</span>:</span><br><span class="line">      <span class="attribute">defaultZone</span>: <span class="attribute">http</span>:<span class="comment">//localhost:8761/eureka</span></span><br><span class="line"></span><br><span class="line"><span class="attribute">management</span>:</span><br><span class="line">  <span class="attribute">security</span>:</span><br><span class="line">    <span class="attribute">enabled</span>: false</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在需要跟踪的服务中引入依赖，就会默认将链路信息发送给9411端口的Zipkin server</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">compile</span><span class="params">(<span class="string">'org.springframework.cloud:spring-cloud-starter-sleuth'</span>)</span></span></span><br><span class="line"><span class="function"><span class="title">compile</span><span class="params">(<span class="string">'org.springframework.cloud:spring-cloud-starter-zipkin'</span>)</span></span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>然后在打出来的日志中就会发现多了如下信息。<br><code>[bff,148ab1e00b07d6b2,6faee1e38537d312,false]</code></p>
+<p><strong>bff</strong>表示应用的名称<br><strong>148ab1e00b07d6b2</strong>表示TraceID，同一条链路会使用同一个TraceID，利用它将分布式的信息链接起来。<br><strong>6faee1e38537d312</strong>表示SpanID，它表示一个基本的工作单元，比如说发送一个HTTP请求，<br><strong>false</strong>表示是否发送给zipkin。为了性能的原因，默认采样率为10%</p>
+<h3 id="收集机制">收集机制</h3><p>Sleuth参考<a href="https://research.google.com/pubs/pub36356.html" target="_blank" rel="external">Dapper’s</a>的论文实现。</p>
+<ul>
+<li>Span: 基本的工作单元，比如发送一个RPC请求是一个新的Span。Span可以开始和停止，这样来跟踪消耗的时间，一旦开始了一个Span，之后就必须停止它。</li>
+<li>Trace: 一系列的Span组成的树形结构。</li>
+<li>Annotation: 用来记录时间的发生，比如cs(Client Sent), sr(Server Received), ss(Server sent), cr(Client Received)</li>
+</ul>
+<p><img src="/uploads/sleuth_trace.png" alt="sleuth_trace"></p>
+<p>我创建了4个服务模拟了上面的4个service。最终在Zipkin上得到下图：<br><img src="/uploads/zipkin.png" alt="zipkin"></p>
+<p>可以看到在ExpandAll下面一列列出了对应的Span数量，总过是7个，对应了官网的图。但是Total Spans却是4个，这是因为zipkin进行的Span的合并。一个Span和客户端调用api-gateway有关，剩下3个和内部3次RPC调用有关。</p>
+<h2 id="参考文档">参考文档</h2><p><a href="http://tech.lede.com/2017/05/16/rd/server/SpringCloudZuul/" target="_blank" rel="external">网易zuul博客</a><br><a href="http://www.ityouknow.com/springcloud/2018/01/20/spring-cloud-zuul.html" target="_blank" rel="external">zuul</a><br><a href="http://blog.didispace.com/spring-cloud-starter-dalston-6-3/" target="_blank" rel="external">zuul过滤器</a><br><a href="https://cloud.spring.io/spring-cloud-sleuth/single/spring-cloud-sleuth.html#_distributed_tracing_with_zipkin" target="_blank" rel="external">官网sleuth</a><br><a href="http://blog.didispace.com/spring-cloud-starter-dalston-8-1/" target="_blank" rel="external">sleuth</a><br><a href="http://tech.lede.com/2017/04/19/rd/server/SpringCloudSleuth/" target="_blank" rel="external">网易sleuth博客</a></p>
 
       
     </div>
@@ -306,17 +337,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/01/09/Heat-Salt自动部署服务/" rel="next" title="Heat+Salt自动部署服务">
-                <i class="fa fa-chevron-left"></i> Heat+Salt自动部署服务
+              <a href="/2018/08/28/Spring-Cloud-四/" rel="next" title="Spring Cloud(四)">
+                <i class="fa fa-chevron-left"></i> Spring Cloud(四)
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/01/20/Openstack-neutron学习/" rel="prev" title="Openstack neutron学习">
-                Openstack neutron学习 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -342,8 +369,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/01/16/Salt-UI-Demo/"
-           data-title="Salt UI Demo" data-url="http://yoursite.com/2016/01/16/Salt-UI-Demo/">
+      <div class="ds-thread" data-thread-key="2018/09/14/Spring-Cloud-五/"
+           data-title="Spring Cloud(五)" data-url="http://yoursite.com/2018/09/14/Spring-Cloud-五/">
       </div>
     
   </div>
@@ -452,7 +479,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#涉及框架"><span class="nav-number">1.</span> <span class="nav-text">涉及框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法介绍"><span class="nav-number">2.</span> <span class="nav-text">方法介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Key_management"><span class="nav-number">2.1.</span> <span class="nav-text">1.Key management</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Run_cmd"><span class="nav-number">2.2.</span> <span class="nav-text">2.Run cmd</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UI"><span class="nav-number">3.</span> <span class="nav-text">UI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#demo配置"><span class="nav-number">4.</span> <span class="nav-text">demo配置</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Zuul"><span class="nav-number">1.</span> <span class="nav-text">Zuul</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#简介"><span class="nav-number">1.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本用法"><span class="nav-number">1.2.</span> <span class="nav-text">基本用法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#过滤器"><span class="nav-number">1.3.</span> <span class="nav-text">过滤器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sleuth_&_Zipkin"><span class="nav-number">2.</span> <span class="nav-text">Sleuth & Zipkin</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本用法-1"><span class="nav-number">2.1.</span> <span class="nav-text">基本用法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#收集机制"><span class="nav-number">2.2.</span> <span class="nav-text">收集机制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">3.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
