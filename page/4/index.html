@@ -225,6 +225,111 @@
             
               
                 
+                <a class="post-title-link" href="/2016/01/20/Openstack-neutron学习/" itemprop="url">
+                  Openstack neutron学习
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-01-20T22:24:15+08:00" content="2016-01-20">
+              2016-01-20
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/01/20/Openstack-neutron学习/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/20/Openstack-neutron学习/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/01/20/Openstack-neutron学习/" class="leancloud_visitors" data-flag-title="Openstack neutron学习">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>最近在学习openstack neutron的东西，记录下自己的一些理解。</p>
+<h3 id="网络基础知识">网络基础知识</h3><p><strong>Switches &amp; Vlan</strong><br>交换机的作用是来连接设备，实现互通的。network host之间通过交换机连接起来，当host A第一次向host B发送帧数据时，先广播出去，而MAC地址相符的host B便接受到数据，并返回给A，完成通信。这时交换机也会自学习MAC地址和Port的对应关系，下次便可直接向对应MAC地址的Port发送帧数据。</p>
+<p>那交换机中进行隔离是通过划分vlan的方式，openstack中也是通过这种方式来隔离tenant的network。network属性的segmentation_id即为vlan_id,如果network不share的话，就只有这个tenant可以访问。</p>
+<p>当交换机的某个vlan的port被占完后，比如交换机A的vlan10的port被占完了，需要用到第二个交换机B，也给B划分vlan10，然后将A和B连接起来，连接的端口设置为trunk port，这样从trunk port出去的数据会加上vlan tag的标志，只有vlan tag一样的才能收到。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/01/20/Openstack-neutron学习/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/01/16/Salt-UI-Demo/" itemprop="url">
                   Salt UI Demo
                 </a>
@@ -682,7 +787,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">34</span>
+              <span class="site-state-item-count">35</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
