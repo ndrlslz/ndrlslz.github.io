@@ -225,6 +225,113 @@
             
               
                 
+                <a class="post-title-link" href="/2016/03/03/Salt自定义module/" itemprop="url">
+                  Salt自定义module
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-03T20:06:41+08:00" content="2016-03-03">
+              2016-03-03
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/03/Salt自定义module/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/03/Salt自定义module/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/03/03/Salt自定义module/" class="leancloud_visitors" data-flag-title="Salt自定义module">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>Saltstack自带了很多module供使用，但需要自己实现一些功能的时候，就需要来自定义module了。</p>
+<h3 id="Salt_Modules">Salt Modules</h3><h4 id="State_Modules和Execution_Modules">State Modules和Execution Modules</h4><p>Salt有2种Modules，State Modules和Execution Modules。</p>
+<ol>
+<li>Execution Modules: 它是通过salt的命令行调用的。当执行相应的execution module的时候，会发送给minion相应的命令，让其马上执行这个命令。</li>
+<li>State Modules: 它是通过states文件调用的。它更倾向于让minion保持某种状态或结果。和Execution Modules不同的是，当执行State Modules的时候，它会检测minion有没有达到state modules想让它达到的效果，比如pkg.installed，它会检测minion有没有装这个软件，如果没有，才会去安装。</li>
+</ol>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/03/03/Salt自定义module/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/01/20/Openstack-neutron学习/" itemprop="url">
                   Openstack neutron学习
                 </a>
@@ -787,7 +894,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">35</span>
+              <span class="site-state-item-count">36</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
