@@ -3,7 +3,7 @@ date: 2018-09-26 20:30:47
 tags:
 ---
 
-restHttpServer是一个基于Netty的轻量级的HTTP Server，旨在RESTful API的开发。
+相信每个后端程序员都想实现一个自己的Http Server, 这个`restHttpServer`是一个基于Netty的轻量级的HTTP Server，旨在RESTful API的开发。
 
 ## Features
 * 基于NIO模式
