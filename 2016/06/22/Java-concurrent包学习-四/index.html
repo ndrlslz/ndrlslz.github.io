@@ -1,0 +1,847 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.0.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.0">
+
+
+
+
+
+
+<meta name="description" content="上一篇通过使用锁来保证线程安全，这一篇学习使用原子变量。  CAS(compare-and-swap)概念CAS是在CPU层面支持的指令，现代的CPU大部分都支持这个指令，它能对内存的共享数据进行原子的操作，因此可以保证线程安全。 语义这个操作用C语言来描述，就是下面的代码:1234567int compare_and_swap (int* reg, int oldval, int newval)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java concurrent包学习(四)">
+<meta property="og:url" content="http://yoursite.com/2016/06/22/Java-concurrent包学习-四/index.html">
+<meta property="og:site_name" content="霹雳啪啦程序汪">
+<meta property="og:description" content="上一篇通过使用锁来保证线程安全，这一篇学习使用原子变量。  CAS(compare-and-swap)概念CAS是在CPU层面支持的指令，现代的CPU大部分都支持这个指令，它能对内存的共享数据进行原子的操作，因此可以保证线程安全。 语义这个操作用C语言来描述，就是下面的代码:1234567int compare_and_swap (int* reg, int oldval, int newval)">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2021-01-09T14:15:24.219Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java concurrent包学习(四)">
+<meta name="twitter:description" content="上一篇通过使用锁来保证线程安全，这一篇学习使用原子变量。  CAS(compare-and-swap)概念CAS是在CPU层面支持的指令，现代的CPU大部分都支持这个指令，它能对内存的共享数据进行原子的操作，因此可以保证线程安全。 语义这个操作用C语言来描述，就是下面的代码:1234567int compare_and_swap (int* reg, int oldval, int newval)">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: '[object Object]',
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Java concurrent包学习(四) | 霹雳啪啦程序汪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d5e930abbb82f9699e861f3eb92eb836";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">霹雳啪啦程序汪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Java concurrent包学习(四)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-22T00:42:19+08:00" content="2016-06-22">
+              2016-06-22
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/06/22/Java-concurrent包学习-四/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/22/Java-concurrent包学习-四/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/06/22/Java-concurrent包学习-四/" class="leancloud_visitors" data-flag-title="Java concurrent包学习(四)">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>上一篇通过使用锁来保证线程安全，这一篇学习使用原子变量。</p>
+<hr>
+<h2 id="CAS-compare-and-swap"><a href="#CAS-compare-and-swap" class="headerlink" title="CAS(compare-and-swap)"></a>CAS(compare-and-swap)</h2><p><strong>概念</strong><br>CAS是在CPU层面支持的指令，现代的CPU大部分都支持这个指令，它能对内存的共享数据进行原子的操作，因此可以保证线程安全。</p>
+<p><strong>语义</strong><br>这个操作用C语言来描述，就是下面的代码:<br><figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> compare_and_swap (<span class="keyword">int</span>* <span class="keyword">reg</span>, <span class="keyword">int</span> oldval, <span class="keyword">int</span> newval)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">int</span> old_reg_val = *<span class="keyword">reg</span>;</span><br><span class="line">  <span class="keyword">if</span> (old_reg_val == oldval)</span><br><span class="line">     *<span class="keyword">reg</span> = newval;</span><br><span class="line">  <span class="keyword">return</span> old_reg_val;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<p>上面代码的意思就是: 我想改变*reg 这个地址的变量，我需要传入我认为的这个地址的值是多少，以及我想改变的新值。如果*reg中现在的值是我认为的值，就把它改成新值。如果*reg现在的值不是我认为的值，即已经被其他线程改了，则返回*reg现在的正确的那个值。</p>
+<p>一句话来描述就是:<br>我认为原有的值应该是什么，如果是，则将原有的值更新为新值，否则不做修改，并告诉我原来的值是多少。</p>
+<hr>
+<h2 id="AtomicInteger"><a href="#AtomicInteger" class="headerlink" title="AtomicInteger"></a>AtomicInteger</h2><p>在内部，原子类大量使用CAS，这个原子指令是被现代的CPU支持的，这个指令要比通过锁实现的同步速度快。因此如果你只是想要并发的更改一个变量的话，优先使用原子类，而不是锁。</p>
+<p>下面是使用<code>AtomicInteger</code>的例子:<br><figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">AtomicInteger atomicInt = <span class="keyword">new</span> <span class="type">AtomicInteger</span>(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">ExecutorService executor = Executors.<span class="keyword">new</span><span class="type">FixedThreadPool</span>(<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">IntStream.range(<span class="number">0</span>, <span class="number">1000</span>)</span><br><span class="line">    .forEach(i -&gt; executor.submit(atomicInt:<span class="type"></span>:incrementAndGet));</span><br><span class="line"></span><br><span class="line">executor.shutdown();</span><br><span class="line">executor.awaitTermination(<span class="number">60</span>, TimeUnit.SECONDS);</span><br><span class="line"></span><br><span class="line">System.out.println(atomicInt.<span class="keyword">get</span>());    <span class="comment">// =&gt; 1000</span></span><br></pre></td></tr></table></figure></p>
+<p>通过使用<code>AtomicInteger</code>来替代<code>Integer</code>，我们可以在不用自己保证同步的情况下，并发的，线程安全的改变一个变量，<code>incrementAndGet()</code>是个原子操作，因此最后的结果是线程安全的。</p>
+<p>AtomicInteger也支持多种原子操作，<code>updateAndGet()</code>方法接受一个lambda表达式来更改变量。<br><figure class="highlight xl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">AtomicInteger atomicInt = new AtomicInteger(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">ExecutorService executor = Executors.newFixedThreadPool(<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">IntStream.range(<span class="number">0</span>, <span class="number">1000</span>)</span><br><span class="line">        .<span class="function"><span class="title">forEach</span>(i -&gt;</span> &#123;</span><br><span class="line">            R<span class="function"><span class="title">unnable</span> task = () -&gt;</span></span><br><span class="line">                    <span class="function"><span class="title">atomicInt</span>.updateAndGet(n -&gt;</span> n + <span class="number">2</span>);</span><br><span class="line">            executor.submit(task);</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">executor.shutdown();</span><br><span class="line">executor.awaitTermination(<span class="number">60</span>, TimeUnit.SECONDS);</span><br><span class="line"></span><br><span class="line">System.out.println(atomicInt);</span><br><span class="line"></span><br><span class="line"><span class="comment">//2000</span></span><br></pre></td></tr></table></figure></p>
+<p>和AtomicInteger类似的原子类还有<code>AtomicBoolean</code>,<code>AtomicLong</code>,<code>AtomicReference</code>。</p>
+<hr>
+<h2 id="LongAdder"><a href="#LongAdder" class="headerlink" title="LongAdder"></a>LongAdder</h2><p><code>LongAdder</code>可以用来替代<code>AtomicLong</code>来连续的增加一个变量。</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">LongAdder adder = <span class="keyword">new</span> <span class="type">LongAdder</span>();</span><br><span class="line">ExecutorService executor = Executors.<span class="keyword">new</span><span class="type">FixedThreadPool</span>(<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">IntStream.range(<span class="number">0</span>, <span class="number">1000</span>)</span><br><span class="line">        .forEach(i -&gt; executor.submit(adder:<span class="type"></span>:increment));</span><br><span class="line">executor.shutdown();</span><br><span class="line">executor.awaitTermination(<span class="number">60</span>, TimeUnit.SECONDS);</span><br><span class="line"></span><br><span class="line">System.out.println(adder.sumThenReset());</span><br><span class="line"></span><br><span class="line"><span class="comment">//1000</span></span><br></pre></td></tr></table></figure>
+<p>不同于<code>AtomicLong</code>只保存单个结果的求和方式，这个原子类会保存一组变量来减少线程之间的竞争。这个类更适合于多线程情况下，写大于读的情况。但劣势是它会占用更多的内存。</p>
+<hr>
+<h2 id="ConcurrentMap"><a href="#ConcurrentMap" class="headerlink" title="ConcurrentMap"></a>ConcurrentMap</h2><p><code>ConcurrentMap</code>接口实现了Map接口，几乎是最常用的并发集合。<br>ConcurrentMap的原理是通过锁分段的技术，加锁的粒度只需要在Segment段上，而不需要对整个Map加锁，极大的提高性能。<br>Java8也对这个接口添加了新的功能，下面的代码会演示一些新功能。</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ConcurrentMap&lt;<span class="keyword">String</span>, <span class="keyword">String</span>&gt; <span class="built_in">map</span> = <span class="keyword">new</span> ConcurrentHashMap&lt;&gt;();</span><br><span class="line"><span class="built_in">map</span>.<span class="built_in">put</span>(<span class="string">"foo"</span>, <span class="string">"bar"</span>);</span><br><span class="line"><span class="built_in">map</span>.<span class="built_in">put</span>(<span class="string">"han"</span>, <span class="string">"solo"</span>);</span><br><span class="line"><span class="built_in">map</span>.<span class="built_in">put</span>(<span class="string">"r2"</span>, <span class="string">"d2"</span>);</span><br><span class="line"><span class="built_in">map</span>.<span class="built_in">put</span>(<span class="string">"c3"</span>, <span class="string">"p0"</span>);</span><br></pre></td></tr></table></figure>
+<p><strong>forEach</strong><br><code>forEach()</code>方法接受<code>BiConsumer</code>接口的lambda表达式，将key,value做为参数传入，这个方法可以用来替换for-each的遍历方式。<br><figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">map</span>.forEach<span class="function"><span class="params">((key, value) -&gt; System.out.println(key + <span class="string">":"</span> + value))</span>;</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>putIfAbsent</strong><br><code>putIfAbsent()</code>方法，当key不存在的时候，可以给key赋值，如果key已经存在了，则不变。<br><figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">String</span> value = <span class="built_in">map</span>.putIfAbsent(<span class="string">"c3"</span>, <span class="string">"p1"</span>);</span><br><span class="line">System.out.<span class="built_in">println</span>(value); </span><br><span class="line"></span><br><span class="line"><span class="comment">//p0</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>getOrDefault</strong><br><code>getOrDefault()</code>方法当key不存在的时候，会返回默认值。<br><figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">String</span> value = <span class="built_in">map</span>.getOrDefault(<span class="string">"hi"</span>, <span class="string">"there"</span>);</span><br><span class="line">System.out.<span class="built_in">println</span>(value);</span><br><span class="line"></span><br><span class="line"><span class="comment">//there</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>replaceAll</strong><br><code>replaceAll()</code>方法接受一个<code>BiFunction</code>的lambda表达式，这个表达式接受2个参数，返回1个值。下面的例子展示了 替换掉满足条件的key。<br><figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">map</span>.replaceAll<span class="function"><span class="params">((key, value) -&gt; <span class="string">"r2"</span>.equals(key) ? <span class="string">"d3"</span> : value)</span>;</span></span><br><span class="line"><span class="function"><span class="title">System</span>.<span class="title">out</span>.<span class="title">println</span><span class="params">(<span class="keyword">map</span>.get(<span class="string">"r2"</span>))</span>;</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">//<span class="title">d3</span></span></span><br></pre></td></tr></table></figure></p>
+<p><strong>compute</strong><br><code>compute()</code>方法可以只对单个entry进行操作。<br><figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">map</span>.compute<span class="function"><span class="params">(<span class="string">"foo"</span>, (key, value) -&gt; value + value)</span>;</span></span><br><span class="line"><span class="function"><span class="title">System</span>.<span class="title">out</span>.<span class="title">println</span><span class="params">(<span class="keyword">map</span>.get(<span class="string">"foo"</span>))</span>;</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">//<span class="title">barbar</span></span></span><br></pre></td></tr></table></figure></p>
+<p><strong>merge</strong><br>最后，<code>merge()</code>方法可以对某个key的旧变量和新变量进行合并。 这个方法接受一个key，一个新变量的值，以及<code>BiFunction</code>表达式。<br><figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">map</span>.merge<span class="function"><span class="params">(<span class="string">"foo"</span>, <span class="string">"boo"</span>, (oldVal, newVal) -&gt; newVal + <span class="string">" was "</span> + oldVal)</span>;</span></span><br><span class="line"><span class="function"><span class="title">System</span>.<span class="title">out</span>.<span class="title">println</span><span class="params">(<span class="keyword">map</span>.get(<span class="string">"foo"</span>))</span>;</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">// <span class="title">boo</span> <span class="title">was</span> <span class="title">foo</span></span></span><br></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h2><p>上面的方法是<code>ConcurrentMap</code>接口增加的方法。对于这个接口最常用的实现类<code>ConcurrentHashMap</code>也增加了几个强大的并行计算的功能。它使用的线程池就是上一章提到的<code>ForkJoinPool</code>。</p>
+<p>Java8对这个类增加了3种并行计算的功能，<code>forEach</code>,<code>search</code>,<code>reduce</code>。<br>这些方法的第一个参数都是<code>parallelismThreshold</code>,意为并行计算的阈值，假设设置为500，那么如果你的map的size小于500的话，就不会使用并行计算，如果大于500，就会使用并行计算了。<br>下面的例子中，为了保证使用并行计算，我们将阈值设置为1。</p>
+<p>先创建好ConcurrentHashMap。<br><figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ConcurrentHashMap&lt;<span class="keyword">String</span>, <span class="keyword">String</span>&gt; <span class="built_in">map</span> = <span class="keyword">new</span> ConcurrentHashMap&lt;&gt;();</span><br><span class="line"><span class="built_in">map</span>.<span class="built_in">put</span>(<span class="string">"foo"</span>, <span class="string">"bar"</span>);</span><br><span class="line"><span class="built_in">map</span>.<span class="built_in">put</span>(<span class="string">"han"</span>, <span class="string">"solo"</span>);</span><br><span class="line"><span class="built_in">map</span>.<span class="built_in">put</span>(<span class="string">"r2"</span>, <span class="string">"d2"</span>);</span><br><span class="line"><span class="built_in">map</span>.<span class="built_in">put</span>(<span class="string">"c3"</span>, <span class="string">"p0"</span>);</span><br></pre></td></tr></table></figure></p>
+<p><strong>ForEach</strong><br><code>forEach()</code>方法和上面提到的差不多，除了第一个参数为阈值外，为了表现它的确是并行计算的，我们将线程打印出来。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">map.forEach(1,</span> <span class="string">(key,</span> <span class="string">value)</span> <span class="string">-&gt;</span></span><br><span class="line">    <span class="string">System.out.printf("key:</span> <span class="string">%s;</span> <span class="attr">value:</span> <span class="string">%s;</span> <span class="attr">thread:</span> <span class="string">%s\n",</span></span><br><span class="line">        <span class="string">key,</span> <span class="string">value,</span> <span class="string">Thread.currentThread().getName()));</span></span><br><span class="line"></span><br><span class="line"><span class="string">//</span> <span class="attr">key:</span> <span class="string">r2;</span> <span class="attr">value:</span> <span class="string">d2;</span> <span class="attr">thread:</span> <span class="string">main</span></span><br><span class="line"><span class="string">//</span> <span class="attr">key:</span> <span class="string">foo;</span> <span class="attr">value:</span> <span class="string">bar;</span> <span class="attr">thread:</span> <span class="string">ForkJoinPool.commonPool-worker-1</span></span><br><span class="line"><span class="string">//</span> <span class="attr">key:</span> <span class="string">han;</span> <span class="attr">value:</span> <span class="string">solo;</span> <span class="attr">thread:</span> <span class="string">ForkJoinPool.commonPool-worker-2</span></span><br><span class="line"><span class="string">//</span> <span class="attr">key:</span> <span class="string">c3;</span> <span class="attr">value:</span> <span class="string">p0;</span> <span class="attr">thread:</span> <span class="string">main</span></span><br></pre></td></tr></table></figure>
+<p><strong>Search</strong><br><code>search()</code>方法接受一个阈值，和<code>BiFunction</code>的表达式，表达式写为如果搜索到满足条件的结果，就返回结果，否则返回null。请记住map是无序的，如果有多个满足条件的key，则返回的值是不确定的。</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">String result = <span class="keyword">map</span>.search<span class="function"><span class="params">(<span class="number">1</span>, (key, value) -&gt; &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">    System.out.println(Thread.currentThread().getName());</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">if</span> (<span class="string">"foo"</span>.equals(key)) &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">return</span> value;</span></span></span><br><span class="line"><span class="function"><span class="params">    &#125;</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">return</span> <span class="literal">null</span>;</span></span></span><br><span class="line"><span class="function"><span class="params">&#125;)</span>;</span></span><br><span class="line"><span class="function"><span class="title">System</span>.<span class="title">out</span>.<span class="title">println</span><span class="params">(<span class="string">"Result: "</span> + result)</span>;</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">// <span class="title">ForkJoinPool</span>.<span class="title">commonPool-worker-2</span></span></span><br><span class="line"><span class="function">// <span class="title">main</span></span></span><br><span class="line"><span class="function">// <span class="title">ForkJoinPool</span>.<span class="title">commonPool-worker-3</span></span></span><br><span class="line"><span class="function">// <span class="title">Result</span>: <span class="title">bar</span></span></span><br></pre></td></tr></table></figure>
+<p><strong>Reduce</strong><br><code>reduce()</code>方法在Stream部分接触到了，这里它接受2个<code>BiFunction</code>，第一个Function对每一对key-value操作，并返回单个值。第二个Function将这些值连起来，忽略掉null的值。</p>
+<figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">String</span> result = <span class="built_in">map</span>.reduce(<span class="number">1</span>,</span><br><span class="line">    (<span class="built_in">key</span>, value) -&gt; &#123;</span><br><span class="line">        System.out.<span class="built_in">println</span>(<span class="string">"Transform: "</span> + Thread.currentThread().getName());</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">key</span> + <span class="string">"="</span> + value;</span><br><span class="line">    &#125;,</span><br><span class="line">    (s1, s2) -&gt; &#123;</span><br><span class="line">        System.out.<span class="built_in">println</span>(<span class="string">"Reduce: "</span> + Thread.currentThread().getName());</span><br><span class="line">        <span class="keyword">return</span> s1 + <span class="string">", "</span> + s2;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">System.out.<span class="built_in">println</span>(<span class="string">"Result: "</span> + result);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Transform: ForkJoinPool.commonPool-worker-2</span></span><br><span class="line"><span class="comment">// Transform: main</span></span><br><span class="line"><span class="comment">// Transform: ForkJoinPool.commonPool-worker-3</span></span><br><span class="line"><span class="comment">// Reduce: ForkJoinPool.commonPool-worker-3</span></span><br><span class="line"><span class="comment">// Transform: main</span></span><br><span class="line"><span class="comment">// Reduce: main</span></span><br><span class="line"><span class="comment">// Reduce: main</span></span><br><span class="line"><span class="comment">// Result: r2=d2, c3=p0, han=solo, foo=bar</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><p>本文大部分翻译自<a href="http://winterbe.com/posts/2015/05/22/java8-concurrency-tutorial-atomic-concurrent-map-examples/" target="_blank" rel="noopener">文档</a><br><a href="http://www.cnblogs.com/Mainz/p/3546347.html" target="_blank" rel="noopener">CAS</a></p>
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/08/Java-concurrent包学习-三/" rel="next" title="Java concurrent包学习(三)">
+                <i class="fa fa-chevron-left"></i> Java concurrent包学习(三)
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/30/Java注解学习-一/" rel="prev" title="Java注解学习(一)">
+                Java注解学习(一) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/06/22/Java-concurrent包学习-四/" data-title="Java concurrent包学习(四)" data-url="http://yoursite.com/2016/06/22/Java-concurrent包学习-四/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/uploads/avatar.jpg" alt="ndrlslz">
+          <p class="site-author-name" itemprop="name">ndrlslz</p>
+          <p class="site-description motion-element" itemprop="description">Just Record Something</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">37</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ndrlslz" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2772570770" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> Weibo
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#CAS-compare-and-swap"><span class="nav-number">1.</span> <span class="nav-text">CAS(compare-and-swap)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AtomicInteger"><span class="nav-number">2.</span> <span class="nav-text">AtomicInteger</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LongAdder"><span class="nav-number">3.</span> <span class="nav-text">LongAdder</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ConcurrentMap"><span class="nav-number">4.</span> <span class="nav-text">ConcurrentMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ConcurrentHashMap"><span class="nav-number">5.</span> <span class="nav-text">ConcurrentHashMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">6.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ndrlslz</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  
+
+
+  
+
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.0"></script>
+
+
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ndrlslz"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+
+  
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("qsixHuR8yNbcGca2Km89Dqik", "Wvge03uyJtMH1XUl4yvQ2HsA");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+</body>
+</html>

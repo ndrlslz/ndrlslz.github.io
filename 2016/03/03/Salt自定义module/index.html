@@ -1,0 +1,851 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.0.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.0">
+
+
+
+
+
+
+<meta name="description" content="Saltstack自带了很多module供使用，但需要自己实现一些功能的时候，就需要来自定义module了。 Salt ModulesState Modules和Execution ModulesSalt有2种Modules，State Modules和Execution Modules。  Execution Modules: 它是通过salt的命令行调用的。当执行相应的execution mo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Salt自定义module">
+<meta property="og:url" content="http://yoursite.com/2016/03/03/Salt自定义module/index.html">
+<meta property="og:site_name" content="霹雳啪啦程序汪">
+<meta property="og:description" content="Saltstack自带了很多module供使用，但需要自己实现一些功能的时候，就需要来自定义module了。 Salt ModulesState Modules和Execution ModulesSalt有2种Modules，State Modules和Execution Modules。  Execution Modules: 它是通过salt的命令行调用的。当执行相应的execution mo">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2021-01-09T14:15:24.222Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Salt自定义module">
+<meta name="twitter:description" content="Saltstack自带了很多module供使用，但需要自己实现一些功能的时候，就需要来自定义module了。 Salt ModulesState Modules和Execution ModulesSalt有2种Modules，State Modules和Execution Modules。  Execution Modules: 它是通过salt的命令行调用的。当执行相应的execution mo">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: '[object Object]',
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Salt自定义module | 霹雳啪啦程序汪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d5e930abbb82f9699e861f3eb92eb836";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">霹雳啪啦程序汪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Salt自定义module
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-03T20:06:41+08:00" content="2016-03-03">
+              2016-03-03
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/03/Salt自定义module/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/03/Salt自定义module/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/03/03/Salt自定义module/" class="leancloud_visitors" data-flag-title="Salt自定义module">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Saltstack自带了很多module供使用，但需要自己实现一些功能的时候，就需要来自定义module了。</p>
+<h3 id="Salt-Modules"><a href="#Salt-Modules" class="headerlink" title="Salt Modules"></a>Salt Modules</h3><h4 id="State-Modules和Execution-Modules"><a href="#State-Modules和Execution-Modules" class="headerlink" title="State Modules和Execution Modules"></a>State Modules和Execution Modules</h4><p>Salt有2种Modules，State Modules和Execution Modules。</p>
+<ol>
+<li>Execution Modules: 它是通过salt的命令行调用的。当执行相应的execution module的时候，会发送给minion相应的命令，让其马上执行这个命令。</li>
+<li>State Modules: 它是通过states文件调用的。它更倾向于让minion保持某种状态或结果。和Execution Modules不同的是，当执行State Modules的时候，它会检测minion有没有达到state modules想让它达到的效果，比如pkg.installed，它会检测minion有没有装这个软件，如果没有，才会去安装。</li>
+</ol>
+<a id="more"></a>
+<h4 id="查看Modules"><a href="#查看Modules" class="headerlink" title="查看Modules"></a>查看Modules</h4><p>salt自带了很多的modules，可以在装有master的机器上查看。</p>
+<p><strong>Execution Modules</strong>:</p>
+<blockquote>
+<ol>
+<li>salt ‘minion-id’ sys.list_modules , 这个命令可以查看所有的execution modules。</li>
+<li>salt ‘&lt;minion-id’ sys.list_functions , 这个命令查看所有的execution modules以及modules所拥有的functions。</li>
+<li>salt ‘&lt;minion-id’ sys.doc (modules or functions) , 这个命令可以查看具体某个execution module或其中某个function的具体用法。</li>
+</ol>
+</blockquote>
+<p><strong>State Modules</strong></p>
+<blockquote>
+<ol>
+<li>salt ‘minion-id’ sys.list_state_modules , 这个命令可以查看所有的state modules。</li>
+<li>salt ‘minion-id’ sys.list_state_functions , 这个命令可以查看所有的state modules以及其拥有的functions。</li>
+<li>salt ‘minion-id’ sys.state_doc , 这个命令可以查看具体某个state module或其中某个function的具体用法。</li>
+</ol>
+</blockquote>
+<hr>
+<h3 id="Modules写法"><a href="#Modules写法" class="headerlink" title="Modules写法"></a>Modules写法</h3><p>在写modules的时候，有几个变量使用较多。<br>1.__grains__ 字典，存储了minion的grains<br>2.__pillar__ 字典，存储了minion的pillar<br>3.__salt__ 字典，存储了minion能用的execution modules</p>
+<p><strong>Execution Modules</strong><br>因为execution modules的定位是用来让minion执行命令，所以通常用它来执行shell命令，执行各种操作等等。<br>举个例子，自定义module的时候，经常调用cmd 这个module。<br>__salt__[‘cmd.run’](command) , 执行shell命令，返回shell执行的字符串结果。</p>
+<p>__salt__[‘cmd.run_all’](command) , 执行shell命令，返回一个字典:</p>
+<blockquote>
+<p>{<br>  ‘pid’: int, #执行shell的process id。<br>  ‘retcode’: int, #执行成功，返回0，失败返回非0。<br>  ‘stderr’: string, #执行失败返回的字符串。<br>  ‘stdout’: string, #执行成功返回的字符串。<br>}</p>
+</blockquote>
+<p>参考文档：<br><a href="https://docs.saltstack.com/en/latest/ref/modules/index.html" target="_blank" rel="noopener">salt官方文档</a><br><a href="https://github.com/saltstack/salt/tree/develop/salt/modules" target="_blank" rel="noopener">salt自带execution modules源码</a></p>
+<p><strong>State Modules</strong><br>state module通常用来调用自定义的或自带的execution module来让minion达到想要的状态和结果。<br>和execution module写法不同的是，execution module没有规定返回结果的格式，state module规定了它的返回结果格式。必须是一个包含下列key/value的字典。</p>
+<blockquote>
+<p>{<br>  ‘name’: string, #执行的state module的name。<br>  ‘changes’: dict, #执行完module的变化。<br>  ‘result’: True | False | None,<br>  ‘comment’: string, #执行结果的摘要<br>}</p>
+</blockquote>
+<p>参考文档：<br><a href="https://docs.saltstack.com/en/latest/ref/states/writing.html" target="_blank" rel="noopener">salt官方文档</a><br><a href="https://github.com/saltstack/salt/tree/develop/salt/states" target="_blank" rel="noopener">salt自带state modules源码</a></p>
+<hr>
+<h3 id="练习Modules编写"><a href="#练习Modules编写" class="headerlink" title="练习Modules编写"></a>练习Modules编写</h3><p>由于最近需要写IBM Websphere Application Server的salt，需要自定义modules来实现一些功能。所以练习下modules的编写。</p>
+<p>WAS的集群安装中，需要实现start和stop集群中的dmgr，nodeagent和server，这里贴下学习写的start部分。</p>
+<p><strong>Execution Modules</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"><span class="keyword">import</span> salt</span><br><span class="line"><span class="keyword">from</span> salt.exceptions <span class="keyword">import</span> SaltInvocationError</span><br><span class="line"></span><br><span class="line">log = logging.getLogger(__name__)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">start_process</span><span class="params">(type, profile_path, server_name=None)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Start the dmgr, node agent or server.</span></span><br><span class="line"><span class="string">    :param type: dmgr | node | server</span></span><br><span class="line"><span class="string">    :param profile_path: profile path of server. i.e: /opt/IBM/WebSphere/AppServer/profiles/dmgr01</span></span><br><span class="line"><span class="string">    :param server_name: server name. i.e: server01</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    CLI Example:</span></span><br><span class="line"><span class="string">    .. code-block: bash</span></span><br><span class="line"><span class="string">        salt '*' websphere.start_server dmgr /opt/IBM/WebSphere/AppServer/profiles dmgr01</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    log.info(<span class="string">"type: &#123;0&#125;"</span>.format(type))</span><br><span class="line">    log.info(<span class="string">"profile_path: &#123;0&#125;"</span>.format(profile_path))</span><br><span class="line">    log.info(<span class="string">"server_name: &#123;0&#125;"</span>.format(server_name))</span><br><span class="line"></span><br><span class="line">    pre_command = profile_path + <span class="string">'/bin/'</span></span><br><span class="line">    <span class="keyword">if</span> type == <span class="string">'node'</span>:</span><br><span class="line">        command = pre_command + <span class="string">'startNode.sh'</span></span><br><span class="line">    <span class="keyword">elif</span> type == <span class="string">'dmgr'</span>:</span><br><span class="line">        command = pre_command + <span class="string">'startManager.sh'</span></span><br><span class="line">    <span class="keyword">elif</span> type == <span class="string">'server'</span>:</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> server_name:</span><br><span class="line">            log.error(<span class="string">'server_name is null!'</span>)</span><br><span class="line">            <span class="keyword">raise</span> SaltInvocationError(<span class="string">'server_name can not be null when type is server'</span>)</span><br><span class="line">        command = pre_command + <span class="string">'startServer.sh '</span> + server_name</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        log.error(<span class="string">'param type error.'</span>)</span><br><span class="line">        <span class="keyword">raise</span> SaltInvocationError(<span class="string">'param type error, please select dmgr, node or server.'</span>)</span><br><span class="line"></span><br><span class="line">    out = __salt__[<span class="string">'cmd.run_all'</span>](command, python_shell=<span class="literal">True</span>)</span><br><span class="line">    <span class="keyword">return</span> out</span><br></pre></td></tr></table></figure></p>
+<p><strong>State Module</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"><span class="keyword">import</span> salt</span><br><span class="line"><span class="keyword">from</span> salt.exceptions <span class="keyword">import</span> SaltInvocationError</span><br><span class="line"></span><br><span class="line">log = logging.getLogger(__name__)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">start_server</span><span class="params">(type, profile_path, server_name=None, **kwargs)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Start the dmgr, node agent or server.</span></span><br><span class="line"><span class="string">    :param type: dmgr | node | server</span></span><br><span class="line"><span class="string">    :param profile_path: profile path of server. i.e: /opt/IBM/WebSphere/AppServer/profiles/dmgr01</span></span><br><span class="line"><span class="string">    :param server_name: while type is server, need server name. i.e: server01</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    CLI Example:</span></span><br><span class="line"><span class="string">    .. code-block: yaml</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    websphere.start:</span></span><br><span class="line"><span class="string">      - type: dmgr</span></span><br><span class="line"><span class="string">      - profile_path: /opt/IBM/WebSphere/AppServer/profiles/dmgr01</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    ret = &#123;</span><br><span class="line">        <span class="string">"name"</span>: <span class="string">"start_server"</span>,</span><br><span class="line">        <span class="string">"changes"</span>: &#123;&#125;,</span><br><span class="line">        <span class="string">"result"</span>: <span class="literal">False</span>,</span><br><span class="line">        <span class="string">"commit"</span>: <span class="string">''</span></span><br><span class="line">    &#125;</span><br><span class="line">    check_out = _check_server_running(profile_path)</span><br><span class="line">    <span class="keyword">if</span> check_out[<span class="string">'retcode'</span>] == <span class="number">0</span>:</span><br><span class="line">        ret[<span class="string">'changes'</span>] = &#123;<span class="string">"changes"</span>: type + <span class="string">" is always running."</span>&#125;</span><br><span class="line">        ret[<span class="string">'result'</span>] = <span class="literal">True</span></span><br><span class="line">        ret[<span class="string">'comment'</span>] = check_out[<span class="string">'stdout'</span>]</span><br><span class="line">        <span class="keyword">return</span> ret</span><br><span class="line"></span><br><span class="line">    start_out = __salt__[<span class="string">'websphere.start_process'</span>](type, profile_path, server_name)</span><br><span class="line">    <span class="keyword">if</span> start_out[<span class="string">'retcode'</span>] == <span class="number">0</span>:</span><br><span class="line">        ret[<span class="string">'changes'</span>] = &#123;<span class="string">"changes"</span>: type + <span class="string">" started successfully."</span>&#125;</span><br><span class="line">        ret[<span class="string">'result'</span>] = <span class="literal">True</span></span><br><span class="line">        ret[<span class="string">'comment'</span>] = start_out[<span class="string">'stdout'</span>]</span><br><span class="line">        <span class="keyword">return</span> ret</span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        ret[<span class="string">'changes'</span>] = &#123;<span class="string">"changes"</span>: type + <span class="string">" started failed."</span>&#125;</span><br><span class="line">        ret[<span class="string">'result'</span>] = <span class="literal">False</span></span><br><span class="line">        ret[<span class="string">'comment'</span>] = start_out[<span class="string">'stdout'</span>]</span><br><span class="line">        <span class="keyword">return</span> ret</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_check_server_running</span><span class="params">(profile_path)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Check server running or not.</span></span><br><span class="line"><span class="string">    :param type: dmgr | node | server</span></span><br><span class="line"><span class="string">    :param profile_path: profile path of server. i.e: /opt/IBM/WebSphere/AppServer/profiles/dmgr01</span></span><br><span class="line"><span class="string">    :param server_name: while type is server, need server name. i.e: server01</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    command = <span class="string">'ps aux | grep -e "&#123;0&#125;" | grep -v grep'</span>.format(profile_path)</span><br><span class="line">    out = __salt__[<span class="string">'cmd.run_all'</span>](command, python_shell=<span class="literal">True</span>)</span><br><span class="line">    <span class="keyword">return</span> out</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/01/20/Openstack-neutron学习/" rel="next" title="Openstack neutron学习">
+                <i class="fa fa-chevron-left"></i> Openstack neutron学习
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/14/Python抓取知乎图片/" rel="prev" title="Python抓取知乎图片">
+                Python抓取知乎图片 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/03/03/Salt自定义module/" data-title="Salt自定义module" data-url="http://yoursite.com/2016/03/03/Salt自定义module/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/uploads/avatar.jpg" alt="ndrlslz">
+          <p class="site-author-name" itemprop="name">ndrlslz</p>
+          <p class="site-description motion-element" itemprop="description">Just Record Something</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">37</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ndrlslz" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2772570770" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> Weibo
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Salt-Modules"><span class="nav-number">1.</span> <span class="nav-text">Salt Modules</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#State-Modules和Execution-Modules"><span class="nav-number">1.1.</span> <span class="nav-text">State Modules和Execution Modules</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看Modules"><span class="nav-number">1.2.</span> <span class="nav-text">查看Modules</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Modules写法"><span class="nav-number">2.</span> <span class="nav-text">Modules写法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#练习Modules编写"><span class="nav-number">3.</span> <span class="nav-text">练习Modules编写</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ndrlslz</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  
+
+
+  
+
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.0"></script>
+
+
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ndrlslz"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+
+  
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("qsixHuR8yNbcGca2Km89Dqik", "Wvge03uyJtMH1XUl4yvQ2HsA");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+</body>
+</html>

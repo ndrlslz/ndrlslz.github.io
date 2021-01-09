@@ -1,0 +1,851 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.0.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.0">
+
+
+
+
+
+
+<meta name="description" content="记录下openstack中keystone的安装及基本用法。 环境信息虚机使用virtualBox安装CentOS 7作为节点 网络创建3张网卡   management network：10.20.0.0/24 private network: 192.168.4.0/24 external network: 172.16.0.0/24">
+<meta property="og:type" content="article">
+<meta property="og:title" content="keystone记录">
+<meta property="og:url" content="http://yoursite.com/2015/12/06/keystone记录/index.html">
+<meta property="og:site_name" content="霹雳啪啦程序汪">
+<meta property="og:description" content="记录下openstack中keystone的安装及基本用法。 环境信息虚机使用virtualBox安装CentOS 7作为节点 网络创建3张网卡   management network：10.20.0.0/24 private network: 192.168.4.0/24 external network: 172.16.0.0/24">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/uploads/Keystone-workflow.png">
+<meta property="og:updated_time" content="2021-01-09T14:15:24.224Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="keystone记录">
+<meta name="twitter:description" content="记录下openstack中keystone的安装及基本用法。 环境信息虚机使用virtualBox安装CentOS 7作为节点 网络创建3张网卡   management network：10.20.0.0/24 private network: 192.168.4.0/24 external network: 172.16.0.0/24">
+<meta name="twitter:image" content="http://yoursite.com/uploads/Keystone-workflow.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: '[object Object]',
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> keystone记录 | 霹雳啪啦程序汪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d5e930abbb82f9699e861f3eb92eb836";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">霹雳啪啦程序汪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                keystone记录
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-12-06T16:03:32+08:00" content="2015-12-06">
+              2015-12-06
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/12/06/keystone记录/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/06/keystone记录/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2015/12/06/keystone记录/" class="leancloud_visitors" data-flag-title="keystone记录">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>记录下openstack中keystone的安装及基本用法。</p>
+<h3 id="环境信息"><a href="#环境信息" class="headerlink" title="环境信息"></a>环境信息</h3><p><strong>虚机</strong><br>使用virtualBox安装CentOS 7作为节点</p>
+<p><strong>网络</strong><br>创建3张网卡</p>
+<blockquote>
+<ul>
+<li>management network：10.20.0.0/24</li>
+<li>private network: 192.168.4.0/24</li>
+<li>external network: 172.16.0.0/24</li>
+</ul>
+</blockquote>
+<hr>
+<a id="more"></a>
+<h3 id="安装步骤"><a href="#安装步骤" class="headerlink" title="安装步骤"></a>安装步骤</h3><ol>
+<li>创建个虚机作为controller节点，我这里给它2个网卡，一个<strong>management</strong>的网卡，用于controller节点与其他节点的通信，一个<strong>NAT</strong>的网卡，让虚机可以上网。进虚机后先把网络配置好。我设置的controller节点的ip为10.20.0.10.</li>
+<li>安装ntp服务，参考 <a href="http://docs.openstack.org/liberty/install-guide-rdo/environment-ntp.html" target="_blank" rel="noopener">ntp安装</a></li>
+<li>安装epel源和openstack的源 参考 <a href="http://docs.openstack.org/liberty/install-guide-rdo/environment-packages.html" target="_blank" rel="noopener">安装源</a></li>
+<li>安装mysql和rabbitmq的服务 参考 <a href="http://docs.openstack.org/liberty/install-guide-rdo/environment-sql-database.html" target="_blank" rel="noopener">mysql</a> <a href="http://docs.openstack.org/liberty/install-guide-rdo/environment-messaging.html" target="_blank" rel="noopener">rabbitmq</a></li>
+<li>然后就可以安装keystone的服务和进行相关配置了，参考 <a href="http://docs.openstack.org/liberty/install-guide-rdo/keystone-install.html" target="_blank" rel="noopener">keystone安装</a></li>
+<li>keystone装好后，开始安装keystone service和endpoint 参考 <a href="http://docs.openstack.org/liberty/install-guide-rdo/keystone-services.html" target="_blank" rel="noopener">service，endpoint</a></li>
+<li>最后再创建好tenant,user,role。 参考<a href="http://docs.openstack.org/liberty/install-guide-rdo/keystone-users.html" target="_blank" rel="noopener">create tenant,user,role</a></li>
+</ol>
+<p>之后再创建个脚本文件，方便以后命令行操作。</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="builtin-name">export</span> <span class="attribute">OS_PROJECT_DOMAIN_ID</span>=default</span><br><span class="line"><span class="builtin-name">export</span> <span class="attribute">OS_USER_DOMAIN_ID</span>=default</span><br><span class="line"><span class="builtin-name">export</span> <span class="attribute">OS_PROJECT_NAME</span>=admin</span><br><span class="line"><span class="builtin-name">export</span> <span class="attribute">OS_TENANT_NAME</span>=admin</span><br><span class="line"><span class="builtin-name">export</span> <span class="attribute">OS_USERNAME</span>=admin</span><br><span class="line"><span class="builtin-name">export</span> <span class="attribute">OS_PASSWORD</span>=ADMIN_PASS</span><br><span class="line"><span class="builtin-name">export</span> <span class="attribute">OS_AUTH_URL</span>=http://controller:35357/v3</span><br><span class="line"><span class="builtin-name">export</span> <span class="attribute">OS_IDENTITY_API_VERSION</span>=3</span><br></pre></td></tr></table></figure>
+<p>这是官网的脚本内容，但因为keystone命令行客户端在v3版被弃用了，所以在命令行无法使用keystone v3的认证服务，这样用keystone开头的命令会出错，所以需要把版本改成v2.0.</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="builtin-name">export</span> <span class="attribute">OS_AUTH_URL</span>=http://controller:35357/v2.0</span><br></pre></td></tr></table></figure>
+<p>这样就可以使用keystone CLI了。<br>然后到这些，keystone的基本安装就结束了，一些驱动的配置都是按照官网安装步骤的配置来配的，例如认证方式采用UUID，token的持久化用的memcache。</p>
+<h3 id="keystone认证流程"><a href="#keystone认证流程" class="headerlink" title="keystone认证流程"></a>keystone认证流程</h3><p><a href="/uploads/Keystone-workflow.png"><img src="/uploads/Keystone-workflow.png" alt="keystone流程图"></a></p>
+<h4 id="认证方式"><a href="#认证方式" class="headerlink" title="认证方式"></a>认证方式</h4><p>之前提到的认证方式，现在keystone有UUID，PKI，ZPKI三种方式，不同点可以参考 <a href="https://www.mirantis.com/blog/understanding-openstack-authentication-keystone-pki/" target="_blank" rel="noopener">keystone认证方式</a></p>
+<p>大概总结一下：<br><strong>UUID</strong><br>UUID方式通过keystone生成32位的字符串token，然后保存在backend中，并返回给申请者，之后拿到这个token去请求其他的openstack组件，而其他组件会再通过keystone验证这个token是否有效。<br>这个方式可能会有几个问题：</p>
+<ol>
+<li>其他组件都会来keystone进行token验证，keystone很容易成为系统的瓶颈，特别对于多region的情况，所以可以考虑对keystone做HA。</li>
+<li>如果backend采用sql，默认不会清理token，所以token数量增大，查询效率会降低。<br>这里keystone-manage token-flush命令可以把过期token删掉，并把token有效期设为1小时。backend也可以采用memcahce。</li>
+</ol>
+<p><strong>PKI</strong><br>PKI方式的keystone相当于一个Certificate Authority，当请求token时，它会生成包含catalog，metadata等的json，然后用自己的密钥和证书来签署，生成token。而其它组件会有自己的一份公钥和证书，对token进行解密得到json串，所以不必再去请求keystone进行验证，它自己就可以进行验证了，降低了keystone的负载。<br>这个方式也可能会存在问题：</p>
+<ol>
+<li>pki的本身性能比UUID要低。</li>
+<li>UUID方式只需要拿32位字符串这个token去请求其他组件即可，而PKI需要拿整个json串的token去请求，数据包很大。</li>
+</ol>
+<p><strong>ZPKI</strong><br>ZPKI方式就是对PKI方式的token进行zlib压缩。</p>
+<h4 id="具体用法"><a href="#具体用法" class="headerlink" title="具体用法"></a>具体用法</h4><p>我这里是采用uuid的方式进行认证。去调keystone的REST API即可。 API参考 <a href="http://developer.openstack.org/api-ref-identity-v3.html" target="_blank" rel="noopener">keystone API</a></p>
+<p>先定义好请求的json串 vim auth.json<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"auth"</span>: &#123;</span><br><span class="line">        <span class="string">"identity"</span>: &#123;</span><br><span class="line">            <span class="string">"methods"</span>: [</span><br><span class="line">                <span class="string">"password"</span>      </span><br><span class="line">            ],          </span><br><span class="line">            <span class="string">"password"</span>: &#123;</span><br><span class="line">                <span class="string">"user"</span>: &#123;       </span><br><span class="line">                    <span class="string">"id"</span>: <span class="string">"ADMIN_USER_ID"</span>,</span><br><span class="line">                    <span class="string">"password"</span>: <span class="string">"ADMIN_USER_PASSWORD"</span></span><br><span class="line">                &#125;               </span><br><span class="line">            &#125;           </span><br><span class="line">        &#125;,      </span><br><span class="line">        <span class="string">"scope"</span>: &#123;</span><br><span class="line">            <span class="string">"project"</span>: &#123;</span><br><span class="line">                <span class="string">"id"</span>: <span class="string">"ADMIN_PROJECT_ID"</span></span><br><span class="line">            &#125;           </span><br><span class="line">        &#125;       </span><br><span class="line">    &#125;   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后我这里用curl调api<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl -i -X POST -H <span class="string">"Content-Type: application/json"</span> -d <span class="string">"`cat auth.json`"</span> \</span><br><span class="line">http://10.20.0.10:5000/v3/auth/tokens</span><br></pre></td></tr></table></figure></p>
+<p>返回的消息的头部如下<br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">HTTP/1.1</span> <span class="number">201</span> <span class="string">Created</span></span><br><span class="line"><span class="attr">Date:</span> <span class="string">Thu,</span> <span class="number">10</span> <span class="string">Dec</span> <span class="number">2015</span> <span class="number">20</span><span class="string">:42:31</span> <span class="string">GMT</span></span><br><span class="line"><span class="attr">Server:</span> <span class="string">Apache/2.4.6</span> <span class="string">(CentOS)</span> <span class="string">mod_wsgi/3.4</span> <span class="string">Python/2.7.5</span></span><br><span class="line"><span class="attr">X-Subject-Token:</span> <span class="string">d576cfe5c3d54b46a8aa2d9a153979b0</span></span><br><span class="line"><span class="attr">Vary:</span> <span class="string">X-Auth-Token</span></span><br><span class="line"><span class="attr">x-openstack-request-id:</span> <span class="string">req-7d3d627a-c77f-49b0-a93b-755d93ff5646</span></span><br><span class="line"><span class="attr">Content-Length:</span> <span class="number">1065</span></span><br><span class="line"><span class="attr">Content-Type:</span> <span class="string">application/json</span></span><br></pre></td></tr></table></figure></p>
+<p>这样就得到了keystone返回的token，body体中还有catalog等信息我没截出来。<br>然后取Header中的X-Subject-Token去向catalog中的某个endpoint发送请求即可。其他组件得到这个token后，再向keystone验证token的有效性，执行相应操作。keystone大致流程就是这样。</p>
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/12/26/斗鱼弹幕抓取/" rel="prev" title="斗鱼弹幕抓取">
+                斗鱼弹幕抓取 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2015/12/06/keystone记录/" data-title="keystone记录" data-url="http://yoursite.com/2015/12/06/keystone记录/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/uploads/avatar.jpg" alt="ndrlslz">
+          <p class="site-author-name" itemprop="name">ndrlslz</p>
+          <p class="site-description motion-element" itemprop="description">Just Record Something</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">37</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ndrlslz" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2772570770" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> Weibo
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#环境信息"><span class="nav-number">1.</span> <span class="nav-text">环境信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装步骤"><span class="nav-number">2.</span> <span class="nav-text">安装步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#keystone认证流程"><span class="nav-number">3.</span> <span class="nav-text">keystone认证流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#认证方式"><span class="nav-number">3.1.</span> <span class="nav-text">认证方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#具体用法"><span class="nav-number">3.2.</span> <span class="nav-text">具体用法</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ndrlslz</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  
+
+
+  
+
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.0"></script>
+
+
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ndrlslz"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+
+  
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("qsixHuR8yNbcGca2Km89Dqik", "Wvge03uyJtMH1XUl4yvQ2HsA");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+</body>
+</html>

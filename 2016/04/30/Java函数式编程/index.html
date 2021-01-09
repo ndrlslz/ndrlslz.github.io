@@ -1,0 +1,847 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.0.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.0">
+
+
+
+
+
+
+<meta name="description" content="通过Python接触到函数式编程后， 希望写Java的时候也可以写的这样简洁，优雅。幸好Java8也推出了函数式编程的概念。 Java8的新特性中，最吸引人的应该就是lambda和stream了吧。 LambdaFunctional Interfacefunctional interface是只包含一个abstract method的接口。可以通过@FunctionalInterface注解显式的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java函数式编程">
+<meta property="og:url" content="http://yoursite.com/2016/04/30/Java函数式编程/index.html">
+<meta property="og:site_name" content="霹雳啪啦程序汪">
+<meta property="og:description" content="通过Python接触到函数式编程后， 希望写Java的时候也可以写的这样简洁，优雅。幸好Java8也推出了函数式编程的概念。 Java8的新特性中，最吸引人的应该就是lambda和stream了吧。 LambdaFunctional Interfacefunctional interface是只包含一个abstract method的接口。可以通过@FunctionalInterface注解显式的">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2021-01-09T14:15:24.220Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java函数式编程">
+<meta name="twitter:description" content="通过Python接触到函数式编程后， 希望写Java的时候也可以写的这样简洁，优雅。幸好Java8也推出了函数式编程的概念。 Java8的新特性中，最吸引人的应该就是lambda和stream了吧。 LambdaFunctional Interfacefunctional interface是只包含一个abstract method的接口。可以通过@FunctionalInterface注解显式的">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: '[object Object]',
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Java函数式编程 | 霹雳啪啦程序汪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d5e930abbb82f9699e861f3eb92eb836";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">霹雳啪啦程序汪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Java函数式编程
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-30T21:48:07+08:00" content="2016-04-30">
+              2016-04-30
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/04/30/Java函数式编程/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/30/Java函数式编程/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/04/30/Java函数式编程/" class="leancloud_visitors" data-flag-title="Java函数式编程">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>通过Python接触到函数式编程后， 希望写Java的时候也可以写的这样简洁，优雅。幸好Java8也推出了函数式编程的概念。</p>
+<p>Java8的新特性中，最吸引人的应该就是lambda和stream了吧。</p>
+<h2 id="Lambda"><a href="#Lambda" class="headerlink" title="Lambda"></a>Lambda</h2><h3 id="Functional-Interface"><a href="#Functional-Interface" class="headerlink" title="Functional Interface"></a>Functional Interface</h3><p><strong>functional interface</strong>是只包含一个abstract method的接口。可以通过<code>@FunctionalInterface</code>注解显式的标记接口，表明它是个functional interface。如果往里面加入第2个abstract method，编译器就会报错。但default method和statis method不会违反functional interface的规则。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">MyFunctionalInterface</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">function</span><span class="params">(String input)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">default_function</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"This is default function"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">static_function</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"This is static function"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<h3 id="Lambda-1"><a href="#Lambda-1" class="headerlink" title="Lambda"></a>Lambda</h3><p>在没有lambda表达式的时候，我们实例化functional interface接口的时候通常用匿名内部类的方式。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">MyFunctionalInterface myFunctionalClass = <span class="keyword">new</span> MyFunctionalInterface() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">function</span><span class="params">(String input)</span> </span>&#123;</span><br><span class="line">        System.out.println(input);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>通过lambda表达式可以写的更简洁，因为对于functional interface，编译器知道我们只需要重载那个唯一的abstract method。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MyFunctionalInterface myFunctionalClass = </span><br><span class="line">(input) -&gt; System.out.println(input);</span><br></pre></td></tr></table></figure></p>
+<p>对于上面这个lambda，因为只是把参数传给了println方法，没有做其他事情，所以可以写成通过方法引用的方式，即把方法作为一个函数指针传进去，<code>::</code>表示传入方法或构造器的引用。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MyFunctionalInterface myFunctionalClass = System.out::println;</span><br></pre></td></tr></table></figure></p>
+<h3 id="内置的functional-interface"><a href="#内置的functional-interface" class="headerlink" title="内置的functional interface"></a>内置的functional interface</h3><p>JDK8之前大家熟悉的functional interface比如有Runnable，Comparator。<br>JDK8新加了几种常用的functional interface。</p>
+<p><strong>Predicate</strong><br>Predicte接口的abstract method接受一个参数，返回一个boolean类型。<br><figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Predicate&lt;<span class="keyword">Integer</span>&gt; predicate = <span class="keyword">integer</span> -&gt; <span class="keyword">integer</span> &gt; <span class="number">0</span>;</span><br><span class="line"><span class="keyword">System</span>.out.println(predicate.test(<span class="number">-1</span>)); <span class="comment">//false</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>Function</strong><br>Function接口的abstract method接受一个参数，返回一个结果。和Predicate不同的是，Predicate只返回boolean类型。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Function&lt;Integer, String&gt; function = integer -&gt; integer + <span class="string">"_test"</span>;</span><br><span class="line">System.out.println(function.apply(<span class="number">10</span>)); <span class="comment">//10_test</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>Supplier</strong><br>Supplier接口不接受参数，返回一个结果。和Function不同的是，Function要接受一个参数。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Supplier supplier = () -&gt; <span class="number">10</span>;</span><br><span class="line">System.out.println(supplier.get()); <span class="comment">//10</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>Consumer</strong><br>Consumer接口接受一个参数，但不返回结果，和Function不同的是，Function要返回一个结果。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Consumer&lt;Integer&gt; consumer = System.out::println;</span><br><span class="line">consumer.accept(<span class="number">10</span>); <span class="comment">//10</span></span><br></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h2><p>stream表示一些元素的序列，并且这个序列支持<strong>串行</strong>和<strong>并行</strong>的操作。<br>对steam的操作分为<strong>中间操作</strong>和<strong>末尾操作</strong>。中间操作会返回steam，所以可以对其继续做操作；<br>末尾操作会返回一个结果，表示steam操作结束。</p>
+<h3 id="创建stream"><a href="#创建stream" class="headerlink" title="创建stream"></a>创建stream</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//通过调用集合的stream()方法创建</span></span><br><span class="line">Arrays.asList(<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>).stream();</span><br><span class="line"></span><br><span class="line"><span class="comment">//通过Stream.of()创建</span></span><br><span class="line">Stream.of(<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="部分stream操作例子"><a href="#部分stream操作例子" class="headerlink" title="部分stream操作例子"></a>部分stream操作例子</h3><p><strong>Filter</strong><br>filter操作接收一个Predicate来对stream过滤，过滤掉不满足Predicate的元素。<br>filter操作是个中间操作，这里我们调用一个末尾操作<code>forEach</code>来显示结果，forEach接收一个Consumer来对每个元素执行指定的方法。<br><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">Arrays</span><span class="selector-class">.asList</span>(<span class="string">"a1"</span>, <span class="string">"b1"</span>, <span class="string">"c1"</span>, <span class="string">"a2"</span>, <span class="string">"b2"</span>, <span class="string">"c2"</span>)</span><br><span class="line">        <span class="selector-class">.stream</span>()</span><br><span class="line">        <span class="selector-class">.filter</span>(s -&gt; s.startsWith(<span class="string">"a"</span>))</span><br><span class="line">        <span class="selector-class">.forEach</span>(System.<span class="attribute">out</span>::println);</span><br><span class="line"></span><br><span class="line"><span class="comment">//a1, a2</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>Map</strong><br>map操作接受一个Function来对stream的每个元素执行指定的功能，map也是一个中间操作。<br><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">Arrays</span><span class="selector-class">.asList</span>(<span class="string">"a1"</span>, <span class="string">"b1"</span>, <span class="string">"c1"</span>, <span class="string">"a2"</span>, <span class="string">"b2"</span>, <span class="string">"c2"</span>)</span><br><span class="line">        <span class="selector-class">.stream</span>()</span><br><span class="line">        <span class="selector-class">.map</span>(<span class="attribute">String</span>::toUpperCase)</span><br><span class="line">        <span class="selector-class">.forEach</span>(System.<span class="attribute">out</span>::println);</span><br><span class="line"></span><br><span class="line"><span class="comment">//A1,B1,C1,A2,B2,C2</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>Reduce</strong><br>reduce操作接收一个Function来操作stream的序列，这个函数接受2个参数，得到的结果再与序列的下一个元素做累积计算。<br>比如对序列[1, 2, 3, 4]做函数叫fun的reduce操作，等同于：fun(fun(fun(1, 2), 3), 4)<br>reduce是个末尾操作。返回Function累积计算的结果。结果是个<code>Optional</code>类型，Optional即对原来的对象封装的一层，目的是方便处理null的情况和强制让程序员思考null的情况。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Optional&lt;String&gt; result = Arrays.asList(<span class="string">"a1"</span>, <span class="string">"b1"</span>, <span class="string">"c1"</span>, <span class="string">"a2"</span>, <span class="string">"b2"</span>, <span class="string">"c2"</span>)</span><br><span class="line">        .stream()</span><br><span class="line">        .reduce((s1, s2) -&gt; s1 + <span class="string">","</span> + s2);</span><br><span class="line"></span><br><span class="line">result.ifPresent(System.out::println);</span><br><span class="line"></span><br><span class="line"><span class="comment">//a1,b1,c1,a2,b2,c2</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="stream执行流程"><a href="#stream执行流程" class="headerlink" title="stream执行流程"></a>stream执行流程</h3><figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">Arrays.asList</span>(<span class="string">"a1"</span>, <span class="string">"b1"</span>, <span class="string">"a2"</span>, <span class="string">"b2"</span>)</span><br><span class="line">        .<span class="keyword">stream()</span></span><br><span class="line"><span class="keyword"> </span>       .map(s -&gt; &#123;</span><br><span class="line">            System.out.println(<span class="string">"map:"</span> + s)<span class="comment">;</span></span><br><span class="line">            return s.toUpperCase()<span class="comment">;</span></span><br><span class="line">        &#125;)</span><br><span class="line">        .filter(<span class="built_in">s1</span> -&gt; &#123;</span><br><span class="line">            System.out.println(<span class="string">"filter:"</span> + <span class="built_in">s1</span>)<span class="comment">;</span></span><br><span class="line">            return <span class="built_in">s1</span>.startsWith(<span class="string">"A"</span>)<span class="comment">;</span></span><br><span class="line">        &#125;)</span><br><span class="line">        .forEach(<span class="built_in">s2</span> -&gt; System.out.println(<span class="string">"forEach"</span> + <span class="built_in">s2</span>))<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">//<span class="meta">map</span>:<span class="built_in">a1</span></span><br><span class="line">//filter:<span class="built_in">A1</span></span><br><span class="line">//forEach:<span class="built_in">A1</span></span><br><span class="line">//<span class="meta">map</span>:<span class="keyword">b1</span></span><br><span class="line"><span class="keyword">//filter:B1</span></span><br><span class="line"><span class="keyword">//map:a2</span></span><br><span class="line"><span class="keyword">//filter:A2</span></span><br><span class="line"><span class="keyword">//forEach:A2</span></span><br><span class="line"><span class="keyword">//map:b2</span></span><br><span class="line"><span class="keyword">//filter:B2</span></span><br></pre></td></tr></table></figure>
+<p>可以看出来stream的执行流程不是水平执行，并不是想象中的先对所有元素map，得到结果再filter。而是<strong>垂直执行</strong>的，先对第一个元素执行map，filter，forEach，完了之后再执行第二个元素。</p>
+<p>当然，sort操作就是水平执行的，因为要先对所有元素排序嘛。</p>
+<p>这种机制的好处在于可以提升速度。表现在2个方面：</p>
+<ol>
+<li>我们可以合理搭配stream操作，尽可能的减少对元素的操作次数。 比如上面这个例子，通过换下filter和map的顺序,先过滤掉部分元素，再map。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">Arrays.asList(<span class="string">"a1"</span>, <span class="string">"b1"</span>, <span class="string">"a2"</span>, <span class="string">"b2"</span>)</span><br><span class="line">        .stream()</span><br><span class="line">        .filter(s1 -&gt; &#123;</span><br><span class="line">            System.out.println(<span class="string">"filter:"</span> + s1);</span><br><span class="line">            <span class="keyword">return</span> s1.startsWith(<span class="string">"a"</span>);</span><br><span class="line">        &#125;)</span><br><span class="line">        .map(s -&gt; &#123;</span><br><span class="line">            System.out.println(<span class="string">"map:"</span> + s);</span><br><span class="line">            <span class="keyword">return</span> s.toUpperCase();</span><br><span class="line">        &#125;)</span><br><span class="line">        .forEach(s2 -&gt; System.out.println(<span class="string">"forEach:"</span> + s2));</span><br><span class="line"></span><br><span class="line"><span class="comment">//filter:a1</span></span><br><span class="line"><span class="comment">//map:a1</span></span><br><span class="line"><span class="comment">//forEach:A1</span></span><br><span class="line"><span class="comment">//filter:b1</span></span><br><span class="line"><span class="comment">//filter:a2</span></span><br><span class="line"><span class="comment">//map:a2</span></span><br><span class="line"><span class="comment">//forEach:A2</span></span><br><span class="line"><span class="comment">//filter:b2</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>就减少了2次函数操作。</p>
+<p>第2点就是下面的并行计算了。</p>
+<h3 id="parallel-stream"><a href="#parallel-stream" class="headerlink" title="parallel stream"></a>parallel stream</h3><p>stream有2种，sequential stream和parallel stream。<br>之前创建的stream就是<strong>sequential stream</strong>，对其的操作都是单线程来运行的。<br>而<strong>parallel stream</strong>的操作可以用多线程来运行。</p>
+<p>在上面那个例子中，序列元素之间的stream操作互不影响，没有必要等a1完了再操作b1，完全可以并发进行，所以可以通过parallel stream这种多线程的方式来执行stream操作。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">Arrays.asList(<span class="string">"a1"</span>, <span class="string">"b1"</span>, <span class="string">"a2"</span>, <span class="string">"b2"</span>)</span><br><span class="line">        .parallelStream()</span><br><span class="line">        .filter(s -&gt; &#123;</span><br><span class="line">            System.out.printf(<span class="string">"filter: %s [%s]\n"</span>,</span><br><span class="line">                    s, Thread.currentThread().getName());</span><br><span class="line">            <span class="keyword">return</span> s.startsWith(<span class="string">"a"</span>);</span><br><span class="line">        &#125;)</span><br><span class="line">        .map(s1 -&gt; &#123;</span><br><span class="line">            System.out.printf(<span class="string">"map: %s [%s]\n"</span>, </span><br><span class="line">                    s1, Thread.currentThread().getName());</span><br><span class="line">            <span class="keyword">return</span> s1.toUpperCase();</span><br><span class="line">        &#125;)</span><br><span class="line">        .forEach(s2 -&gt; &#123;</span><br><span class="line">            System.out.printf(<span class="string">"forEach: %s [%s]\n"</span>, </span><br><span class="line">                    s2, Thread.currentThread().getName());</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">//filter: a2 [main]</span></span><br><span class="line"><span class="comment">//filter: a1 [ForkJoinPool.commonPool-worker-3]</span></span><br><span class="line"><span class="comment">//filter: b1 [ForkJoinPool.commonPool-worker-1]</span></span><br><span class="line"><span class="comment">//map: a1 [ForkJoinPool.commonPool-worker-3]</span></span><br><span class="line"><span class="comment">//forEach: A1 [ForkJoinPool.commonPool-worker-3]</span></span><br><span class="line"><span class="comment">//filter: b2 [ForkJoinPool.commonPool-worker-2]</span></span><br><span class="line"><span class="comment">//map: a2 [main]</span></span><br><span class="line"><span class="comment">//forEach: A2 [main]</span></span><br></pre></td></tr></table></figure>
+<p>可以看到，parallel stream从ForkJoinPool线程池中利用空闲线程来并发执行stream操作。</p>
+<hr>
+<h2 id="Guava"><a href="#Guava" class="headerlink" title="Guava"></a>Guava</h2><p>以上是通过Java8来实现函数式编程的部分内容，但目前也有很多项目没有使用jdk8，我们可以通过google的guava库来实现类似的操作。</p>
+<p>通过guava的fluent风格也可以写出类似代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">ImmutableList&lt;String&gt; lists = ImmutableList.of(<span class="string">"a1"</span>, <span class="string">"b1"</span>, <span class="string">"a2"</span>, <span class="string">"b2"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 1. [a1, b1, a2, b2] filter -&gt; [a1, a2]</span></span><br><span class="line"><span class="comment"> * 2. [a1, a2] transform(map) -&gt; [A1, A2]</span></span><br><span class="line"><span class="comment"> * 3. [A1, A2] join with "_" -&gt; A1_A2</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">String result = Joiner</span><br><span class="line">        .on(<span class="string">"_"</span>)</span><br><span class="line">        .skipNulls()</span><br><span class="line">        .join(from(lists)</span><br><span class="line">                .filter(<span class="keyword">new</span> Predicate&lt;String&gt;() &#123;</span><br><span class="line">                    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">apply</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">                        <span class="keyword">return</span> s.startsWith(<span class="string">"a"</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;)</span><br><span class="line">                .transform(<span class="keyword">new</span> Function&lt;String, String&gt;() &#123;</span><br><span class="line">                    <span class="function"><span class="keyword">public</span> String <span class="title">apply</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">                        <span class="keyword">return</span> s.toUpperCase();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;));</span><br><span class="line"></span><br><span class="line">System.out.println(result);</span><br><span class="line"></span><br><span class="line"><span class="comment">//A1_A2</span></span><br></pre></td></tr></table></figure></p>
+<p>但不要过度使用guava的函数式编程，如果用原来的方法更简洁、快速的话，就不要用guava的函数式。<br>在JDK8之前的话，传统方式的代码应该还是第一选择，除非guava的函数式可以有效减少代码量或者增加速度。</p>
+<hr>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><p><a href="http://winterbe.com/posts/2014/03/16/java-8-tutorial/" target="_blank" rel="noopener">Java8 feature</a><br><a href="http://winterbe.com/posts/2014/07/31/java8-stream-tutorial-examples/" target="_blank" rel="noopener">Java8 stream</a><br><a href="http://ifeve.com/google-guava/" target="_blank" rel="noopener">Guava</a></p>
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/25/RabbitMQ学习/" rel="next" title="RabbitMQ学习">
+                <i class="fa fa-chevron-left"></i> RabbitMQ学习
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/07/Ternya/" rel="prev" title="Ternya">
+                Ternya <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/04/30/Java函数式编程/" data-title="Java函数式编程" data-url="http://yoursite.com/2016/04/30/Java函数式编程/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/uploads/avatar.jpg" alt="ndrlslz">
+          <p class="site-author-name" itemprop="name">ndrlslz</p>
+          <p class="site-description motion-element" itemprop="description">Just Record Something</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">37</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ndrlslz" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2772570770" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> Weibo
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Lambda"><span class="nav-number">1.</span> <span class="nav-text">Lambda</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Functional-Interface"><span class="nav-number">1.1.</span> <span class="nav-text">Functional Interface</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lambda-1"><span class="nav-number">1.2.</span> <span class="nav-text">Lambda</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内置的functional-interface"><span class="nav-number">1.3.</span> <span class="nav-text">内置的functional interface</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stream"><span class="nav-number">2.</span> <span class="nav-text">Stream</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建stream"><span class="nav-number">2.1.</span> <span class="nav-text">创建stream</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#部分stream操作例子"><span class="nav-number">2.2.</span> <span class="nav-text">部分stream操作例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stream执行流程"><span class="nav-number">2.3.</span> <span class="nav-text">stream执行流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#parallel-stream"><span class="nav-number">2.4.</span> <span class="nav-text">parallel stream</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Guava"><span class="nav-number">3.</span> <span class="nav-text">Guava</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">4.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ndrlslz</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  
+
+
+  
+
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.0"></script>
+
+
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ndrlslz"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+
+  
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("qsixHuR8yNbcGca2Km89Dqik", "Wvge03uyJtMH1XUl4yvQ2HsA");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+</body>
+</html>
