@@ -1,0 +1,843 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.0.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.0">
+
+
+
+
+
+
+<meta name="description" content="上一篇文章介绍了自己练手写的配置管理中心，在这篇文章里记录下其中用到的一些技术原理。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="配置管理中心小结">
+<meta property="og:url" content="http://yoursite.com/2020/10/13/配置管理中心小结/index.html">
+<meta property="og:site_name" content="霹雳啪啦程序汪">
+<meta property="og:description" content="上一篇文章介绍了自己练手写的配置管理中心，在这篇文章里记录下其中用到的一些技术原理。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/uploads/zookeeper-interaction.jpg">
+<meta property="og:image" content="http://yoursite.com/uploads/spring-lifecycle.png">
+<meta property="og:image" content="http://yoursite.com/uploads/spring-bean-factory-post-processor.png">
+<meta property="og:updated_time" content="2021-01-11T08:39:41.868Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="配置管理中心小结">
+<meta name="twitter:description" content="上一篇文章介绍了自己练手写的配置管理中心，在这篇文章里记录下其中用到的一些技术原理。">
+<meta name="twitter:image" content="http://yoursite.com/uploads/zookeeper-interaction.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: '[object Object]',
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 配置管理中心小结 | 霹雳啪啦程序汪 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d5e930abbb82f9699e861f3eb92eb836";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">霹雳啪啦程序汪</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                配置管理中心小结
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2020-10-13T20:31:29+08:00" content="2020-10-13">
+              2020-10-13
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2020/10/13/配置管理中心小结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/10/13/配置管理中心小结/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2020/10/13/配置管理中心小结/" class="leancloud_visitors" data-flag-title="配置管理中心小结">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>上一篇文章介绍了自己练手写的配置管理中心，在这篇文章里记录下其中用到的一些技术原理。</p>
+<a id="more"></a>
+<h3 id="Zookeeper相关"><a href="#Zookeeper相关" class="headerlink" title="Zookeeper相关"></a>Zookeeper相关</h3><h4 id="实时动态更新配置"><a href="#实时动态更新配置" class="headerlink" title="实时动态更新配置"></a>实时动态更新配置</h4><p>应用除了能够从配置中心读取配置，还有一个核心功能是监听配置的改变，从而实现不需要重启来实时动态更新配置。<br>实现方式就是利用Zookeeper的Watch来监听配置，Zookeeper有2个后台线程：SendThread，EventThread。</p>
+<p><img src="/uploads/zookeeper-interaction.jpg" alt="zookeeper-interaction.jpg"></p>
+<p><strong>SendThread</strong>：IO和心跳线程， 用于处理Zookeeper Client和Server间的Request和Response<br><strong>EventThread</strong>：事件处理线程，用于处理Zookeeper的事件，比如连接状态改变，Watch事件。<br>收到Watcher Event的时候会联系WatcherManager找到相对应的Watcher，从WatcherManager里面移除这个Watcher(因为每个Watcher只会被通知一次) 并回调Watcher的process函数</p>
+<h4 id="Zookeeper原生客户端和Curator不同的处理方式"><a href="#Zookeeper原生客户端和Curator不同的处理方式" class="headerlink" title="Zookeeper原生客户端和Curator不同的处理方式"></a>Zookeeper原生客户端和Curator不同的处理方式</h4><p>相对来说，<code>Curator</code>提供了更方便的API，而且帮助处理了很多本来需要自己考虑的情况，所以使用起来更加便利。</p>
+<ol>
+<li><p>连接状态的管理，如果Zookeeper客户端连接断开，会主动和集群中其他服务器连接。<br>若在Session Timeout前连上了，一般不需要处理，临时节点和Watch都会存在，如果超过了Session Timeout，客户端会Expire，失效。<br>如果使用原生的客户端，是需要自己重建客户端的，Curator的话会帮助我们做这个事。</p>
+</li>
+<li><p>Zookeeper的Watch是一次性的，如果要一直监听配置的改变，需要不断的设置Watch。<br>如果使用原生的Zookeeper客户端，这段逻辑需要自己完成，Curator提供了现成的NodeCache。</p>
+</li>
+<li><p>临时节点的处理，一般在CONNECTED（连接）或者RECONNECTED（重连）事件中判断临时节点是否存在，不存在就创建。<br>有一种特殊情况是：应用异常终止后立即重启，导致旧的Zookeeper客户端没有调用close方法来关闭Session，在Session Timeout内，新的客户端又启动了，但旧客户端的临时节点还存在，<br>新的客户端便不会创建。当旧客户端Session Timeout后，临时节点就销毁了。 对于这种情况，需要比较当前SessionId和上次的SessionId，如果不一致，就需要将临时节点销毁重建。</p>
+</li>
+</ol>
+<h3 id="Spring相关"><a href="#Spring相关" class="headerlink" title="Spring相关"></a>Spring相关</h3><p>项目提供了<code>spring-boot-starter-configuration-center</code>库，和Spring集成，提供<code>@Config</code>注解来实现配置的获取和自动更新。</p>
+<p><img src="/uploads/spring-lifecycle.png" alt="spring-lifecycle.png"><br>上图是Spring Bean的生命周期，如果要满足我们的需求，有2种方式。</p>
+<p><strong>第一种：基于BeanFactoryPostProcessor</strong><br>Spring从3.1版本开始增加了<code>ConfigurableEnvironment</code>和<code>PropertySource</code>：</p>
+<ul>
+<li>ConfigurableEnvironment<br>Spring的ApplicationContext会包含一个Environment（实现ConfigurableEnvironment接口）<br>ConfigurableEnvironment自身包含了很多个PropertySource</li>
+<li>PropertySource<br>属性源，可以理解为很多个Key - Value的属性配置</li>
+</ul>
+<p>所以可以实现<code>BeanFactoryPostProcessor</code>，在应用启动阶段，从Zookeeper读取所有的配置，组装程PropertySource，插入到Environment中<br><img src="/uploads/spring-bean-factory-post-processor.png" alt="spring-bean-factory-post-processor.png"></p>
+<p><strong>第二种：基于BeanPostProcessor</strong><br>此方法参考<code>@Value</code>注解的实现方式，实现<code>BeanPostProcessor</code>，在Bean的初始化完成后，从Zookeeper获取配置，注入属性。</p>
+<p>Apollo项目就是使用的第一种方式。我这里需要用第二种方式才满足需求，因为我想要使用<code>@Config(refresh=true)</code>注解的Field能Watch配置更新来反射修改， 所以需要Field的对象先实例化出来。</p>
+<h3 id="容灾"><a href="#容灾" class="headerlink" title="容灾"></a>容灾</h3><p>配置中心不应该是一个被Application强依赖的服务，它的状态不应该阻止Application的启动。即使配置中心挂了，Application应该也可以正常启动起来，configuration-center里面用到了如下的容灾策略。</p>
+<ol>
+<li><p>本地内存缓存，当Application运行时与配置中心的连接丢失或配置中心完全宕机，仍能正常地调用服务。</p>
+</li>
+<li><p>本地缓存文件，当应用与配置中心发生网络分区或配置中心完全宕机后，应用进行了重启操作，内存里没有数据，此时应用可以通过读取本地缓存文件的数据来获取到最后一次订阅到的配置。</p>
+</li>
+<li><p>本地容灾文件夹。正常的情况下，容灾文件夹内是没有内容的。当服务端完全宕机且长时间不能恢复，同时服务提供者又发生了很大的变更时，可以通过在容灾文件夹内添加文件的方式来开启本地容灾。此时客户端会忽略原有的本地缓存文件，只从本地容灾文件中读取配置</p>
+</li>
+</ol>
+<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><p><a href="https://zookeeper.apache.org/doc/r3.1.2/zookeeperProgrammers.html" target="_blank" rel="noopener">Zookeeper Guide</a><br><a href="https://github.com/ctripcorp/apollo/wiki/Apollo%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83%E8%AE%BE%E8%AE%A1" target="_blank" rel="noopener">Apollo</a><br><a href="https://yq.aliyun.com/articles/227260" target="_blank" rel="noopener">Zookeeper使用注意点</a><br><a href="http://jm.taobao.org/2018/06/26/聊聊微服务的服务注册与发现/" target="_blank" rel="noopener">Failover</a><br><a href="https://www.cnblogs.com/zrtqsk/p/3735273.html" target="_blank" rel="noopener">Spring Bean Lifecycle</a><br><a href="https://www.jianshu.com/p/70151fc0ef5d" target="_blank" rel="noopener">Curator</a></p>
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/11/Configuration-Center/" rel="next" title="Configuration Center">
+                <i class="fa fa-chevron-left"></i> Configuration Center
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2020/10/13/配置管理中心小结/" data-title="配置管理中心小结" data-url="http://yoursite.com/2020/10/13/配置管理中心小结/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/uploads/avatar.jpg" alt="ndrlslz">
+          <p class="site-author-name" itemprop="name">ndrlslz</p>
+          <p class="site-description motion-element" itemprop="description">Just Record Something</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">39</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">0</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ndrlslz" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2772570770" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> Weibo
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Zookeeper相关"><span class="nav-number">1.</span> <span class="nav-text">Zookeeper相关</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#实时动态更新配置"><span class="nav-number">1.1.</span> <span class="nav-text">实时动态更新配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Zookeeper原生客户端和Curator不同的处理方式"><span class="nav-number">1.2.</span> <span class="nav-text">Zookeeper原生客户端和Curator不同的处理方式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring相关"><span class="nav-number">2.</span> <span class="nav-text">Spring相关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#容灾"><span class="nav-number">3.</span> <span class="nav-text">容灾</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文档"><span class="nav-number">4.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ndrlslz</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  
+
+
+  
+
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.0"></script>
+
+
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ndrlslz"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+
+  
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("qsixHuR8yNbcGca2Km89Dqik", "Wvge03uyJtMH1XUl4yvQ2HsA");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+</body>
+</html>
